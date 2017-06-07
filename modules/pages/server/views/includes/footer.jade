@@ -1,0 +1,9 @@
+script(type='text/javascript', src='/bower_components/jquery/dist/jquery.js')
+script(type='text/javascript', src='/bower_components/bootstrap/dist/js/bootstrap.js')
+script(type='text/javascript', src='/bower_components/angular/angular.js')
+script(type='text/javascript', src='/bower_components/angular-ui-router/release/angular-ui-router.js')
+
+each jsAsset in settings.jsAssets
+    script(type='text/javascript', src='#{jsAsset}')
+
+     
