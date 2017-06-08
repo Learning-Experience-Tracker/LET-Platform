@@ -12,5 +12,9 @@ module.exports = {
         port : 3306,
         dialect : 'mysql',
         enableLogging : false
+    },
+    mongoDb : {
+        name : 'let',
+        host : 'mongodb://localhost/'
     }
 }
