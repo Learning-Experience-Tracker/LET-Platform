@@ -18,7 +18,25 @@
 
       // states
       $stateProvider
-        .state('main', {
+        .state('main',{
+          abstract : true,
+          views : {
+            'header' : {
+              templateUrl : '/pages/views/header.html',
+              controller : 'HeaderController',
+              controllerAs : 'headerCtr'
+            },
+            'content' : {
+              template : '<section ui-view></section>'
+            },
+            'footer' : {
+              templateUrl : '/pages/views/footer.html',
+              controller : 'FooterController',
+              controllerAs : 'footerCtr'
+            }
+          }
+        })
+        .state('main.index', {
           url: '/',
           templateUrl : '/pages/views/main.html',
           controller : 'MainController',

@@ -5,6 +5,6 @@ var express = require('express'),
 
 module.exports = function(app){
 
-    app.route('/').get(pagesCtr.renderIndexPage);
+    app.route('/*').get(pagesCtr.renderIndexPage);
     
 }

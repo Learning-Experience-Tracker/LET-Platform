@@ -1,0 +1,44 @@
+<div class="container" ng-init="lrsCtr.init()">
+    <div class="jumbotron text-center bg-transparent margin-none">
+      <h1>Learning Record Stores</h1>
+      <p>a list of your learning record stores.</p>
+      <a href="/lrs/create"class="btn btn-primary">Create</a>
+    </div>
+
+    <div class="page-section">
+      <div class="row">
+        <div class="col-md-10 col-lg-8 col-md-offset-1 col-lg-offset-2">
+          
+          <div class="panel panel-default">
+            <!-- Data table -->
+            <table data-toggle="data-table" class="table" cellspacing="0" width="100%">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Username</th>
+                  <th>Password</th>
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <th>Name</th>
+                  <th>Username</th>
+                  <th>Password</th>
+                </tr>
+              </tfoot>
+              <tbody>
+                <tr ng-repeat="lrs in lrsCtr.lrsList">
+                  <td>{{lrs.name}}</td>
+                  <td>{{lrs.username}}</td>
+                  <td>{{lrs.password}}</td>
+                </tr>
+              </tbody>
+            </table>
+            <!-- // Data table -->
+          </div>
+
+        </div>
+      </div>
+    </div>
+   
+ </div>

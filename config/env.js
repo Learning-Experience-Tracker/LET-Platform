@@ -16,5 +16,11 @@ module.exports = {
     mongoDb : {
         name : 'let',
         host : 'mongodb://localhost/'
-    }
+    },
+    adminConfigs : {
+        name : 'admin',
+        username : 'admin',
+        password : 'admin'
+    },
+    jwtSecret : 'batman'
 }

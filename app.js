@@ -3,7 +3,8 @@
 var express = require('express'),
     config = require('./config/config'),
     winston = require('./config/winston'),
-    mongoose = require('./config/mongoose');
+    mongoose = require('./config/mongoose'),
+    bootstrap = require('./config/bootstrap');
 
 createApp();
 
@@ -13,6 +14,8 @@ function createApp(){
 
     mongoose.init()
     .then(() => {
+
+        bootstrap();
 
         var app = express();
         require('./config/express')(app);

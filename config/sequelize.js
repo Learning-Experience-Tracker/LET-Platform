@@ -63,6 +63,6 @@ function init(callback){
             var model = sequelize.import(path.join(route, file));
             db[model.name] = model;
         });
-  }
+    }
 }
 
