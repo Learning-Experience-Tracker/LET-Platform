@@ -3,7 +3,7 @@
 var express = require('express'),
     config = require('./config/config'),
     winston = require('./config/winston'),
-    mongoose = require('./config/mongoose'),
+    sequelize = require('./config/sequelize'),
     bootstrap = require('./config/bootstrap');
 
 createApp();
@@ -12,9 +12,7 @@ function createApp(){
 
     winston.info("Launching...");  
 
-    mongoose.init()
-    .then(() => {
-
+    sequelize.init(function(db){
         bootstrap();
 
         var app = express();
@@ -23,9 +21,5 @@ function createApp(){
         app.listen(config.port);
         winston.info("App started and running on port: " + config.port);
 
-    })
-    .catch((error) => {
-        winston.error(error);
-    });
-    
+    });    
 }

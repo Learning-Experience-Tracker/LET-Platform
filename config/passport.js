@@ -3,7 +3,7 @@ var passport = require('passport');
 
 var LocalStrategy = require('passport-local').Strategy;
 var config = require('./config');
-var db = require('./mongoose');
+var db = require('./sequelize');
 var winston = require('./winston');
 
 //---Json Web Tokens

@@ -1,7 +1,7 @@
 
 var config = require('./../../../../config/config'),
     jwt = require('jsonwebtoken'),
-    db = require('./../../../../config/mongoose'),
+    db = require('./../../../../config/sequelize'),
     winston = require('./../../../../config/winston');
 
 module.exports.login = function(req, res){
@@ -18,7 +18,7 @@ module.exports.login = function(req, res){
 }
 
 module.exports.register = function(req, res){
-    var user = new db.User({
+    var user = db.User.build({
         name : req.body.name,
         username : req.body.username,
         password : req.body.password

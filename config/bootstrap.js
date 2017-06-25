@@ -1,21 +1,22 @@
 
-var db = require('./mongoose'),
+var db = require('./sequelize'),
     adminConfigs = require('./env').adminConfigs,
     winston = require('./winston');
 
 module.exports = function(){
 
     //bootstraping with admin user
-    db.User.find({ username : 'admin'})
+    db.User.find({ where : { username : 'admin' } })
       .then(function(adminUser){
-        if(adminUser.length == 0){ // no admin user registered
+        if(!adminUser){ // no admin user registered
             winston.info('No admin user found, creating...');
             
-            adminUser = new db.User(adminConfigs);
+            adminUser = db.User.build(adminConfigs);
 
-            adminUser.save();
+            adminUser.save().then(function(){
+                winston.info('Admin user created.');                
+            });
 
-            winston.info('Admin user created.');
         }else
             winston.info('Admin user is already created.');
       })

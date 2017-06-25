@@ -1,14 +1,14 @@
 'use strict';
 
-var db = require('./../../../../config/mongoose'),
+var db = require('./../../../../config/sequelize'),
     winston = require('./../../../../config/winston');
 
 module.exports.create = function(req, res){
-    var lrs = new db.LRS({
+    var lrs = db.LRS.build({
         name : req.body.name,
         username : req.user.name,
         password : req.user.password,
-        userId : req.user.id
+        UserId : req.user.id
     });
 
     lrs.save().then(function(){
@@ -25,7 +25,7 @@ module.exports.get = function(req, res){
 }
 
 module.exports.getAll = function(req, res){
-    db.LRS.find({ userId : req.user.id }).then(function(lrss){
+    db.LRS.findAll({ where : { UserId : req.user.id } }).then(function(lrss){
         return res.json(lrss);
     }).catch(function(err){
         winston.error(err);
