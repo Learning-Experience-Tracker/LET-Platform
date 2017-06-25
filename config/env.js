@@ -19,6 +19,7 @@ module.exports = {
     },
     adminConfigs : {
         name : 'admin',
+        email : 'admin@mail.com',
         username : 'admin',
         password : 'admin'
     },

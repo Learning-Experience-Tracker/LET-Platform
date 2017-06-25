@@ -21,6 +21,7 @@ module.exports.register = function(req, res){
     var user = db.User.build({
         name : req.body.name,
         username : req.body.username,
+        email : req.body.email,
         password : req.body.password
     });
 
@@ -41,6 +42,4 @@ module.exports.register = function(req, res){
         winston.error(error);
         res.status(500).end();
     });
-
-
 }

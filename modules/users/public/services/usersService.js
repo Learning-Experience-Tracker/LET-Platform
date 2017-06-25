@@ -85,7 +85,8 @@ angular
                 $http.post('/api/register', {
                         username: user.username,
                         password: user.password,
-                        name : user.name
+                        name : user.name,
+                        email : user.email
                     }).then(function(res) {
                         self.onIdentity(res.data);
                     })
