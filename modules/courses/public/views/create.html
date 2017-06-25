@@ -1,0 +1,41 @@
+  <div class="container" ng-init="courseCtr.initCreate()">
+    <div class="jumbotron bg-transparent text-center margin-none">
+      <h1>Courses</h1>
+      <p>Creating a course for a specific organization.</p>
+    </div>
+
+    <div class="page-section">
+      <div class="row">
+        <div class="col-md-10 col-lg-8 col-md-offset-1 col-lg-offset-2">
+          
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <form>                
+                <div class="row form-group required" style="margin-bottom:11px;">
+                  <label class="col-sm-3 control-label">Name</label>
+                  <div class="col-sm-9">
+                    <input type="text" class="form-control" id="name" ng-model="courseCtr.name">
+                  </div>
+                </div>
+
+                <div class="row form-group required" style="margin-bottom:11px;">
+                  <label class="col-sm-3 control-label">Organization</label>
+                  <div class="col-sm-9">
+                    <select id="org_select" class="form-control" ng-model="courseCtr.org">
+                      <option ng-repeat="org in courseCtr.orgList" value="{{org.id}}">{{org.name}}</option>
+                    </select>
+                  </div>
+                </div>          
+                <div class="row" style="text-align:center;">
+                    <button class="btn btn-primary" ng-click="courseCtr.create()">Submit</button>
+                </div>                      
+              </form>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+
+  </div>

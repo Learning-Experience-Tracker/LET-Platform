@@ -2,24 +2,24 @@
     'use strict';
     angular
         .module('letApp')
-        .controller('LRSController', LRSController);
+        .controller('OrganizationController', OrganizationController);
 
-    LRSController.$inject = ['LRSService', '$rootScope', 'ngToast', '$state'];
+    OrganizationController.$inject = ['OrganizationService', '$rootScope', 'ngToast', '$state'];
     
-    function LRSController(LRSService, $rootScope, ngToast, $state){
+    function OrganizationController(OrganizationService, $rootScope, ngToast, $state){
        var vm = this;
 
        vm.init = init;
        vm.create = create;
        
        function init(){
-           LRSService.getAll().then(function(response){
-              vm.lrsList = response.data;
+           OrganizationService.getAll().then(function(response){
+              vm.orgList = response.data;
            }).catch(function(err){
                console.log(err);
                ngToast.create({
                    className : 'danger',
-                   content : 'Error retrieving list of LRSs'
+                   content : 'Error retrieving list of Organizations'
                });
            });
        }
@@ -33,8 +33,8 @@
                return;
            }
 
-           LRSService.create({ name : vm.name }).then(function(){
-                $state.go('main.lrsList');
+           OrganizationService.create({ name : vm.name }).then(function(){
+                $state.go('main.orgList');
                 ngToast.create({                    
                     content : 'Created Successfully.'
                 }); 
@@ -42,7 +42,7 @@
                console.log(err);
                ngToast.create({
                    className : 'danger',
-                   content : 'Error creating LRS.'
+                   content : 'Error creating Organization.'
                });
            })
        }

@@ -1,20 +1,20 @@
 
 var passport = require('./../../../../config/passport'),
-    lrsCtr = require('./../controllers/LRSController');
+    orgCtr = require('./../controllers/OrganizationController');
 
 module.exports = function(app){
 
-    app.route('/api/lrs/all')
+    app.route('/api/org/all')
        .get(passport.authenticate('jwt', {session : false}),
-            lrsCtr.getAll);
+            orgCtr.getAll);
 
-    app.route('/api/lrs/:id')
+    app.route('/api/org/:id')
        .get(passport.authenticate('jwt', {session : false}),
-            lrsCtr.get);
+            orgCtr.get);
 
-    app.route('/api/lrs/create')
+    app.route('/api/org/create')
        .post(passport.authenticate('jwt', {session : false}),
-             lrsCtr.create);
+             orgCtr.create);
 
     
 }

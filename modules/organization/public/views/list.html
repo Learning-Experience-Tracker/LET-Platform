@@ -1,8 +1,8 @@
-<div class="container" ng-init="lrsCtr.init()">
+<div class="container" ng-init="orgCtr.init()">
     <div class="jumbotron text-center bg-transparent margin-none">
-      <h1>Learning Record Stores</h1>
-      <p>a list of your learning record stores.</p>
-      <a href="/lrs/create"class="btn btn-primary">Create</a>
+      <h1>Organizations</h1>
+      <p>a list of your Educational Organizations.</p>
+      <a href="/org/create"class="btn btn-primary">Create</a>
     </div>
 
     <div class="page-section">
@@ -14,23 +14,14 @@
             <table data-toggle="data-table" class="table" cellspacing="0" width="100%">
               <thead>
                 <tr>
+                  <th>Id</th>
                   <th>Name</th>
-                  <th>Username</th>
-                  <th>Password</th>
                 </tr>
               </thead>
-              <tfoot>
-                <tr>
-                  <th>Name</th>
-                  <th>Username</th>
-                  <th>Password</th>
-                </tr>
-              </tfoot>
               <tbody>
-                <tr ng-repeat="lrs in lrsCtr.lrsList">
-                  <td>{{lrs.name}}</td>
-                  <td>{{lrs.username}}</td>
-                  <td>{{lrs.password}}</td>
+                <tr ng-repeat="org in orgCtr.orgList">
+                  <td>{{org.id}}</td>
+                  <td>{{org.name}}</td>
                 </tr>
               </tbody>
             </table>

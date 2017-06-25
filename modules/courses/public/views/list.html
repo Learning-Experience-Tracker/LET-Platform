@@ -1,0 +1,37 @@
+<div class="container" ng-init="courseCtr.init()">
+    <div class="jumbotron text-center bg-transparent margin-none">
+      <h1>Courses</h1>
+      <p>a list of your Educational Courses.</p>
+      <a href="/courses/create"class="btn btn-primary">Create</a>
+    </div>
+
+    <div class="page-section">
+      <div class="row">
+        <div class="col-md-10 col-lg-8 col-md-offset-1 col-lg-offset-2">
+          
+          <div class="panel panel-default">
+            <!-- Data table -->
+            <table data-toggle="data-table" class="table" cellspacing="0" width="100%">
+              <thead>
+                <tr>
+                  <th>Id</th>
+                  <th>Name</th>
+                  <th>Organization</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="course in courseCtr.courseList">
+                  <td>{{course.id}}</td>
+                  <td>{{course.name}}</td>
+                  <td>{{course.Organization.name}}</td>
+                </tr>
+              </tbody>
+            </table>
+            <!-- // Data table -->
+          </div>
+
+        </div>
+      </div>
+    </div>
+   
+ </div>

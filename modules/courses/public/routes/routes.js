@@ -13,24 +13,24 @@
 
       // states
       $stateProvider
-        .state('main.lrsList', {
-          url: '/lrs/all',          
+        .state('main.courseList', {
+          url: '/courses/all',          
           data : { },
           views : {
               '' : {                
-                templateUrl : '/lrs/views/list.html',
-                controller : 'LRSController',
-                controllerAs : 'lrsCtr'
+                templateUrl : '/courses/views/list.html',
+                controller : 'CoursesController',
+                controllerAs : 'courseCtr'
               }
           }
-        }).state('main.lrsCreate', {
-          url: '/lrs/create',          
+        }).state('main.courseCreate', {
+          url: '/courses/create',          
           data : { },
           views : {
               '' : {                
-                templateUrl : '/lrs/views/create.html',
-                controller : 'LRSController',
-                controllerAs : 'lrsCtr'
+                templateUrl : '/courses/views/create.html',
+                controller : 'CoursesController',
+                controllerAs : 'courseCtr'
               }
           }
         });
