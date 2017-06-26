@@ -17,6 +17,7 @@
                   <th>Id</th>
                   <th>Name</th>
                   <th>Organization</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -24,6 +25,11 @@
                   <td>{{course.id}}</td>
                   <td>{{course.name}}</td>
                   <td>{{course.Organization.name}}</td>
+                  <td>
+                      <button class="btn btn-danger" ng-click="courseCtr.delete(course.id)" style="height: 24px;padding: 2px;padding-right: 5px;padding-left: 5px;">
+                          delete
+                      </button>
+                  </td>
                 </tr>
               </tbody>
             </table>

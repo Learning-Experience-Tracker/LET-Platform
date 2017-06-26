@@ -14,6 +14,9 @@ angular
                 },
                 create : function(course){
                     return $http.post('/api/course/create', course);
+                },
+                delete : function(courseId){
+                    return $http.post('/api/course/delete', { courseId : courseId });
                 }
             }
     }

@@ -12,6 +12,7 @@
        vm.init = init;
        vm.initCreate = initCreate;
        vm.create = create;
+       vm.delete = _delete;
        
        function init(){
            CourseService.getAll().then(function(response){
@@ -57,6 +58,21 @@
                ngToast.create({
                    className : 'danger',
                    content : 'Error creating Course.'
+               });
+           });
+       }
+
+       function _delete(courseId){           
+           CourseService.delete(courseId).then(function(){
+                vm.init();
+                ngToast.create({                    
+                    content : 'Deleted Successfully.'
+                }); 
+           }).catch(function(err){
+               console.log(err);
+               ngToast.create({
+                   className : 'danger',
+                   content : 'Error deleteing Course.'
                });
            });
        }

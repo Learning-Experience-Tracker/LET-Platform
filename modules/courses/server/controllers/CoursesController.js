@@ -36,3 +36,14 @@ module.exports.getAll = function(req, res){
         res.status(500).end();
     });
 }
+
+module.exports.delete = function(req, res){
+    db.Course.destroy({
+        where : { id : req.body.courseId }
+    }).then(function(){
+        res.end();
+    }).catch(function(err){
+        winston.error(err);
+        res.status(500).end();
+    });
+}

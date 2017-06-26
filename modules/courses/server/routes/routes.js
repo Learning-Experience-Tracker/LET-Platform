@@ -16,5 +16,8 @@ module.exports = function(app){
        .post(passport.authenticate('jwt', {session : false}),
              courseCtr.create);
 
+    app.route('/api/course/delete')
+       .post(passport.authenticate('jwt', {session : false}),
+             courseCtr.delete);
     
 }
