@@ -1,0 +1,72 @@
+  <div class="container" ng-init="assessmentCtr.initCreate()">
+    <div class="jumbotron bg-transparent text-center margin-none">
+      <h1>Assessments</h1>
+      <p>Creating a Assessments for a specific Course.</p>
+    </div>
+
+    <div class="page-section">
+      <div class="row">
+        <div class="col-md-10 col-lg-8 col-md-offset-1 col-lg-offset-2">
+          
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <form>                
+                <div class="row form-group required" style="margin-bottom:11px;">
+                  <label class="col-sm-3 control-label">Name</label>
+                  <div class="col-sm-9">
+                    <input type="text" class="form-control" id="name" ng-model="assessmentCtr.name">
+                  </div>
+                </div>
+
+                <div class="row form-group required" style="margin-bottom:11px;">
+                  <label class="col-sm-3 control-label">ID IRI</label>
+                  <div class="col-sm-9">
+                    <input type="text" class="form-control" id="id_IRI" ng-model="assessmentCtr.id_IRI">
+                  </div>
+                </div>
+
+                <div class="row form-group required" style="margin-bottom:11px;">
+                  <label class="col-sm-3 control-label">Course</label>
+                  <div class="col-sm-9">
+                    <select id="course_select" class="form-control" ng-model="assessmentCtr.courseId">
+                      <option ng-repeat="course in assessmentCtr.courseList" value="{{course.id}}">{{course.name}}</option>
+                    </select>
+                  </div>
+                </div>   
+
+                <div class="row form-group required" style="margin-bottom:11px;">
+                  <label class="col-sm-3 control-label">Questions</label>
+                    <div class="col-sm-9">
+                      <div class= "input-group" data-ng-repeat="question in assessmentCtr.questions" style="margin-bottom:11px;">
+                        <div class="panel panel-default">
+                          <div lass="panel-body">
+                              <div class="input-group" style="padding:10px;">
+                              <label>Question {{question.id}}</label>
+                              <input class="form-control" ng-model="question.name" name="" placeholder="Question name" style="margin-bottom:11px;">
+                              <input class="form-control" ng-model="question.id_IRI" name="" placeholder="Question ID">
+                              </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </div> 
+
+                <div class="row form-group required" style="margin-bottom:11px;">
+                    <div class="col-sm-3">
+                      <button class="btn btn-primary" ng-click="assessmentCtr.addQuestion()">Add Questions</button>
+                    </div>
+                </div>
+
+                <div class="row" style="text-align:center;">
+                    <button class="btn btn-primary" ng-click="assessmentCtr.create()">Submit</button>
+                </div>                      
+              </form>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+
+  </div>
