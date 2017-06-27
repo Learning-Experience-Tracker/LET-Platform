@@ -11,7 +11,7 @@ module.exports = function (sequelize, DataTypes) {
 		},
 		{
 			associate: function (models) {
-				Course.belongsTo(models.Organization);				
+				Course.belongsTo(models.Organization,{onDelete: 'cascade'});				
 			}
 		}
 	);

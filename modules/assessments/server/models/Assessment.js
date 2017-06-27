@@ -12,7 +12,7 @@ module.exports = function (sequelize, DataTypes) {
 		},
 		{
 			associate: function (models) {
-				Assessment.belongsTo(models.Course);				
+				Assessment.belongsTo(models.Course,{onDelete: 'cascade'});				
 			}
 		}
 	);

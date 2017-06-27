@@ -4,11 +4,13 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
-  },
+    "start": "node app.js",
+    "dropDB" : "node config/dropDB.js"
+  }, 
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "async": "^2.5.0",
     "body-parser": "^1.17.2",
     "express": "^4.15.3",
     "glob": "^7.1.2",

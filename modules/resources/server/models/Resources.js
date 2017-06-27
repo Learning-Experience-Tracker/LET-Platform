@@ -14,7 +14,7 @@ module.exports = function (sequelize, DataTypes) {
 		},
 		{
 			associate: function (models) {
-				Resource.belongsTo(models.Course);				
+				Resource.belongsTo(models.Course,{onDelete: 'cascade'});				
 			}
 		}
 	);

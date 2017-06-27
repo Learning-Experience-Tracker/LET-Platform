@@ -11,8 +11,8 @@ module.exports = function (sequelize, DataTypes) {
 		},
 		{
 			associate: function (models) {
-				Organization.belongsTo(models.User);	
-				Organization.hasMany(models.Course);			
+				Organization.belongsTo(models.User,{onDelete: 'cascade'});	
+				Organization.hasMany(models.Course,{onDelete: 'cascade'});			
 			}
 		}
 	);
