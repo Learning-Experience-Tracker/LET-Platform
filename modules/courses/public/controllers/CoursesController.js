@@ -4,15 +4,17 @@
         .module('letApp')
         .controller('CoursesController', CoursesController);
 
-    CoursesController.$inject = ['CourseService', 'OrganizationService', '$rootScope', 'ngToast', '$state'];
+    CoursesController.$inject = ['CourseService', 'OrganizationService', '$rootScope', 'ngToast', '$state', '$stateParams'];
     
-    function CoursesController(CourseService, OrganizationService, $rootScope, ngToast, $state){
+    function CoursesController(CourseService, OrganizationService, $rootScope, ngToast, $state, $stateParams){
        var vm = this;
 
        vm.init = init;
        vm.initCreate = initCreate;
        vm.create = create;
        vm.delete = _delete;
+       vm.findOne = findOne;
+       vm.viewCourse = viewCourse;
        
        function init(){
            CourseService.getAll().then(function(response){
@@ -75,6 +77,31 @@
                    content : 'Error deleteing Course.'
                });
            });
+       }
+
+       function findOne(){
+           console.log($stateParams.id);
+           CourseService.get($stateParams.id).then(function(response){
+              vm.course = response.data;
+           }).catch(function(error){
+              if(error.status = 404){
+                console.log(error);
+                ngToast.create({
+                    className : 'danger',
+                    content : 'Course Not Found.'
+                });  
+              }else {
+                console.log(error);
+                ngToast.create({
+                    className : 'danger',
+                    content : 'Error retrieving Course.'
+                });  
+              }              
+           });
+       }
+
+       function viewCourse(courseId){
+          $state.go('main.courseView', { id : courseId});
        }
     }
 })();

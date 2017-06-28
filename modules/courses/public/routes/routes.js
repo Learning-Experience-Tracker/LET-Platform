@@ -33,6 +33,16 @@
                 controllerAs : 'courseCtr'
               }
           }
+        }).state('main.courseView', {
+          url: '/courses/:id',          
+          data : { },
+          views : {
+              '' : {                
+                templateUrl : '/courses/views/view.html',
+                controller : 'CoursesController',
+                controllerAs : 'courseCtr'
+              }
+          }
         });
   }
 

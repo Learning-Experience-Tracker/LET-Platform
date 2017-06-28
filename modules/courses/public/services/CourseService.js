@@ -17,6 +17,9 @@ angular
                 },
                 delete : function(courseId){
                     return $http.post('/api/course/delete', { courseId : courseId });
+                },
+                get : function(courseId){
+                    return $http.get('/api/course/' + courseId);
                 }
             }
     }
