@@ -19,7 +19,26 @@ module.exports.create = function(req, res){
 }
 
 module.exports.get = function(req, res){
-    res.end();
+    
+    db.Course.findOne({
+        where : {
+            id : req.params.id
+        },
+        include : [
+          {
+              model : db.Resource
+          }]
+    }).then(function(course){
+        if(!course){
+            res.status(404).end();
+            return;
+        }
+
+        res.json(course);
+    }).catch(function(error){
+        winston.error(error);
+        res.status(500).end();
+    });
 }
 
 module.exports.getAll = function(req, res){

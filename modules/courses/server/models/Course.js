@@ -11,7 +11,8 @@ module.exports = function (sequelize, DataTypes) {
 		},
 		{
 			associate: function (models) {
-				Course.belongsTo(models.Organization,{onDelete: 'cascade'});				
+				Course.belongsTo(models.Organization,{onDelete: 'cascade'});
+				Course.hasMany(models.Resource,{onDelete: 'cascade'});				
 			}
 		}
 	);
