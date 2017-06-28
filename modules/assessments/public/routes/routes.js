@@ -43,7 +43,17 @@
                 controllerAs : 'assessmentCtr'
               }
           }
-        });
+        }).state('main.assessmentDashboard', {
+          url: '/assessments/:id/dashboard',          
+          data : { },
+          views : {
+              '' : {                
+                templateUrl : '/assessments/views/dashboard.html',
+                controller : 'AssessmentsController',
+                controllerAs : 'assessmentCtr'
+              }
+          }
+        });;
   }
 
 })();

@@ -11,7 +11,7 @@
           
           <div class="panel panel-default">
             <!-- Data table -->
-            <table data-toggle="data-table" class="table" cellspacing="0" width="100%" style="table-layout:fixed;">
+            <table data-toggle="data-table" class="table" cellspacing="0" width="100%">
               <thead>
                 <tr>
                   <th>Id</th>
@@ -26,11 +26,14 @@
                   <td>{{assessment.name}}</td>
                   <td>{{assessment.id_IRI}}</td>
                   <td>
-                      <button class="btn btn-danger" ng-click="assessmentCtr.delete(assessment.id)" style="height: 24px;padding: 2px;padding-right: 5px;padding-left: 5px;">
-                          delete
+                   <button class="btn btn-info" ng-click="assessmentCtr.viewDashboard(assessment.id)" style="height: 24px;padding: 2px;padding-right: 5px;padding-left: 5px;">
+                          insights
                       </button>
                       <button class="btn btn-primary" ng-click="assessmentCtr.viewAssessment(assessment.id)" style="height: 24px;padding: 2px;padding-right: 5px;padding-left: 5px;">
                           details
+                      </button>
+                      <button class="btn btn-danger" ng-click="assessmentCtr.delete(assessment.id)" style="height: 24px;padding: 2px;padding-right: 5px;padding-left: 5px;">
+                          delete
                       </button>
                   </td>
                 </tr>

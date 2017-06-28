@@ -15,6 +15,8 @@
        vm.delete = _delete;
        vm.findOne = findOne;
        vm.viewAssessment = viewAssessment;
+       vm.viewDashboard = viewDashboard;
+       vm.initDashboard = initDashboard;
 
        vm.addQuestion = addQuestion;
        vm.removeQuestion = removeQuestion;
@@ -115,6 +117,14 @@
 
        function viewAssessment(assessmentId){
            $state.go('main.assessmentView', { id : assessmentId });
+       }
+
+       function viewDashboard(assessmentId){
+           $state.go('main.assessmentDashboard', { id : assessmentId });
+       }
+
+       function initDashboard(){
+           findOne();
        }
     }
 })();
