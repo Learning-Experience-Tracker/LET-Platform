@@ -1,0 +1,52 @@
+<div ng-init="assessmentCtr.findOne()">
+    <div class="parallax bg-white page-section">
+    <div class="parallax-layer container" data-opacity="true">
+      <div class="media v-middle">
+        <div class="media-left">
+          <span class="icon-block s60 bg-lightred"><i class="fa fa-file-text"></i></span>
+        </div>
+        <div class="media-body">
+          <h1 class="text-display-1 margin-none">{{assessmentCtr.assessment.name}}</h1>
+        </div>
+        <div class="media-right">
+          <a class="btn btn-white" href="website-directory-grid.html">Library</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-9 col-md-8">
+
+
+        <div class="page-section">
+          <div class="row">
+            <div class="col-md-7">
+              <h2 class="text-headline margin-none">Questions</h2>
+              <p class="text-subhead text-light">A list of Assessment questions.</p>
+              <ul class="list-group relative paper-shadow" data-hover-z="0.5" data-animated>
+                <li class="list-group-item" ng-repeat="question in assessmentCtr.assessment.Questions">
+                  <div class="media v-middle">
+                    <div class="media-left">
+                      <div class="icon-block s30 bg-red-300 text-white img-circle">
+                        <i class="fa fa-star"></i>
+                      </div>
+                    </div>
+                    <div class="media-body text-body-2">
+                      <p style="font-size:22px;">{{question.name}}<p>
+                      <p>{{question.id_IRI}}</p>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

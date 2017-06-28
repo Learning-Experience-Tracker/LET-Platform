@@ -33,6 +33,16 @@
                 controllerAs : 'assessmentCtr'
               }
           }
+        }).state('main.assessmentView', {
+          url: '/assessments/:id',          
+          data : { },
+          views : {
+              '' : {                
+                templateUrl : '/assessments/views/view.html',
+                controller : 'AssessmentsController',
+                controllerAs : 'assessmentCtr'
+              }
+          }
         });
   }
 

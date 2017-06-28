@@ -12,7 +12,8 @@ module.exports = function (sequelize, DataTypes) {
 		},
 		{
 			associate: function (models) {
-				Assessment.belongsTo(models.Course,{onDelete: 'cascade'});				
+				Assessment.belongsTo(models.Course,{onDelete: 'cascade'});	
+				Assessment.hasMany(models.Question);			
 			}
 		}
 	);
