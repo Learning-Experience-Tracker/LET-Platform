@@ -6,7 +6,7 @@
 
     <div class="page-section">
       <div class="row">
-        <div class="col-md-10 col-lg-8 col-md-offset-1 col-lg-offset-2">
+        <div class="col-md-12 col-lg-12">
           
           <div class="panel panel-default">
             <!-- Data table -->
@@ -14,19 +14,31 @@
               <thead>
                 <tr>
                   <th>Id</th>
+                  <th>Student</th>
+                  <th>Action</th>
+                  <th>Object</th>
                 </tr>
               </thead>
               <tbody>
                 <tr ng-repeat="activity in activitiesCtr.activitiesList">
                   <td>{{activity.id}}</td>
+                  <td>{{activity.User.name}}</td>
+                  <td>{{activity.Verb.name}}</td>
+                  <td ng-if="activity.AssessmentId">{{activity.Assessment.name}}</td>
+                  <td ng-if="activity.QuestionId">{{activity.Question.name}}</td>
+                  <td ng-if="activity.ResourceId">{{activity.Resource.name}}</td>
                 </tr>
               </tbody>
             </table>
-            <!-- // Data table -->
           </div>
-
+          <div  paging 
+                page="activitiesCtr.currentPage" 
+                page-size="activitiesCtr.pageSize" 
+                total="activitiesCtr.activitiesCount" 
+                paging-action="activitiesCtr.getPage('clicked', page, pageSize, total)"
+                width="100%">
+          </div> 
         </div>
       </div>
     </div>
-   
  </div>

@@ -9,8 +9,55 @@ module.exports.get = function(req, res){
 
 module.exports.getAll = function(req, res){
     db.Statement
-      .findAll().then(function(statements){
+      .findAll({
+          where :{},
+          order : [
+            ['id', 'ASC']
+          ],
+          include : [
+              {model : db.Verb},
+              {model : db.User},
+              {model : db.Assessment},
+              {model : db.Resource},
+              {model : db.Question}
+        ]
+      }).then(function(statements){
         return res.json(statements);
+    }).catch(function(err){
+        winston.error(err);
+        res.status(500).end();
+    });
+}
+
+module.exports.page = function(req, res){
+    console.log(req.body);
+    db.Statement
+      .findAll({
+          where :{},
+          order : [
+                ['id', 'ASC']
+          ],
+          include : [
+              {model : db.Verb},
+              {model : db.User},
+              {model : db.Assessment},
+              {model : db.Resource},
+              {model : db.Question}
+        ],
+        limit: req.body.limit,
+        offset: req.body.offset,
+      }).then(function(statements){
+        return res.json(statements);
+    }).catch(function(err){
+        winston.error(err);
+        res.status(500).end();
+    });
+}
+
+module.exports.getCount = function(req, res){
+    db.Statement
+      .findAll().then(function(statements){
+        return res.json(statements.length);
     }).catch(function(err){
         winston.error(err);
         res.status(500).end();

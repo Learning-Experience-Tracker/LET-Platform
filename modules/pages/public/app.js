@@ -1,5 +1,5 @@
 'use strict';
-angular.module('letApp', ['ui.router', 'ngStorage', 'ngToast', 'angular-loading-bar']);
+angular.module('letApp', ['ui.router', 'ngStorage', 'ngToast', 'angular-loading-bar','bw.paging']);
 
 (function () {
 

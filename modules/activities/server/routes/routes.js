@@ -8,7 +8,16 @@ module.exports = function(app){
        .get(passport.authenticate('jwt', {session : false}),
             activitiesCtr.getAll);
 
+
+    app.route('/api/activity/count')
+       .get(passport.authenticate('jwt', {session : false}),
+            activitiesCtr.getCount);
+
     app.route('/api/activity/:id')
        .get(passport.authenticate('jwt', {session : false}),
-            activitiesCtr.get);    
+            activitiesCtr.get); 
+
+    app.route('/api/activity/page')
+       .post(passport.authenticate('jwt', {session : false}),
+            activitiesCtr.page);    
 }
