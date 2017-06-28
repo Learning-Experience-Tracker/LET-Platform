@@ -1,0 +1,43 @@
+<div class="container" ng-init="assessmentCtr.init()">
+    <div class="jumbotron text-center bg-transparent margin-none">
+      <h1>Assessments</h1>
+      <p>a list of your Course Assessments.</p>
+      <a href="/assessments/create"class="btn btn-primary">Create</a>
+    </div>
+
+    <div class="page-section">
+      <div class="row">
+        <div class="col-md-10 col-lg-8 col-md-offset-1 col-lg-offset-2">
+          
+          <div class="panel panel-default">
+            <!-- Data table -->
+            <table data-toggle="data-table" class="table" cellspacing="0" width="100%">
+              <thead>
+                <tr>
+                  <th>Id</th>
+                  <th>Name</th>
+                  <th>Id IRI</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="assessment in assessmentCtr.assessmentsList">
+                  <td>{{assessment.id}}</td>
+                  <td>{{assessment.name}}</td>
+                  <td>{{assessment.id_IRI}}</td>
+                  <td>
+                      <button class="btn btn-danger" ng-click="assessmentCtr.delete(assessment.id)" style="height: 24px;padding: 2px;padding-right: 5px;padding-left: 5px;">
+                          delete
+                      </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <!-- // Data table -->
+          </div>
+
+        </div>
+      </div>
+    </div>
+   
+ </div>
