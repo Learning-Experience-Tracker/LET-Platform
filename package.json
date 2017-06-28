@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "dropDB" : "node config/dropDB.js"
+    "emptyDB" : "node config/emptyDB.js",
+    "importAss" : "node data/assessmentData/ImportAssData.js"
   }, 
   "author": "",
   "license": "ISC",
