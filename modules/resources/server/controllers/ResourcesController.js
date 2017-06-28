@@ -4,7 +4,7 @@ var db = require('./../../../../config/sequelize'),
     winston = require('./../../../../config/winston');
 
 module.exports.create = function(req, res){
-    var resourse = db.Resourse.build({
+    var resource = db.Resource.build({
             id_IRI : req.body.id_IRI,
             type_IRI : req.body.type_IRI,
             name : req.body.name,
@@ -12,7 +12,7 @@ module.exports.create = function(req, res){
             CourseId : req.body.courseId
     });
 
-    resourse.save().then(function(){
+    resource.save().then(function(){
         res.end();
     })
     .catch(function(err){
@@ -36,8 +36,8 @@ module.exports.getAll = function(req, res){
 }
 
 module.exports.delete = function(req, res){
-    db.Resourse.destroy({
-        where : { id : req.body.resourseId }
+    db.Resource.destroy({
+        where : { id : req.body.resourceId }
     }).then(function(){
         res.end();
     }).catch(function(err){
