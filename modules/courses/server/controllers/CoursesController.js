@@ -27,6 +27,9 @@ module.exports.get = function(req, res){
         include : [
           {
               model : db.Resource
+          },
+          {
+              model : db.Assessment
           }]
     }).then(function(course){
         if(!course){

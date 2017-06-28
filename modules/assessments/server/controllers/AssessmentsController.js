@@ -42,7 +42,24 @@ module.exports.create = function(req, res){
 }
 
 module.exports.get = function(req, res){
-    res.end();
+    db.Assessment.findOne({
+        where : {
+            id : req.params.id
+        },
+        include : [{
+            model : db.Question
+        }]
+    }).then(function(assessment){
+        if(!assessment){
+            res.status(404).end();
+            return;
+        }
+
+        res.json(assessment);
+    }).catch(function(error){
+        winston.error(error);
+        res.status(500).end();
+    });
 }
 
 module.exports.getAll = function(req, res){

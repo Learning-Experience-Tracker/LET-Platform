@@ -4,15 +4,17 @@
         .module('letApp')
         .controller('AssessmentsController', AssessmentsController);
 
-    AssessmentsController.$inject = ['AssessmentsService', 'CourseService', '$rootScope', 'ngToast', '$state'];
+    AssessmentsController.$inject = ['AssessmentsService', 'CourseService', '$rootScope', 'ngToast', '$state', '$stateParams'];
 
-    function AssessmentsController(AssessmentsService, CourseService, $rootScope, ngToast, $state){
+    function AssessmentsController(AssessmentsService, CourseService, $rootScope, ngToast, $state, $stateParams){
         var vm = this;
         
        vm.init = init;
        vm.initCreate = initCreate;
        vm.create = create;
        vm.delete = _delete;
+       vm.findOne = findOne;
+       vm.viewAssessment = viewAssessment;
 
        vm.addQuestion = addQuestion;
        vm.removeQuestion = removeQuestion;
@@ -34,7 +36,7 @@
                console.log(err);
                ngToast.create({
                    className : 'danger',
-                   content : 'Error retrieving list of Courses'
+                   content : 'Error retrieving list of Assessments'
                });
            });
        }
@@ -46,7 +48,7 @@
                console.log(err);
                ngToast.create({
                    className : 'danger',
-                   content : 'Error retrieving list of Organizations'
+                   content : 'Error retrieving list of Courses'
                });
            });
        }
@@ -79,7 +81,7 @@
                console.log(err);
                ngToast.create({
                    className : 'danger',
-                   content : 'Error creating Course.'
+                   content : 'Error creating Assessment.'
                });
            });
        }
@@ -94,9 +96,25 @@
                console.log(err);
                ngToast.create({
                    className : 'danger',
-                   content : 'Error deleteing Course.'
+                   content : 'Error deleting Assessment.'
                });
            });
+       }
+
+       function findOne(){
+           AssessmentsService.get($stateParams.id).then(function(response){
+              vm.assessment = response.data;
+           }).catch(function(err){
+              console.log(err);
+              ngToast.create({
+                   className : 'danger',
+                   content : 'Error retrieving assessment.'
+              });
+           });
+       }
+
+       function viewAssessment(assessmentId){
+           $state.go('main.assessmentView', { id : assessmentId });
        }
     }
 })();
