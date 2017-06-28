@@ -6,10 +6,6 @@
 module.exports = function (sequelize, DataTypes) {
 
 	var Statement = sequelize.define('Statement',{
-            id : {
-                type : DataTypes.INTEGER,
-                primaryKey: true
-            },
             timestamp : {
                 type : DataTypes.DATE
             },
@@ -22,11 +18,7 @@ module.exports = function (sequelize, DataTypes) {
             has_result :{
                 type : DataTypes.BOOLEAN
             }, // result object
-
                 success :{
-                    type : DataTypes.BOOLEAN
-                },
-                completion:{
                     type : DataTypes.BOOLEAN
                 },
                 scaled:{
@@ -40,9 +32,6 @@ module.exports = function (sequelize, DataTypes) {
                 },
                 max :{
                     type : DataTypes.DECIMAL
-                },
-                response :{
-                    type : DataTypes.STRING
                 }
         },
         {
