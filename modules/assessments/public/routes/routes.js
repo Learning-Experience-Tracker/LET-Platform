@@ -49,7 +49,7 @@
           views : {
               '' : {                
                 templateUrl : '/assessments/views/dashboard.html',
-                controller : 'AssessmentsController',
+                controller : 'AssDashboardController',
                 controllerAs : 'assessmentCtr'
               }
           }

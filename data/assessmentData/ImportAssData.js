@@ -328,8 +328,10 @@ sequelize.init(function(db){
                 statementObject.has_result = true;
                 statementObject.success = item.result.success;
 
-                var objectDBID  = questionSMap[item.object.id];
-                statementObject.QuestionId = objectDBID.id;
+                var questionDB  = questionSMap[item.object.id];
+                var asessmentDB = assessmentsMap[item.context.contextActivities.parent[0].id];
+                statementObject.AssessmentId = asessmentDB.id;
+                statementObject.QuestionId = questionDB.id;
             }
 
             if (verbObject.name == "completed"){
@@ -339,15 +341,15 @@ sequelize.init(function(db){
                 statementObject.min = item.result.score.min;
                 statementObject.max = item.result.score.max;
 
-                var objectDBID  = assessmentsMap[item.object.id];
-                statementObject.AssessmentId = objectDBID.id;
+                var objectDB  = assessmentsMap[item.object.id];
+                statementObject.AssessmentId = objectDB.id;
             }
         
             if (verbObject.name == "attempted"){
                 statementObject.has_result = false;
 
-                var objectDBID  = assessmentsMap[item.object.id];
-                statementObject.AssessmentId = objectDBID.id;
+                var objectDB  = assessmentsMap[item.object.id];
+                statementObject.AssessmentId = objectDB.id;
             }
 
             var statement = db.Statement.build(statementObject);

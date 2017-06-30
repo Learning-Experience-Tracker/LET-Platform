@@ -12,7 +12,8 @@ module.exports = function (sequelize, DataTypes) {
 		},
 		{
 			associate: function (models) {
-				Question.belongsTo(models.Assessment,{onDelete: 'cascade'});				
+				Question.belongsTo(models.Assessment,{onDelete: 'cascade'});
+				Question.hasMany(models.Statement);			
 			}
 		}
 	);

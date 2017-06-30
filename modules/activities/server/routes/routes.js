@@ -6,18 +6,20 @@ module.exports = function(app){
 
     app.route('/api/activity/all')
        .get(passport.authenticate('jwt', {session : false}),
-            activitiesCtr.getAll);
-
+                activitiesCtr.getAll);
 
     app.route('/api/activity/count')
        .get(passport.authenticate('jwt', {session : false}),
-            activitiesCtr.getCount);
+                activitiesCtr.getCount);
 
     app.route('/api/activity/:id')
        .get(passport.authenticate('jwt', {session : false}),
-            activitiesCtr.get); 
+                activitiesCtr.get); 
 
     app.route('/api/activity/page')
        .post(passport.authenticate('jwt', {session : false}),
-            activitiesCtr.page);    
+                activitiesCtr.page);
+
+    app.route('/api/activity/assessment/:id')
+       .get(activitiesCtr.getAssessmentActivities);   
 }

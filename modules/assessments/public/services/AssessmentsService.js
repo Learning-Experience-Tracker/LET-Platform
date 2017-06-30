@@ -20,6 +20,9 @@ angular
                 },
                 get : function(assessmentId){
                     return $http.get('/api/assessment/' + assessmentId);
+                },
+                getDashboardData : function(assessmentId){
+                    return $http.get('/api/activity/assessment/' + assessmentId);
                 }
             }
     }
