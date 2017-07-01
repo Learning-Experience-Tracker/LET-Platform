@@ -60,18 +60,29 @@
                 return item.raw;
             });
 
-            var scoresRange = scoreDim.group().reduceCount();
+            var scoresRange = scoreDim.group(function(raw){
+                return Math.ceil(raw / 10) * 10;
+            });
+            print_filter(scoresRange);
+            
+        
 
             var scoresRangeChart = dc.barChart('#scoresRangeChart');
 
-            var xScale = d3.scale.linear();
-            xScale.domain([0,100]);
-            xScale.rangeRound([0,100]);
+            var xScale = d3.scale.linear().domain([20, 100]).range([0, 100]);
+            /*d3.scale.quantize();
+            xScale.domain([0,1]);
+            xScale.range(['a','b','c']);*/
+            vm.scale = xScale;
+
             
             scoresRangeChart 
                 .dimension(scoreDim)
                 .group(scoresRange)
-                .width(1080)
+                .width(function(element){
+                    var width = element && element.getBoundingClientRect && element.getBoundingClientRect().width;
+                    return (width && width > scoresRangeChart.minWidth()) ? width : scoresRangeChart.minWidth();
+                })
                 .height(400)
                 .renderHorizontalGridLines(true)
                 .centerBar(true)
