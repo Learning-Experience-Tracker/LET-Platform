@@ -1,7 +1,9 @@
 'use strict';
 
 var db = require('./../../../../config/sequelize'),
-    winston = require('./../../../../config/winston');
+    winston = require('./../../../../config/winston'),
+    async = require('async'),
+    math = require('mathjs');
 
 module.exports.create = function(req, res){
     var assessment = db.Assessment.build({
@@ -82,5 +84,148 @@ module.exports.delete = function(req, res){
     }).catch(function(err){
         winston.error(err);
         res.status(500).end();
+    });
+}
+
+
+module.exports.getAssessmentDashboard = function (req,res){
+    async.parallel({
+        statements: function(callback) { // activities in this assessment 
+                db.Statement
+                .findAll({
+                    attributes: { exclude: ['createdAt','updatedAt','ResourceId'] },
+                    where :{ AssessmentId : req.params.id},
+                    order : [
+                            ['id', 'ASC']
+                    ],
+                    include : [
+                        {model : db.Question ,attributes: { exclude: ['createdAt','updatedAt','ResourceId'] }},
+                        {model : db.Verb , attributes: { exclude: ['createdAt','updatedAt','ResourceId'] }},
+                        {model : db.User,  attributes: { exclude: ['createdAt','updatedAt','ResourceId'] }}
+                    ],
+                    raw : true,
+                    nest: true
+                }).then(function(statements){
+                    callback(null,statements);
+                }).catch(function(err){
+                    callback(err,null);
+                });
+        },
+        questionsNum: function(callback) { // questions number in assessment 
+                db.Question
+                .count({
+                    where :{ AssessmentId : req.params.id}
+                }).then(function(res){
+                    callback(null,res);
+                }).catch(function(err){
+                    callback(err,null);
+                });
+        },
+        avg: function(callback) { // Avarage
+                db.Statement
+                .findOne({
+                    attributes: [ [db.sequelize.fn('AVG', db.sequelize.col('raw')), 'avg']],
+                    where :{ AssessmentId : req.params.id},
+                    raw : true 
+                }).then(function(res){
+                    callback(null,res.avg);
+                }).catch(function(err){
+                    callback(err,null);
+                });
+        },
+        std : function (callback){ // Standard Deviation
+                db.Statement
+                .findAll({
+                    attributes: ['raw'],
+                    where :{ AssessmentId : req.params.id},
+                    include : [
+                        {   
+                            model : db.Verb , 
+                            where :{ name : 'completed' },
+                            attributes: []
+                        }
+                    ],
+                    raw :true
+                }).then(function(marks){
+                    var marksArray = marks.map(function(item){ return item.raw;});
+                    callback(null,math.std(marksArray));
+                }).catch(function(err){
+                    callback(err,null);
+                });
+        },
+        studentsNum: function(callback) { // Total attempted students
+                db.Statement
+                .count({
+                    where :{ AssessmentId : req.params.id},
+                    include : [
+                        {   model : db.Verb , 
+                            where :{ name : 'attempted' },
+                            attributes: { exclude: ['createdAt','updatedAt'] }}
+                    ]
+                }).then(function(res){
+                    callback(null,res);
+                }).catch(function(err){
+                    callback(err,null);
+                });
+        },
+        passedstudentsNum: function(callback) { // Total passed Students
+                db.Statement
+                .count({
+                    where :{ AssessmentId : req.params.id , success : true},
+                    include : [
+                        {   model : db.Verb , 
+                            where :{ name : 'completed' },
+                            attributes: { exclude: ['createdAt','updatedAt'] }}
+                    ]
+                }).then(function(res){
+                    callback(null,res);
+                }).catch(function(err){
+                    callback(err,null);
+                });
+        },
+        faildSutdentsNum: function(callback) { // Total faild Students
+                db.Statement
+                .count({
+                    where :{ AssessmentId : req.params.id , success : false},
+                    include : [
+                        {   model : db.Verb , 
+                            where :{ name : 'completed' },
+                            attributes: { exclude: ['createdAt','updatedAt'] }}
+                    ]
+                }).then(function(res){
+                    callback(null,res);
+                }).catch(function(err){
+                    callback(err,null);
+                });
+        },
+        correctQuestions : function(callback){
+                db.Statement
+                .findAll({
+                    attributes: [ [db.sequelize.fn('COUNT', db.sequelize.col('Statement.id')), 'faildSutdentsNum']],
+                    where :{ AssessmentId : req.params.id , success : false},
+                    include : [
+                        { model : db.Question },
+                        {   
+                            model : db.Verb , 
+                            where :{ name : 'answered' },
+                            attributes: []
+                        }
+                    ],
+                    group : 'QuestionId',
+                    raw : true,
+                    nest: true
+                }).then(function(statements){
+                    callback(null,statements);
+                }).catch(function(err){
+                    callback(err,null);
+                });       
+        }
+    }, function(err, results) {
+        if (err){
+            winston.error(err);
+            res.status(500).end();
+        }else{
+            return res.json(results);
+        }
     });
 }

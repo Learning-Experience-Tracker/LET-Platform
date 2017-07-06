@@ -18,8 +18,5 @@ module.exports = function(app){
 
     app.route('/api/activity/page')
        .post(passport.authenticate('jwt', {session : false}),
-                activitiesCtr.page);
-
-    app.route('/api/activity/assessment/:id')
-       .get(activitiesCtr.getAssessmentActivities);   
+                activitiesCtr.page);  
 }

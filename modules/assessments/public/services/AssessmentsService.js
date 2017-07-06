@@ -22,7 +22,7 @@ angular
                     return $http.get('/api/assessment/' + assessmentId);
                 },
                 getDashboardData : function(assessmentId){
-                    return $http.get('/api/activity/assessment/' + assessmentId);
+                    return $http.get('/api/assessment/' + assessmentId+'/dashboard');
                 }
             }
     }

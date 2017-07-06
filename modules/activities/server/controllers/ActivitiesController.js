@@ -62,22 +62,3 @@ module.exports.getCount = function(req, res){
         res.status(500).end();
     });
 }
-
-module.exports.getAssessmentActivities = function (req,res){
-    db.Statement
-      .findAll({
-          attributes: { exclude: ['createdAt','updatedAt','ResourceId'] },
-          where :{ AssessmentId : req.params.id},
-          order : [
-                ['id', 'ASC']
-          ],
-          include : [
-              {model : db.Question ,attributes: { exclude: ['createdAt','updatedAt'] }}
-        ]
-      }).then(function(statements){
-        return res.json(statements);
-    }).catch(function(err){
-        winston.error(err);
-        res.status(500).end();
-    });
-}

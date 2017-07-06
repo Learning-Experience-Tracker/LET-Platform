@@ -19,5 +19,8 @@ module.exports = function(app){
     app.route('/api/assessment/delete')
        .post(passport.authenticate('jwt', {session : false}),
              assessmentCtr.delete);
-    
+
+    app.route('/api/assessment/:id/dashboard')
+       .get(passport.authenticate('jwt', {session : false}),
+            assessmentCtr.getAssessmentDashboard);   
 }
