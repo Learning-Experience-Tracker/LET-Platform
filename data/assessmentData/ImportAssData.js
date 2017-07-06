@@ -103,7 +103,7 @@ sequelize.init(function(db){
             if(!existCourse){ 
                 winston.info('No Course found, creating...');
     
-                course = db.Course.build({ name : 'cop-3223' , OrganizationId : oranization.id });
+                course = db.Course.build({ name : 'cop-3223' , startDate: new Date() , OrganizationId : oranization.id });
                 
                 course.save().then(function(newItem){
                     course = newItem.dataValues;

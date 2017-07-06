@@ -6,10 +6,9 @@ var db = require('./../../../../config/sequelize'),
 module.exports.create = function(req, res){
     var resource = db.Resource.build({
             id_IRI : req.body.id_IRI,
-            type_IRI : req.body.type_IRI,
             name : req.body.name,
-            description : req.body.description,
-            CourseId : req.body.courseId
+            type : req.body.type,
+            CourseId : req.body.courseId,
     });
 
     resource.save().then(function(){
@@ -19,10 +18,6 @@ module.exports.create = function(req, res){
         winston.error(err);
         res.status(500).end();
     });
-}
-
-module.exports.get = function(req, res){
-    res.end();
 }
 
 module.exports.getAll = function(req, res){
@@ -44,4 +39,14 @@ module.exports.delete = function(req, res){
         winston.error(err);
         res.status(500).end();
     });
+}
+
+module.exports.getTypes = function(req, res){
+    var resourceTypes = db.Resource.rawAttributes.type.values;
+    if (resourceTypes != null){
+        return res.json(resourceTypes);
+    }else{
+        winston.error(err);
+        res.status(500).end();
+    }
 }

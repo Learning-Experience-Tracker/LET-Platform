@@ -7,7 +7,9 @@ module.exports = function (sequelize, DataTypes) {
 
 	var Course = sequelize.define('Course',
 		{
-			name: DataTypes.STRING
+			name: DataTypes.STRING,
+			startDate : DataTypes.DATE,
+			endDate : DataTypes.DATE
 		},
 		{
 			associate: function (models) {

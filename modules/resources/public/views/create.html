@@ -19,13 +19,6 @@
                 </div>
 
                 <div class="row form-group required" style="margin-bottom:11px;">
-                  <label class="col-sm-3 control-label">Description</label>
-                  <div class="col-sm-9">
-                    <input type="text" class="form-control" id="description" ng-model="resourceCtr.description">
-                  </div>
-                </div>
-
-                <div class="row form-group required" style="margin-bottom:11px;">
                   <label class="col-sm-3 control-label">ID IRI</label>
                   <div class="col-sm-9">
                     <input type="text" class="form-control" id="id_IRI" ng-model="resourceCtr.id_IRI">
@@ -33,11 +26,13 @@
                 </div>
 
                 <div class="row form-group required" style="margin-bottom:11px;">
-                  <label class="col-sm-3 control-label">Type IRI</label>
+                  <label class="col-sm-3 control-label">Type</label>
                   <div class="col-sm-9">
-                    <input type="text" class="form-control" id="type_IRI" ng-model="resourceCtr.type_IRI">
+                    <select id="type_select" class="form-control" ng-model="resourceCtr.type">
+                      <option ng-repeat="type in resourceCtr.resourceTypes" value="{{type}}">{{type}}</option>
+                    </select>
                   </div>
-                </div>                
+                </div>                             
 
                 <div class="row form-group required" style="margin-bottom:11px;">
                   <label class="col-sm-3 control-label">Course</label>

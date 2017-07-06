@@ -17,6 +17,9 @@ angular
                 },
                 delete : function(resourceId){
                     return $http.post('/api/resource/delete', { resourceId : resourceId });
+                },
+                getTypes : function(){
+                    return $http.get('/api/resource/types');
                 }
             }
     }

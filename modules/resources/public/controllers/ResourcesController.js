@@ -33,14 +33,24 @@
                console.log(err);
                ngToast.create({
                    className : 'danger',
-                   content : 'Error retrieving list of Organizations'
+                   content : 'Error retrieving list of Courses'
+               });
+           });
+
+           ResourcesService.getTypes().then(function(response){
+              vm.resourceTypes = response.data;
+           }).catch(function(err){
+               console.log(err);
+               ngToast.create({
+                   className : 'danger',
+                   content : 'Error retrieving types of resource'
                });
            });
        }
 
        function create(){
 
-           if(!vm.name || !vm.description || !vm.id_IRI || !vm.type_IRI || !vm.courseId){
+           if(!vm.name || !vm.id_IRI || !vm.type || !vm.courseId){
                ngToast.create({
                    className : 'danger',
                    content : 'Please fill all required fields.'
@@ -50,10 +60,9 @@
 
            var resource = { 
                 name : vm.name,
-                description : vm.description,
                 id_IRI : vm.id_IRI,
-                type_IRI : vm.type_IRI,
-                courseId : vm.courseId 
+                courseId : vm.courseId,
+                type : vm.type
             };
            
            ResourcesService.create(resource).then(function(){
