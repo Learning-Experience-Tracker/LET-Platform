@@ -133,7 +133,8 @@ sequelize.init(function(db){
                 name : item.actor.name,
                 email : item.actor.mbox,
                 username :  firstName,
-                password : firstName
+                password : firstName,
+                role : 'student'
             };
 
             db.User.find({ where : { email : userObject.email} })
