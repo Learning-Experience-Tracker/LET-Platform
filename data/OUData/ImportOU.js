@@ -25,28 +25,33 @@ sequelize.init(function(db){
     var assessmentMap   = new Map();
     var usersMap        = new Map();
     var verbsMap        = new Map();
+    var courseStudentMap = new Map();
 
     async.series([
             function(callback){
-                //addAdmin(callback)
-                callback();                
+                addAdmin(callback)
+                //callback();                
             },function(callback){
-                //addOrganization(callback);
-                callback();                
+                addOrganization(callback);
+               // callback();                
             },function(callback){
-                //addCourse(callback)
-                callback();                
+                addCourse(callback)
+                //callback();                
             },function(callback){
                 //addResources(callback);
                 callback();
             },function (callback){
-                //addAssessments(callback);
-                callback();
+                addAssessments(callback);
+                //callback();
             },function(callback){
-                //addUsers(callback);
-                callback();
+                addUsers(callback);
+                //callback();
             }, function (callback){
                 addVerbs(callback);
+            }, function(callback){
+                addRegistered(callback);
+            }, function(callback){
+                addAssActivites(callback);
             }
         ],function(err) {
             winston.info('All objects are created...');
@@ -316,7 +321,7 @@ sequelize.init(function(db){
 
                     user.name               = item[0];
                     user.username           = item[0];
-                    user.passowrd           = item[0];
+                    user.password           = item[0];
                     user.email              = item[0] + '@open-university.edu';                    
                     user.gender             = item[1] == 'M' ? 'Male' : 'Female';
                     user.region             = item[2];
@@ -332,10 +337,10 @@ sequelize.init(function(db){
 
                 async.eachLimit(users,maxLimit,function(userObject,callback){
 
-                    var user = db.User.build(user);
+                    var user = db.User.build(userObject);
                     
                     user.save().then(function(newItem){
-                        user[userObject.name] = newItem.dataValues;
+                        usersMap[userObject.name] = newItem.dataValues;
                         winston.info('User %s created...',userObject.name);
                         callback();               
                     });
@@ -346,6 +351,88 @@ sequelize.init(function(db){
                 });
             });
         });
+    }
+
+    function addRegistered(callback){
+       winston.info('Begin reading registered students file');
+        fs.readFile(datasetFolderPath + 'registered.csv','utf8',function(err,data){
+            if (err){
+                winston.error(err);
+                return;
+            }
+            winston.info('Begin parsing registered students csv file');
+            parse(data,{},function(err,output){
+                if (err){
+                    winston.error(err);
+                    return;
+                }
+
+                output.shift(); // remove first row (headers)
+
+                var courseStudents = [];
+
+                output.forEach(function(item){
+                    var courseStudent    = {};
+
+                    var courseName = item[1]+item[0];
+                    courseStudent.uniqueID = courseName + item[7];
+                    courseStudent.UserId = usersMap[item[7]].id;
+                    courseStudent.CourseId = coursesMap[courseName].id;
+                    
+                    var registrationDays = parseInt(item[6]);
+                    if (!isNaN(registrationDays)){
+                        var registrationDate = new Date(coursesMap[courseName].startDate);
+                        courseStudent.reg_date = registrationDate.addDays(registrationDays);
+                    }
+
+                    var unregistrationDays = parseInt(item[3]);
+                    if (!isNaN(unregistrationDays)){
+                        var unregistrationDate = new Date(coursesMap[courseName].startDate);
+                        courseStudent.un_reg_date = unregistrationDate.addDays(unregistrationDays);
+                    }
+
+                    courseStudent.credits = parseInt(item[5]);
+                    courseStudent.num_attempts = parseInt(item[4]);
+                    courseStudent.final_result = item[2];
+                    
+
+                    courseStudents.push(courseStudent);
+                });
+
+                winston.info('Start registered students import series..');
+
+
+                async.eachLimit(courseStudents,maxLimit,function(courseStudentObject,callback){
+
+                    var inputValues = {
+                        credits : courseStudentObject.credits,
+                        num_attempts : courseStudentObject.num_attempts,
+                        final_result : courseStudentObject.final_result,
+                        UserId : courseStudentObject.UserId,
+                        CourseId : courseStudentObject.CourseId
+                    };
+
+                    if (courseStudentObject.un_reg_date){
+                        inputValues.un_reg_date = courseStudentObject.un_reg_date;
+                    }
+
+                    if (courseStudentObject.reg_date){
+                        inputValues.reg_date = courseStudentObject.reg_date;
+                    }
+
+                    var courseStudent = db.CourseStudent.build(inputValues);
+                    courseStudent.save().then(function(newItem){
+                        courseStudentMap[courseStudentObject.uniqueID] = newItem.dataValues;
+                        winston.info('Course Student %s created...',courseStudentObject.uniqueID);
+                        callback();               
+                    });
+
+                },function(){
+                    winston.info('All Course Students created...');
+                    callback(null);
+                });
+            });
+        });  
     }
 
     function addVerbs(callback){
@@ -399,6 +486,92 @@ sequelize.init(function(db){
             winston.info('All verbs added...');
             callback(null);
         });
+    }
+
+    function addAssActivites(callback){
+        winston.info('Begin reading ass activity file');
+        fs.readFile(datasetFolderPath + 'assActivity.csv','utf8',function(err,data){
+            if (err){
+                winston.error(err);
+                return;
+            }
+            winston.info('Begin parsing ass activity csv file');
+            parse(data,{},function(err,output){
+                if (err){
+                    winston.error(err);
+                    return;
+                }
+
+                output.shift(); // remove first row (headers)
+
+                var assActivities = [];
+
+                output.forEach(function(item){
+                    var actorDBObject   = usersMap[item[1]];
+                    var assessmentDBObject = assessmentMap[item[0]];
+                    
+                    var courseDBObject = coursesMap[item[4]+item[5]];
+
+                    var date     = new Date(courseDBObject.startDate);
+                    var score = parseInt(item[3]);
+
+                    var attemptedActivity = {
+                        timestamp : date.addDays(item[2]),
+                        stored :  date.addDays(item[2]),
+                        platform : "Moodle LMS",
+                        UserId : actorDBObject.id,
+                        VerbId : verbsMap['https://w3id.org/xapi/adl/verbs/attempted'].id,
+                        has_result : false,
+                        AssessmentId : assessmentDBObject.id
+                    };
+
+                    var completedActivity = {
+                        timestamp : date.addDays(item[2]),
+                        stored :  date.addDays(item[2]),
+                        platform : "Moodle LMS",
+                        UserId : actorDBObject.id,
+                        VerbId : verbsMap['https://w3id.org/xapi/adl/verbs/completed'].id,
+                        has_result : true,
+                        success : (score >= 60 ? true : false),
+                        raw : score,
+                        min : 0,
+                        max : 100,
+                        AssessmentId : assessmentDBObject.id
+                    };
+
+                    assActivities.push({activity1:attemptedActivity,activity2:completedActivity});
+                });
+
+                winston.info('Start assessment activities statements import series..');
+                // each object will add two statement (completed and attempted)
+                async.eachLimit(assActivities,maxLimit,function(assActivityObject,callback){ 
+
+                    async.parallel([
+                        function(callback){
+                            var statement = db.Statement.build(assActivityObject.activity1);
+
+                            statement.save().then(function(newItem){
+                                winston.info('Assessment activity statement %s created...',assActivityObject.activity1.timestamp);
+                                callback();  // next statement          
+                            });
+                        },
+                        function(callback){
+                            var statement = db.Statement.build(assActivityObject.activity2);
+
+                            statement.save().then(function(newItem){
+                                winston.info('Assessment activity statement %s created...',assActivityObject.activity2.timestamp);
+                                callback();  // next statement          
+                            });
+
+                    }],function(err){
+                        callback();
+                    });
+                },function(){
+                    winston.info('All Assessment activities statements created...');
+                    callback(null);
+                });
+            });
+        });      
     }
 });
 
