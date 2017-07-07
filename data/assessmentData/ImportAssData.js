@@ -305,7 +305,7 @@ sequelize.init(function(db){
 
     function addActivities(statements,callback){
         winston.info('Start activities import series...');
-        async.eachSeries(statements,function(item,callback){
+        async.eachLimit(statements,100,function(item,callback){
 
             var verbObject = {
                 name : item.verb.display['en-US'],
@@ -354,7 +354,7 @@ sequelize.init(function(db){
 
             var statement = db.Statement.build(statementObject);
             statement.save().then(function(newItem){
-                winston.info('Added new activity record');
+                winston.info('Added new activity record ' + newItem.dataValues.id);
                 callback(); // process next statement
             });
 

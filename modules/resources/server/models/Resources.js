@@ -9,7 +9,7 @@ module.exports = function (sequelize, DataTypes) {
 		{
 			id_IRI : DataTypes.STRING,
 			name: DataTypes.STRING,
-			type : DataTypes.ENUM('video', 'content','url','homepage','glossary','forum')
+			type : DataTypes.ENUM('video', 'content','quiz','homepage','glossary','forum','url','wiki')
 		},
 		{
 			associate: function (models) {

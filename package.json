@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node app.js",
     "emptyDB": "node config/emptyDB.js",
-    "importAss": "node data/assessmentData/ImportAssData.js"
+    "importAss": "node data/assessmentData/ImportAssData.js",
+    "importOU": "node data/OUData/ImportOU.js"
   },
   "author": "",
   "license": "ISC",
