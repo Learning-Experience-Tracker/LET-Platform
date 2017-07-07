@@ -80,7 +80,6 @@
        }
 
        function findOne(){
-           console.log($stateParams.id);
            CourseService.get($stateParams.id).then(function(response){
               vm.course = response.data;
            }).catch(function(error){

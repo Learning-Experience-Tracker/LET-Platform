@@ -24,12 +24,13 @@ module.exports.get = function(req, res){
         where : {
             id : req.params.id
         },
-        include : [
-          {
+        include : [{
               model : db.Resource
-          },
-          {
+          },{
               model : db.Assessment
+          },{
+              model : db.CourseStudent,
+              include : [{model:db.User}]
           }]
     }).then(function(course){
         if(!course){
