@@ -11,7 +11,7 @@ module.exports = function (sequelize, DataTypes) {
             id_IRI : DataTypes.STRING,
 			type : DataTypes.ENUM('TMA','CMA','Exam'),
 			deadline : DataTypes.DATE,
-			weight : DateTypes.INT
+			weight : DataTypes.INTEGER
 		},
 		{
 			associate: function (models) {
