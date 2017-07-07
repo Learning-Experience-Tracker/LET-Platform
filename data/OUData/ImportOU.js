@@ -49,7 +49,8 @@ sequelize.init(function(db){
             }, function (callback){
                 addVerbs(callback);
             }, function(callback){
-                addRegistered(callback);
+                //addRegistered(callback);
+                callback();
             }, function(callback){
                 addAssActivites(callback);
             }
@@ -328,8 +329,7 @@ sequelize.init(function(db){
                     user.highest_education  = item[3];
                     user.age_band           = item[4];
                     user.disability         = item[5] == 'N' ? false : true;
-  
-
+                    user.role               = 'student';
                     users.push(user);
                 });
 
