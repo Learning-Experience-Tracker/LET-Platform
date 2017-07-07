@@ -14,7 +14,7 @@
       // states
       $stateProvider
         .state('main.resourceList', {
-          url: '/resources/all',          
+          url: '/admin/resources/all',          
           data : { },
           views : {
               '' : {                
@@ -24,7 +24,7 @@
               }
           }
         }).state('main.resourceCreate', {
-          url: '/resources/create',          
+          url: '/admin/resources/create',          
           data : { },
           views : {
               '' : {                

@@ -14,7 +14,7 @@
       // states
       $stateProvider
         .state('main.assessmentList', {
-          url: '/assessments/all',          
+          url: '/admin/assessments/all',          
           data : { },
           views : {
               '' : {                
@@ -24,7 +24,7 @@
               }
           }
         }).state('main.assessmentCreate', {
-          url: '/assessments/create',          
+          url: '/admin/assessments/create',          
           data : { },
           views : {
               '' : {                
@@ -34,7 +34,7 @@
               }
           }
         }).state('main.assessmentView', {
-          url: '/assessments/:id',          
+          url: '/admin/assessment/:id',          
           data : { },
           views : {
               '' : {                
@@ -44,7 +44,7 @@
               }
           }
         }).state('main.assessmentDashboard', {
-          url: '/assessments/:id/dashboard',          
+          url: '/admin/assessment/:id/dashboard',          
           data : { },
           views : {
               '' : {                

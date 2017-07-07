@@ -14,7 +14,7 @@
       // states
       $stateProvider
         .state('main.activitiesList', {
-          url: '/activity/all',          
+          url: '/admin/activity/all',          
           data : { },
           views : {
               '' : {                
@@ -24,7 +24,7 @@
               }
           }
         }).state('main.activitiesView', {
-          url: '/activity/:id',          
+          url: '/admin/activity/:id',          
           data : { },
           views : {
               '' : {                

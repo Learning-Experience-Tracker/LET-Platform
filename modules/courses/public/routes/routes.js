@@ -34,7 +34,7 @@
               }
           }
         }).state('main.courseView', {
-          url: '/admin/courses/:id',          
+          url: '/admin/course/:id',          
           data : { },
           views : {
               '' : {                
@@ -54,7 +54,7 @@
               }
           }
         }).state('main.studentCourseView', {
-          url: '/student/courses/:id',          
+          url: '/student/course/:id',          
           data : { },
           views : {
               '' : {                
