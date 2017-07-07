@@ -102,7 +102,7 @@
                 .xAxisLabel('Scores Ranges')
                 .yAxisLabel('Students Count')
                 .x(d3.scale.ordinal().domain([10,20,30,40,50,60,70,80,90,100]))
-                .y(d3.scale.linear().domain([0, scoresRange.top(1)[0].value + 2]))
+                .y(d3.scale.linear().domain([0, scoresRange.top(1)[0].value + 10]))
                 .xUnits(dc.units.ordinal)
                 .renderLabel(true);
 
@@ -160,7 +160,7 @@
                 .renderHorizontalGridLines(true)
                 .brushOn(false)
                 .x(d3.scale.ordinal())
-                .y(d3.scale.linear().domain([(Math.floor(grouping.bottom(1)[0].value / 10) * 10) + 1, grouping.top(1)[0].value + 5]))
+                .y(d3.scale.linear().domain([(Math.floor(grouping.bottom(1)[0].value / 10) * 10) - 6, grouping.top(1)[0].value + 5]))
                 .xUnits(dc.units.ordinal)
                 .renderLabel(true)
                 .elasticX(true)
@@ -170,7 +170,9 @@
                 })
                 .margins({left: 40, top: 20, right: 10, bottom: 100})
                 .on("preRedraw", function (chart){
-                    chart.y(d3.scale.linear().domain([(Math.floor(grouping.bottom(1)[0].value / 10) * 10) + 1, grouping.top(1)[0].value + 5]));
+                    chart.y(d3.scale.linear().domain([
+                        (Math.floor(grouping.bottom(1)[0].value / 10) * 10) - 6, 
+                        grouping.top(1)[0].value + 5]));
                 });
 
             studentsMarksChart.yAxis().tickFormat(function(d) {return d});

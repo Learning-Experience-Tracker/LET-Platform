@@ -12,9 +12,14 @@
                   <div class="chart-title">
                     Number of Questions
                   </div>
-                  <div class="chart-stage">
+                  <div class="chart-stage" ng-if="assessmentCtr.questionsNum != 0">
                     <div id="grid-1-1">
                        {{assessmentCtr.questionsNum}} Questions
+                    </div>
+                  </div>
+                  <div class="chart-stage" ng-if="assessmentCtr.questionsNum == 0">
+                    <div id="grid-1-1">
+                       Not Available
                     </div>
                   </div>
               </div>
@@ -141,7 +146,7 @@
           </div>
       </div>
 
-      <div class="row">
+      <div class="row" ng-if="assessmentCtr.questionsNum != 0">
           <div class="col-sm-12">
             <div class="chart-wrapper">
               <div class="chart-title">
