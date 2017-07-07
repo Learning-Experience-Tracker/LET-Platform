@@ -219,7 +219,9 @@ sequelize.init(function(db){
             var assesmentObject = {
                 name : item.object.definition.name['en-US'],
                 id_IRI : item.object.id,
-                CourseId : course.id
+                CourseId : course.id,
+                deadline : new Date(),
+                type : 'CMA'
             };
             
             db.Assessment.find({ where : { id_IRI : assesmentObject.id_IRI} })

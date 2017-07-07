@@ -8,7 +8,10 @@ module.exports = function (sequelize, DataTypes) {
 	var Assessment = sequelize.define('Assessment',
 		{
 			name: DataTypes.STRING,
-            id_IRI : DataTypes.STRING
+            id_IRI : DataTypes.STRING,
+			type : DataTypes.ENUM('TMA','CMA','Exam'),
+			deadline : DataTypes.DATE,
+			weight : DateTypes.INT
 		},
 		{
 			associate: function (models) {
