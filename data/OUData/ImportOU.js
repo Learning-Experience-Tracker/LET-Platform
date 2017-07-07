@@ -6,27 +6,47 @@ var sequelize = require('../../config/sequelize'),
     async = require('async'),
     parse = require('csv-parse');
 
+
+Date.prototype.addDays = function(days) {
+    var dat = new Date(this.valueOf());
+    dat.setDate(dat.getDate() + parseInt(days));
+    return dat;
+}
+
 sequelize.init(function(db){
 
     var datasetFolderPath   = 'data/OUData/'
-    var currnetDataSetPath  = 'AAA2013J';
-    
+    var maxLimit        = 100; // max insert operation in parallel
     var admin           = {};
     var oranization     = {};
 
     var coursesMap      = new Map();
     var resourcesMap    = new Map();
-
+    var assessmentMap   = new Map();
+    var usersMap        = new Map();
+    var verbsMap        = new Map();
 
     async.series([
             function(callback){
-                addAdmin(callback)
+                //addAdmin(callback)
+                callback();                
             },function(callback){
-                addOrganization(callback);
+                //addOrganization(callback);
+                callback();                
             },function(callback){
-                addCourse(callback)
+                //addCourse(callback)
+                callback();                
             },function(callback){
-                addResources(callback);
+                //addResources(callback);
+                callback();
+            },function (callback){
+                //addAssessments(callback);
+                callback();
+            },function(callback){
+                //addUsers(callback);
+                callback();
+            }, function (callback){
+                addVerbs(callback);
             }
         ],function(err) {
             winston.info('All objects are created...');
@@ -111,12 +131,6 @@ sequelize.init(function(db){
 
                     var courseObject = { name:name+date};
 
-                    Date.prototype.addDays = function(days) {
-                        var dat = new Date(this.valueOf());
-                        dat.setDate(dat.getDate() + parseInt(days));
-                        return dat;
-                    }
-
                     switch(date){
                          case "2013J":
                             courseObject.startDate = new Date(2013, 9, 2);
@@ -137,7 +151,7 @@ sequelize.init(function(db){
                 });
 
                 winston.info('Start courses import series..');
-                async.eachLimit(courses,50,function(courseObject,callback){
+                async.eachLimit(courses,maxLimit,function(courseObject,callback){
                     var course = db.Course.build({ 
                                 name : courseObject.name , 
                                 startDate: courseObject.startDate ,
@@ -158,7 +172,7 @@ sequelize.init(function(db){
 
     function addResources(callback){
         winston.info('Begin reading resources file');
-        fs.readFile(datasetFolderPath + 'vle.csv','utf8',function(err,data){
+        fs.readFile(datasetFolderPath + 'resrouces.csv','utf8',function(err,data){
             if (err){
                 winston.error(err);
                 return;
@@ -187,7 +201,7 @@ sequelize.init(function(db){
 
                 winston.info('Start resources import series..');
 
-                async.eachLimit(resources,50,function(resObject,callback){
+                async.eachLimit(resources,maxLimit,function(resObject,callback){
 
                     var courseDBObject = coursesMap[resObject.courseName];
 
@@ -208,6 +222,182 @@ sequelize.init(function(db){
                     callback(null);
                 });
             });
+        });
+    }
+
+    function addAssessments(callback){
+        winston.info('Begin reading assessments file');
+        fs.readFile(datasetFolderPath + 'assessments.csv','utf8',function(err,data){
+            if (err){
+                winston.error(err);
+                return;
+            }
+            winston.info('Begin parsing assessments csv file');
+            parse(data,{},function(err,output){
+                if (err){
+                    winston.error(err);
+                    return;
+                }
+
+                output.shift(); // remove first row (headers)
+
+                var assessments = [];
+
+                output.forEach(function(item){
+                    var assessment    = {};
+
+                    assessment.name          = item[2];
+                    assessment.courseName    = item[0] + item[1];
+                    assessment.id_IRI        = "http://www.open-university.edu/"+assessment.courseName+"/assessment/"+item[2];
+                    assessment.type          = item[3];
+                    assessment.weight        = item[5];
+
+                    var days = parseInt(item[4]);
+                    if (!isNaN(days)){
+                        var date = new Date(coursesMap[assessment.courseName].startDate);
+                        assessment.deadline = date.addDays(days);
+                    }
+                    assessments.push(assessment);
+                });
+
+                winston.info('Start assessments import series..');
+
+                async.eachLimit(assessments,maxLimit,function(assessmentObject,callback){
+
+                    var courseDBObject = coursesMap[assessmentObject.courseName];
+
+                    var inputValues = { 
+                                name : assessmentObject.name , 
+                                id_IRI: assessmentObject.id_IRI ,
+                                type: assessmentObject.type, 
+                                CourseId : courseDBObject.id,
+                                weight : assessmentObject.weight};
+
+                    if (assessmentObject.deadline){
+                        inputValues.deadline = assessmentObject.deadline;
+                    }
+
+                    var assessment = db.Assessment.build(inputValues);
+                    
+                    assessment.save().then(function(newItem){
+                        assessmentMap[assessmentObject.name] = newItem.dataValues;
+                        winston.info('Assessment %s created...',assessmentObject.name);
+                        callback();               
+                    });
+
+                },function(){
+                    winston.info('All Assessment created...');
+                    callback(null);
+                });
+            });
+        });
+    }
+
+    function addUsers(callback){
+       winston.info('Begin reading users file');
+        fs.readFile(datasetFolderPath + 'users.csv','utf8',function(err,data){
+            if (err){
+                winston.error(err);
+                return;
+            }
+            winston.info('Begin parsing users csv file');
+            parse(data,{},function(err,output){
+                if (err){
+                    winston.error(err);
+                    return;
+                }
+
+                output.shift(); // remove first row (headers)
+
+                var users = [];
+
+                output.forEach(function(item){
+                    var user    = {};
+
+                    user.name               = item[0];
+                    user.username           = item[0];
+                    user.passowrd           = item[0];
+                    user.email              = item[0] + '@open-university.edu';                    
+                    user.gender             = item[1] == 'M' ? 'Male' : 'Female';
+                    user.region             = item[2];
+                    user.highest_education  = item[3];
+                    user.age_band           = item[4];
+                    user.disability         = item[5] == 'N' ? false : true;
+  
+
+                    users.push(user);
+                });
+
+                winston.info('Start users import series..');
+
+                async.eachLimit(users,maxLimit,function(userObject,callback){
+
+                    var user = db.User.build(user);
+                    
+                    user.save().then(function(newItem){
+                        user[userObject.name] = newItem.dataValues;
+                        winston.info('User %s created...',userObject.name);
+                        callback();               
+                    });
+
+                },function(){
+                    winston.info('All Users created...');
+                    callback(null);
+                });
+            });
+        });
+    }
+
+    function addVerbs(callback){
+        
+        var verbs =  [{
+            name : 'answered',
+            id_IRI : 'https://w3id.org/xapi/adl/verbs/answered'
+        },{
+            name : 'attempted',
+            id_IRI : 'https://w3id.org/xapi/adl/verbs/attempted'
+        },{
+            name : 'completed',
+            id_IRI : 'https://w3id.org/xapi/adl/verbs/completed'
+        },{
+            name : 'completed',
+            id_IRI : 'https://w3id.org/xapi/let/verbs/clicked' 
+        },{
+            name : 'loggedin',
+            id_IRI : 'https://w3id.org/xapi/adl/verbs/logged-in' 
+        },{
+            name : 'commented',
+            id_IRI : 'https://w3id.org/xapi/adl/verbs/commented' 
+        }];
+
+        winston.info('Start verbs import series...');
+
+        async.eachSeries(verbs,function(verbObject,callback){
+            db.Verb.find({ where : { id_IRI : verbObject.id_IRI} })
+                .then(function(verb){
+                    if(!verb){
+                        winston.info('No verb found with ' + verbObject.id_IRI);
+                        verb = db.Verb.build(verbObject);
+                        verb.save().then(function(newItem){
+                            winston.info('Verb Created');
+                            verbsMap[newItem.dataValues.id_IRI] = newItem.dataValues;
+                            callback();  // process next statement    
+                        }); 
+
+                    }else{
+                        winston.info('Verb is already created ' + verbObject.id_IRI);
+                        verbsMap[verb.dataValues.id_IRI] = verb.dataValues;                                               
+                        callback(); // process next statement
+                    }
+                })
+                .catch(function(error){
+                    winston.error('Error adding verb');
+                    winston.error(error);
+                    callback(error);
+                });
+        },function(){
+            winston.info('All verbs added...');
+            callback(null);
         });
     }
 });
