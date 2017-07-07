@@ -45,6 +45,7 @@ passport.use(new JwtStrategy({
                 next(null, user);
             }
         }).catch(function(err){
+            winston.error(err);
             next(err);
         });
 
@@ -57,10 +58,12 @@ passport.use(new LocalStrategy({
     passwordField: 'password'
   },
   function(username, password, done) {
-    db.User.findOne({ username: username }).then(function(user) {
+    db.User.findOne({ where : { username : username }}).then(function(user) {
       if (!user) {
+        winston.info('Unknown user login: ' + username + ":" + password);
         done(null, false, { message: 'Unknown user' });
       } else if (!user.authenticate(password)) {
+        winston.info('Invalid user login: ' + username + ":" + password);
         done(null, false, { message: 'Invalid password'});
       } else {
         winston.info('Login (local) : { id: ' + user.id + ', username: ' + user.username + ' }');

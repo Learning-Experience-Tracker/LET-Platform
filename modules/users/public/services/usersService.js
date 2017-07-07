@@ -86,7 +86,8 @@ angular
                         username: user.username,
                         password: user.password,
                         name : user.name,
-                        email : user.email
+                        email : user.email,
+                        role : user.role
                     }).then(function(res) {
                         self.onIdentity(res.data);
                     })

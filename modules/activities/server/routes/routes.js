@@ -1,22 +1,27 @@
 
 var passport = require('./../../../../config/passport'),
-    activitiesCtr = require('./../controllers/ActivitiesController');
+    activitiesCtr = require('./../controllers/ActivitiesController'),
+    acl = require('./../../../../config/acl');
 
 module.exports = function(app){
 
     app.route('/api/activity/all')
        .get(passport.authenticate('jwt', {session : false}),
-                activitiesCtr.getAll);
+            acl.adminOnly,
+            activitiesCtr.getAll);
 
     app.route('/api/activity/count')
        .get(passport.authenticate('jwt', {session : false}),
-                activitiesCtr.getCount);
+            acl.adminOnly,
+            activitiesCtr.getCount);
 
     app.route('/api/activity/:id')
        .get(passport.authenticate('jwt', {session : false}),
-                activitiesCtr.get); 
+            acl.adminOnly,
+            activitiesCtr.get); 
 
     app.route('/api/activity/page')
        .post(passport.authenticate('jwt', {session : false}),
-                activitiesCtr.page);  
+             acl.adminOnly,
+             activitiesCtr.page);  
 }

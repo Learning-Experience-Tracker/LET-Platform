@@ -1,5 +1,5 @@
 
-var Sequelize = require('Sequelize'),
+var Sequelize = require('sequelize'),
     winston = require('./winston'),
     config = require('./config'),
     path = require('path'),

@@ -37,6 +37,16 @@
                   <label for="passwordConfirmation">Re-type password</label>
                 </div>
               </div>
+              <div class="form-group">
+                <div class="form-control-material">
+                  <select class="form-control" ng-model="signupCtr.role">
+                    <option value="admin">Owner</option>
+                    <option value="student">Student</option>
+                    <option value="teacher">Teacher</option>                    
+                  </select>
+                  <label>Account Role</label>
+                </div>
+              </div>
               <div class="form-group text-center">
                 <div class="checkbox">
                   <input type="checkbox" id="agree" />

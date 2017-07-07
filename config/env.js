@@ -21,7 +21,8 @@ module.exports = {
         name : 'admin',
         email : 'admin@mail.com',
         username : 'admin',
-        password : 'admin'
+        password : 'admin',
+        role : 'admin'
     },
     jwtSecret : 'batman'
 }

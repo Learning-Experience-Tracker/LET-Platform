@@ -45,13 +45,33 @@
                   }
               }
           }
-        }).state('main.dashboard', {
-          url: '/dashboard',          
+        }).state('main.dashboardAdmin', {
+          url: '/admin/dashboard',          
           data : { bodyClasses : 'login' },
           views : {
               '' : {                
-                templateUrl : '/users/views/dashboard.html',
-                controller : 'DashboardController',
+                templateUrl : '/users/views/dashboard_admin.html',
+                controller : 'AdminDashboardController',
+                controllerAs : 'dashboardCtr'
+              }
+          }
+        }).state('main.dashboardStudent', {
+          url: '/student/dashboard',          
+          data : { bodyClasses : 'login' },
+          views : {
+              '' : {                
+                templateUrl : '/users/views/dashboard_student.html',
+                controller : 'StudentDashboardController',
+                controllerAs : 'dashboardCtr'
+              }
+          }
+        }).state('main.dashboardTeacher', {
+          url: '/teacher/dashboard',          
+          data : { bodyClasses : 'login' },
+          views : {
+              '' : {                
+                templateUrl : '/users/views/dashboard_teacher.html',
+                controller : 'TeacherDashboardController',
                 controllerAs : 'dashboardCtr'
               }
           }

@@ -1,8 +1,7 @@
 <div class="container" ng-init="courseCtr.init()">
     <div class="jumbotron text-center bg-transparent margin-none">
       <h1>Courses</h1>
-      <p>a list of your Educational Courses.</p>
-      <a href="/admin/courses/create"class="btn btn-primary">Create</a>
+      <p>a list of Educational Courses.</p>
     </div>
 
     <div class="page-section">
@@ -16,7 +15,6 @@
                 <tr>
                   <th>Id</th>
                   <th>Name</th>
-                  <th>Organization</th>
                   <th></th>
                 </tr>
               </thead>
@@ -24,13 +22,12 @@
                 <tr ng-repeat="course in courseCtr.courseList">
                   <td>{{course.id}}</td>
                   <td>{{course.name}}</td>
-                  <td>{{course.Organization.name}}</td>
                   <td>
-                      <button class="btn btn-danger" ng-click="courseCtr.delete(course.id)" style="height: 24px;padding: 2px;padding-right: 5px;padding-left: 5px;">
-                          delete
+                      <button ng-if="course.Users.length == 0" class="btn btn-primary" ng-click="courseCtr.enroll(course.id)" style="height: 24px;padding: 2px;padding-right: 5px;padding-left: 5px;">
+                          Enroll
                       </button>
-                      <button class="btn btn-primary" ng-click="courseCtr.viewCourse(course.id)" style="height: 24px;padding: 2px;padding-right: 5px;padding-left: 5px;">
-                          details
+                      <button ng-if="course.Users.length != 0" class="btn btn-primary" ng-click="courseCtr.viewCourse(course.id)" style="height: 24px;padding: 2px;padding-right: 5px;padding-left: 5px;">
+                          Details
                       </button>
                   </td>
                 </tr>

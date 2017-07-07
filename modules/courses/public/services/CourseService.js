@@ -20,6 +20,15 @@ angular
                 },
                 get : function(courseId){
                     return $http.get('/api/course/' + courseId);
+                },
+                getStudentCourses : function(){
+                    return $http.get('/api/student/courses/all');
+                },
+                getSpecifiedStudentCourses : function(){
+                    return $http.get('/api/student/courses');
+                },
+                enrollCourse : function(courseId){
+                    return $http.post('/api/course/enroll', { courseId : courseId });
                 }
             }
     }

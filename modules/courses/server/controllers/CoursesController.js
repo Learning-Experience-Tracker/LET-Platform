@@ -67,3 +67,48 @@ module.exports.delete = function(req, res){
         res.status(500).end();
     });
 }
+
+module.exports.getStudentCourses = function(req, res){
+    db.Course.findAll({
+        include : [{
+            model : db.User,
+            where : { Id : req.user.id },
+            required : false // get all courses, even the ones the user is not rolled in
+        }]
+    }).then(function(courses){
+        res.json(courses);
+    }).catch(function(error){
+        winston.error(error);
+        res.status(500).end();
+    });
+}
+
+module.exports.getSpecifiedStudentCourses = function(req, res){
+    db.Course.findAll({
+        include : [{
+            model : db.User,
+            where : { Id : req.user.id },
+            required : true
+        }]
+    }).then(function(courses){
+        res.json(courses);
+    }).catch(function(error){
+        winston.error(error);
+        res.status(500).end();
+    });
+}
+
+module.exports.enroll = function(req, res){
+    db.Course.findOne({
+        where : {
+            Id : req.body.courseId
+        }
+    }).then(function(course){
+        return req.user.addCourse(course);
+    }).then(function(){
+        res.status(200).end();
+    }).catch(function(error){
+        winston.error(error);
+        res.status(500).end();
+    });
+}

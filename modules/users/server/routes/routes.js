@@ -1,6 +1,7 @@
 
 var passport = require('./../../../../config/passport'),
-    usersCtr = require('./../controllers/UsersController');
+    usersCtr = require('./../controllers/UsersController'),
+    acl = require('./../../../../config/acl');
 
 module.exports = function(app){
     

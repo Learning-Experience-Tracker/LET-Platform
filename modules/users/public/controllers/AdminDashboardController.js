@@ -2,14 +2,16 @@
     'use strict';
     angular
         .module('letApp')
-        .controller('DashboardController',DashboardController);
+        .controller('AdminDashboardController',AdminDashboardController);
 
-    DashboardController.$inject = ['UserService', 'CourseService', '$rootScope', 'ngToast', '$state'];
+    AdminDashboardController.$inject = ['UserService', 'CourseService', '$rootScope', 'ngToast', '$state'];
     
-    function DashboardController(UserService, CourseService, $rootScope, ngToast, $state){
+    function AdminDashboardController(UserService, CourseService, $rootScope, ngToast, $state){
        var vm = this;
        
        vm.init = init;
+
+       vm.user = UserService.user;
 
        function init(){
            CourseService.getAll().then(function(response){

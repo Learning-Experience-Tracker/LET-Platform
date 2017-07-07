@@ -14,7 +14,7 @@
       // states
       $stateProvider
         .state('main.courseList', {
-          url: '/courses/all',          
+          url: '/admin/courses/all',          
           data : { },
           views : {
               '' : {                
@@ -24,7 +24,7 @@
               }
           }
         }).state('main.courseCreate', {
-          url: '/courses/create',          
+          url: '/admin/courses/create',          
           data : { },
           views : {
               '' : {                
@@ -34,11 +34,31 @@
               }
           }
         }).state('main.courseView', {
-          url: '/courses/:id',          
+          url: '/admin/courses/:id',          
           data : { },
           views : {
               '' : {                
                 templateUrl : '/courses/views/view.html',
+                controller : 'CoursesController',
+                controllerAs : 'courseCtr'
+              }
+          }
+        }).state('main.studentCourseList', {
+          url: '/student/courses/all',          
+          data : { },
+          views : {
+              '' : {                
+                templateUrl : '/courses/views/list_student.html',
+                controller : 'StudentCoursesController',
+                controllerAs : 'courseCtr'
+              }
+          }
+        }).state('main.studentCourseView', {
+          url: '/student/courses/:id',          
+          data : { },
+          views : {
+              '' : {                
+                templateUrl : '/courses/views/view_student.html',
                 controller : 'CoursesController',
                 controllerAs : 'courseCtr'
               }

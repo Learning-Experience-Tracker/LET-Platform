@@ -14,7 +14,7 @@
       // states
       $stateProvider
         .state('main.orgList', {
-          url: '/org/all',          
+          url: '/admin/org/all',          
           data : { },
           views : {
               '' : {                
@@ -24,7 +24,7 @@
               }
           }
         }).state('main.orgCreate', {
-          url: '/org/create',          
+          url: '/admin/org/create',          
           data : { },
           views : {
               '' : {                

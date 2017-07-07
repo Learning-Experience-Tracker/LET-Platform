@@ -27,19 +27,45 @@
                 {{headerCtr.user.name}}<span class="caret"></span>
               </a>
               <ul class="dropdown-menu" role="menu">
-                <li><a href="/dashboard"><i class="fa fa-bar-chart-o"></i> Dashboard</a></li>
-                <li><a href="/org/all"><i class="fa fa-mortar-board"></i> My Organization</a></li>
-                <li><a href="courses/all"><i class="fa fa-mortar-board"></i> My Courses</a></li>
-                <li><a href="resources/all"><i class="fa fa-mortar-board"></i>Resources</a></li>
-                <li><a href="assessments/all"><i class="fa fa-mortar-board"></i>Assessments</a></li>
-                <li><a href="activity/all"><i class="fa fa-mortar-board"></i>Activities</a></li>                
+                <!-- Dashboard routes -->
+                <li ng-if="headerCtr.user.role == 'admin'"><a href="/admin/dashboard"><i class="fa fa-bar-chart-o"></i> Dashboard</a></li>
+                <li ng-if="headerCtr.user.role == 'student'"><a href="/student/dashboard"><i class="fa fa-bar-chart-o"></i> Dashboard</a></li>
+                <li ng-if="headerCtr.user.role == 'teacher'"><a href="/teacher/dashboard"><i class="fa fa-bar-chart-o"></i> Dashboard</a></li>
+
+                <!-- Organization route only for admin -->
+                <li ng-if="headerCtr.user.role == 'admin'"><a href="/admin/org/all"><i class="fa fa-mortar-board"></i> My Organization</a></li>
+
+                <!-- Courses Routes -->
+                <li ng-if="headerCtr.user.role == 'admin'"><a href="/admin/courses/all"><i class="fa fa-mortar-board"></i> My Courses</a></li>
+                <li ng-if="headerCtr.user.role == 'student'"><a href="/student/courses/all"><i class="fa fa-mortar-board"></i> My Courses</a></li>
+                <li ng-if="headerCtr.user.role == 'teacher'"><a href="/teacher/courses/all"><i class="fa fa-mortar-board"></i> My Courses</a></li>
+
+                <!-- Resources Routes -->
+                <li ng-if="headerCtr.user.role == 'admin'"><a href="/admin/resources/all"><i class="fa fa-mortar-board"></i>Resources</a></li>
+                <li ng-if="headerCtr.user.role == 'student'"><a href="/student/resources/all"><i class="fa fa-mortar-board"></i>Resources</a></li>
+                <li ng-if="headerCtr.user.role == 'teacher'"><a href="/teacher/resources/all"><i class="fa fa-mortar-board"></i>Resources</a></li>
+                
+                <!-- Assessments Routes -->
+                <li ng-if="headerCtr.user.role == 'admin'"><a href="/admin/assessments/all"><i class="fa fa-mortar-board"></i>Assessments</a></li>
+                <li ng-if="headerCtr.user.role == 'student'"><a href="/student/assessments/all"><i class="fa fa-mortar-board"></i>Assessments</a></li>
+                <li ng-if="headerCtr.user.role == 'teacher'"><a href="/teacher/assessments/all"><i class="fa fa-mortar-board"></i>Assessments</a></li>
+
+                <!-- Activitiy Routes -->
+                <li ng-if="headerCtr.user.role == 'admin'"><a href="/admin/activity/all"><i class="fa fa-mortar-board"></i>Activities</a></li>                
+                <li ng-if="headerCtr.user.role == 'student'"><a href="/student/activity/all"><i class="fa fa-mortar-board"></i>Activities</a></li>                                
+                <li ng-if="headerCtr.user.role == 'teacher'"><a href="/teacher/activity/all"><i class="fa fa-mortar-board"></i>Activities</a></li>                
+
                 <li><a href="logout" ng-click="headerCtr.logout()"><i class="fa fa-sign-out"></i> Logout</a></li>
               </ul>
             </li>
             <!-- // END user -->
           </ul>
           <a ng-if="!headerCtr.user" href="login" class="navbar-btn btn btn-primary">Log In</a>
-          <a ng-if="headerCtr.user" href="dashboard" class="navbar-btn btn btn-primary">Dashboard</a>
+
+          <a ng-if="headerCtr.user && headerCtr.user.role == 'admin'" href="/admin/dashboard" class="navbar-btn btn btn-primary">Dashboard</a>
+          <a ng-if="headerCtr.user && headerCtr.user.role == 'student'" href="/student/dashboard" class="navbar-btn btn btn-primary">Dashboard</a>
+          <a ng-if="headerCtr.user && headerCtr.user.role == 'teacher'" href="/teacher/dashboard" class="navbar-btn btn btn-primary">Dashboard</a>
+          
         </div>
       </div>
       <!-- /.navbar-collapse -->

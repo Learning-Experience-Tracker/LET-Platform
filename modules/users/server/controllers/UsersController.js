@@ -11,18 +11,21 @@ module.exports.login = function(req, res){
     return res.json({
                 user: {
                     username : req.user.username,
-                    name : req.user.name
+                    name : req.user.name,
+                    role : req.user.role
                 },
                 token: token
     });
 }
 
 module.exports.register = function(req, res){
+    console.log(req.body);
     var user = db.User.build({
         name : req.body.name,
         username : req.body.username,
         email : req.body.email,
-        password : req.body.password
+        password : req.body.password,
+        role : req.body.role
     });
 
     user.save().then(function(user){
@@ -33,7 +36,8 @@ module.exports.register = function(req, res){
         return res.json({
                     user: {
                         username : user.username,
-                        name : user.name
+                        name : user.name,
+                        role : user.role
                     },
                     token: token
         });
