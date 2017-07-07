@@ -59,25 +59,7 @@
             </div>
 
             <div class="col-md-4">
-              <h2 class="text-headline margin-none">Students</h2>
-              <p class="text-subhead text-light">A list of registered students.</p>
-              <ul class="list-group relative paper-shadow" data-hover-z="0.5" data-animated>
-                <li class="list-group-item" ng-repeat="courseStudent in courseCtr.course.CourseStudents">
-                  <a href="#" >
-                    <div class="media v-middle">
-                      <div class="media-left">
-                        <div class="icon-block s30 bg-red-300 text-white img-circle">
-                          <i class="fa fa-user"></i>
-                        </div>
-                      </div>
-                      <div class="media-body text-body-2">
-                        {{courseStudent.User.name}}
-                      </div>
-                    </div>
-                  </a>
-                </li>
-              </ul>
-              <p ng-if="courseCtr.course.CourseStudents.length == 0">No registred students.</p>
+
             </div>
           </div>
         </div>

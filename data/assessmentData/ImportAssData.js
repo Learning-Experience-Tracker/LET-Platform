@@ -144,13 +144,7 @@ sequelize.init(function(db){
                         user.save().then(function(newItem){
                             winston.info('User Created');
                             usersMap[newItem.dataValues.email] = newItem.dataValues;
-
-                            db.CourseStudent.build({ // reg this user (student) to course
-                                CourseId:course.id,
-                                UserId : newItem.dataValues.id
-                            }).save().then(function(){
-                                callback(); // process next statemnt
-                            });                
+                            callback(); // process next statemnt               
                         });
 
                     }else{
