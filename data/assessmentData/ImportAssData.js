@@ -10,6 +10,7 @@ sequelize.init(function(db){
     var admin           = {};
     var oranization     = {};
     var course          = {};
+    var courseObject = {};
     var usersMap        = new Map();
     var verbsMap        = new Map();
     var assessmentsMap  = new Map();
@@ -106,6 +107,7 @@ sequelize.init(function(db){
                 course = db.Course.build({ name : 'cop-3223' , startDate: new Date() , OrganizationId : oranization.id });
                 
                 course.save().then(function(newItem){
+                    courseObject = newItem;
                     course = newItem.dataValues;
                     winston.info('Course created.');
                     callback();               
@@ -142,9 +144,11 @@ sequelize.init(function(db){
                     if(!user){
                         winston.info('No user found with email ' + userObject.email);
                         user = db.User.build(userObject);
+                        
                         user.save().then(function(newItem){
                             winston.info('User Created');
                             usersMap[newItem.dataValues.email] = newItem.dataValues;
+                            user.addCourse(courseObject,{ enroll_date : Date.now(), enroll_times : 1});
                             callback(); // process next statemnt               
                         });
 
