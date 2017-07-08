@@ -38,11 +38,11 @@ sequelize.init(function(db){
                 addCourse(callback)
                 //callback();                
             },function(callback){
-                //addResources(callback);
-                callback();
-            },function (callback){
-                addAssessments(callback);
+                addResources(callback);
                 //callback();
+            },function (callback){
+                //addAssessments(callback);
+                callback();
             },function(callback){
                 addUsers(callback);
                 //callback();
@@ -52,7 +52,10 @@ sequelize.init(function(db){
                 //addRegistered(callback);
                 callback();
             }, function(callback){
-                addAssActivites(callback);
+                //addAssActivites(callback);
+                callback();
+            }, function(callback){
+                addResourcesLunchedActivites(callback);
             }
         ],function(err) {
             winston.info('All objects are created...');
@@ -455,6 +458,9 @@ sequelize.init(function(db){
         },{
             name : 'commented',
             id_IRI : 'https://w3id.org/xapi/adl/verbs/commented' 
+        },{
+            name : 'launched',
+            id_IRI : 'https://w3id.org/xapi/adl/verbs/launched' 
         }];
 
         winston.info('Start verbs import series...');
@@ -572,6 +578,63 @@ sequelize.init(function(db){
                 });
             });
         });      
+    }
+
+    function addResourcesLunchedActivites(callback){
+        winston.info('Begin reading res activity file');
+        fs.readFile(datasetFolderPath + 'studentVleLunched.csv','utf8',function(err,data){
+            if (err){
+                winston.error(err);
+                return;
+            }
+            winston.info('Begin parsing res activity csv file');
+            parse(data,{},function(err,output){
+                if (err){
+                    winston.error(err);
+                    return;
+                }
+
+                output.shift(); // remove first row (headers)
+
+                var resActivities = [];
+
+                output.forEach(function(item){
+                    var actorDBObject   = usersMap[item[2]];
+                    var resourcesDBObject = resourcesMap[item[3]];
+                    
+                    var courseDBObject = coursesMap[item[0]+item[1]];
+
+                    var date     = new Date(courseDBObject.startDate);
+
+                    var launchedActivity = {
+                        timestamp : date.addDays(item[4]),
+                        stored :  date.addDays(item[4]),
+                        platform : "Moodle LMS",
+                        UserId : actorDBObject.id,
+                        VerbId : verbsMap['https://w3id.org/xapi/adl/verbs/launched'].id,
+                        has_result : false,
+                        ResourceId : resourcesDBObject.id
+                    };
+
+                    resActivities.push(launchedActivity);
+                });
+
+                winston.info('Start resources lunched activities import series..');
+
+                async.eachLimit(resActivities,maxLimit,function(launchedActivityObject,callback){ 
+
+                    var statement = db.Statement.build(launchedActivityObject);
+                    statement.save().then(function(newItem){
+                        winston.info('Resource launch activity %s created...',launchedActivityObject.timestamp);
+                        callback();               
+                    });
+
+                },function(){
+                    winston.info('All resource lunched activities created...');
+                    callback(null);
+                });
+            });
+        });    
     }
 });
 
