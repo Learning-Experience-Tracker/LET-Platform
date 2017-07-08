@@ -33,29 +33,34 @@ sequelize.init(function(db){
                 //callback();                
             },function(callback){
                 addOrganization(callback);
-               // callback();                
+                //callback();         
             },function(callback){
-                addCourse(callback)
-                //callback();                
+                addCourse(callback);
+                //callback();              
             },function(callback){
                 addResources(callback);
-                //callback();
+                //callback();  
             },function (callback){
-                //addAssessments(callback);
-                callback();
+                addAssessments(callback);
+                //callback();  
             },function(callback){
                 addUsers(callback);
-                //callback();
+                //callback();  
             }, function (callback){
+                addRegistered(callback);
+                //callback();  
+            }, function(callback){
                 addVerbs(callback);
+                //callback();  
             }, function(callback){
-                //addRegistered(callback);
-                callback();
+                addResourcesLunchedActivites(callback);                
+                //callback();  
             }, function(callback){
-                //addAssActivites(callback);
-                callback();
+                addResourcesClickedActivites(callback);
+                //callback();  
             }, function(callback){
-                addResourcesLunchedActivites(callback);
+                addAssActivites(callback);
+                //callback();  
             }
         ],function(err) {
             winston.info('All objects are created...');
@@ -167,7 +172,7 @@ sequelize.init(function(db){
                                 endDate: courseObject.endDate, 
                                 OrganizationId : oranization.id });
                     course.save().then(function(newItem){
-                        coursesMap[courseObject.name] = newItem.dataValues;
+                        coursesMap[courseObject.name] = newItem;
                         winston.info('Course %s created...',courseObject.name);
                         callback();               
                     });
@@ -343,7 +348,7 @@ sequelize.init(function(db){
                     var user = db.User.build(userObject);
                     
                     user.save().then(function(newItem){
-                        usersMap[userObject.name] = newItem.dataValues;
+                        usersMap[userObject.name] = newItem;
                         winston.info('User %s created...',userObject.name);
                         callback();               
                     });
@@ -372,66 +377,67 @@ sequelize.init(function(db){
 
                 output.shift(); // remove first row (headers)
 
-                var courseStudents = [];
+                var userCourses = [];
 
                 output.forEach(function(item){
-                    var courseStudent    = {};
+                    var userCourse    = {};
 
                     var courseName = item[1]+item[0];
-                    courseStudent.uniqueID = courseName + item[7];
-                    courseStudent.UserId = usersMap[item[7]].id;
-                    courseStudent.CourseId = coursesMap[courseName].id;
+
+                    userCourse.uniqueID = courseName + item[7];
+
+                    userCourse.User   = usersMap[item[7]];
+                    userCourse.Course = coursesMap[courseName];
                     
                     var registrationDays = parseInt(item[6]);
+
                     if (!isNaN(registrationDays)){
                         var registrationDate = new Date(coursesMap[courseName].startDate);
-                        courseStudent.reg_date = registrationDate.addDays(registrationDays);
+                        userCourse.enroll_date = registrationDate.addDays(registrationDays);
                     }
 
                     var unregistrationDays = parseInt(item[3]);
                     if (!isNaN(unregistrationDays)){
                         var unregistrationDate = new Date(coursesMap[courseName].startDate);
-                        courseStudent.un_reg_date = unregistrationDate.addDays(unregistrationDays);
+                        userCourse.unenroll_date = unregistrationDate.addDays(unregistrationDays);
                     }
 
-                    courseStudent.credits = parseInt(item[5]);
-                    courseStudent.num_attempts = parseInt(item[4]);
-                    courseStudent.final_result = item[2];
+                    userCourse.credits = parseInt(item[5]);
+                    userCourse.enroll_times = parseInt(item[4]);
+                    userCourse.final_result = item[2];
                     
 
-                    courseStudents.push(courseStudent);
+                    userCourses.push(userCourse);
                 });
 
                 winston.info('Start registered students import series..');
-
-
-                async.eachLimit(courseStudents,maxLimit,function(courseStudentObject,callback){
+                
+                async.eachLimit(userCourses,maxLimit,function(userCourse,callback){
 
                     var inputValues = {
-                        credits : courseStudentObject.credits,
-                        num_attempts : courseStudentObject.num_attempts,
-                        final_result : courseStudentObject.final_result,
-                        UserId : courseStudentObject.UserId,
-                        CourseId : courseStudentObject.CourseId
+                        credits : userCourse.credits,
+                        enroll_times : userCourse.enroll_times,
+                        final_result : userCourse.final_result
                     };
 
-                    if (courseStudentObject.un_reg_date){
-                        inputValues.un_reg_date = courseStudentObject.un_reg_date;
+                    if (userCourse.enroll_date){
+                        inputValues.enroll_date = userCourse.enroll_date;
                     }
 
-                    if (courseStudentObject.reg_date){
-                        inputValues.reg_date = courseStudentObject.reg_date;
+                    if (userCourse.unenroll_date){
+                        inputValues.unenroll_date = userCourse.unenroll_date;
                     }
 
-                    var courseStudent = db.CourseStudent.build(inputValues);
-                    courseStudent.save().then(function(newItem){
-                        courseStudentMap[courseStudentObject.uniqueID] = newItem.dataValues;
-                        winston.info('Course Student %s created...',courseStudentObject.uniqueID);
-                        callback();               
+                    userCourse.User.addCourse(userCourse.Course,inputValues).then(function(){ 
+                        winston.info('Registerd students %s created...',userCourse.uniqueID);                        
+                        callback();   
+                    }).catch(function(error){
+                        winston.error('Error adding Registerd students ');
+                        winston.error(error);
+                        callback(error);
                     });
-
                 },function(){
-                    winston.info('All Course Students created...');
+                    winston.info('All Registerd students created...');
                     callback(null);
                 });
             });
@@ -450,7 +456,7 @@ sequelize.init(function(db){
             name : 'completed',
             id_IRI : 'https://w3id.org/xapi/adl/verbs/completed'
         },{
-            name : 'completed',
+            name : 'clicked',
             id_IRI : 'https://w3id.org/xapi/let/verbs/clicked' 
         },{
             name : 'loggedin',
@@ -581,13 +587,13 @@ sequelize.init(function(db){
     }
 
     function addResourcesLunchedActivites(callback){
-        winston.info('Begin reading res activity file');
+        winston.info('Begin reading res lunch activity file');
         fs.readFile(datasetFolderPath + 'studentVleLunched.csv','utf8',function(err,data){
             if (err){
                 winston.error(err);
                 return;
             }
-            winston.info('Begin parsing res activity csv file');
+            winston.info('Begin parsing res lunch activity csv file');
             parse(data,{},function(err,output){
                 if (err){
                     winston.error(err);
@@ -617,6 +623,66 @@ sequelize.init(function(db){
                     };
 
                     resActivities.push(launchedActivity);
+                });
+
+                winston.info('Start resources lunched activities import series..');
+
+                async.eachLimit(resActivities,maxLimit,function(launchedActivityObject,callback){ 
+
+                    var statement = db.Statement.build(launchedActivityObject);
+                    statement.save().then(function(newItem){
+                        winston.info('Resource launch activity %s created...',launchedActivityObject.timestamp);
+                        callback();               
+                    });
+
+                },function(){
+                    winston.info('All resource lunched activities created...');
+                    callback(null);
+                });
+            });
+        });    
+    }
+
+    function addResourcesClickedActivites(callback){
+        winston.info('Begin reading res click activity file');
+        fs.readFile(datasetFolderPath + 'studentVleClicked.csv','utf8',function(err,data){
+            if (err){
+                winston.error(err);
+                return;
+            }
+            winston.info('Begin parsing res click activity csv file');
+            parse(data,{},function(err,output){
+                if (err){
+                    winston.error(err);
+                    return;
+                }
+
+                output.shift(); // remove first row (headers)
+
+                var resActivities = [];
+
+                output.forEach(function(item){
+                    var actorDBObject   = usersMap[item[2]];
+                    var resourcesDBObject = resourcesMap[item[3]];
+                    
+                    var courseDBObject = coursesMap[item[0]+item[1]];
+
+                    var date     = new Date(courseDBObject.startDate);
+
+                    var sumOfClicks = parseInt(item[5]);
+
+                    for(var i = 0 ; i < sumOfClicks; i++){
+                        var clickedActivity = {
+                            timestamp : date.addDays(item[4]),
+                            stored :  date.addDays(item[4]),
+                            platform : "Moodle LMS",
+                            UserId : actorDBObject.id,
+                            VerbId : verbsMap['https://w3id.org/xapi/let/verbs/clicked'].id,
+                            has_result : false,
+                            ResourceId : resourcesDBObject.id
+                        };
+                        resActivities.push(clickedActivity);
+                    }
                 });
 
                 winston.info('Start resources lunched activities import series..');
