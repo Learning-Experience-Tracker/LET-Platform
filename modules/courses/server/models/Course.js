@@ -16,7 +16,7 @@ module.exports = function (sequelize, DataTypes) {
 				Course.belongsTo(models.Organization,{onDelete: 'cascade'});
 				Course.hasMany(models.Resource,{onDelete: 'cascade'});
 				Course.hasMany(models.Assessment, {onDelete : 'cascade' });				
-				Course.belongsToMany(models.User, { through : 'user_courses' } );
+				Course.belongsToMany(models.User, { through : models.UserCourses } );
 			}
 		}
 	);
