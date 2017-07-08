@@ -20,6 +20,11 @@ angular
                 },
                 getTypes : function(){
                     return $http.get('/api/resource/types');
+                },get :function(resourceId){
+                    return $http.get('/api/resource/' + resourceId);
+                },
+                getDashboardData : function(resourceId){
+                    return $http.get('/api/resource/' + resourceId+'/dashboard');
                 }
             }
     }

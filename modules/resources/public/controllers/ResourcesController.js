@@ -13,6 +13,7 @@
        vm.initCreate = initCreate;
        vm.create = create;
        vm.delete = _delete;
+       vm.viewDashboard = viewDashboard;
        
        function init(){
            ResourcesService.getAll().then(function(response){
@@ -92,6 +93,10 @@
                    content : 'Error deleteing Course.'
                });
            });
+       }
+
+       function viewDashboard(resourceId){
+           $state.go('main.resourceDashboard', { id : resourceId });
        }
     }
 })();

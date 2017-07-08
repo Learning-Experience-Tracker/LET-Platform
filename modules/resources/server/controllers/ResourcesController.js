@@ -30,6 +30,24 @@ module.exports.getAll = function(req, res){
     });
 }
 
+
+module.exports.get = function(req, res){
+    db.Resource.findOne({
+        where : {
+            id : req.params.id
+        }
+    }).then(function(resource){
+        if(!resource){
+            res.status(404).end();
+            return;
+        }
+        res.json(resource);
+    }).catch(function(error){
+        winston.error(error);
+        res.status(500).end();
+    });
+}
+
 module.exports.delete = function(req, res){
     db.Resource.destroy({
         where : { id : req.body.resourceId }
@@ -49,4 +67,9 @@ module.exports.getTypes = function(req, res){
         winston.error(err);
         res.status(500).end();
     }
+}
+
+
+module.exports.getAssessmentDashboard = function(req, res){
+    res.status(500).end();
 }

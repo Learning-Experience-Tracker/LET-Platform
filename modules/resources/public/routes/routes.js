@@ -33,7 +33,17 @@
                 controllerAs : 'resourceCtr'
               }
           }
-        });
+        }).state('main.resourceDashboard', {
+          url: '/admin/resources/:id/dashboard',          
+          data : { },
+          views : {
+              '' : {                
+                templateUrl : '/resources/views/dashboard.html',
+                controller : 'ResDashboardController',
+                controllerAs : 'resourceCtr'
+              }
+          }
+        });;
   }
 
 })();

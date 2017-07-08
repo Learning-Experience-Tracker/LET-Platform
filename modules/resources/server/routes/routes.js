@@ -10,6 +10,11 @@ module.exports = function(app){
             acl.adminOnly,
             resourcesCtr.getAll);
 
+    app.route('/api/resource/:id')
+       .get(passport.authenticate('jwt', {session : false}),
+            acl.adminOnly,
+            resourcesCtr.get);
+
     app.route('/api/resource/create')
        .post(passport.authenticate('jwt', {session : false}),
              acl.adminOnly,
@@ -24,4 +29,9 @@ module.exports = function(app){
        .get(passport.authenticate('jwt', {session : false}),
             acl.adminOnly,
             resourcesCtr.getTypes);
+
+    app.route('/api/resource/:id/dashboard')
+       .get(passport.authenticate('jwt', {session : false}),
+            acl.adminOnly,
+            resourcesCtr.getAssessmentDashboard);   
 }
