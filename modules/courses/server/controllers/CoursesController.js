@@ -98,13 +98,14 @@ module.exports.getSpecifiedStudentCourses = function(req, res){
     });
 }
 
-module.exports.enroll = function(req, res){
+module.exports.enroll = function(req, res){    
     db.Course.findOne({
         where : {
             Id : req.body.courseId
         }
     }).then(function(course){
-        return req.user.addCourse(course);
+        
+        return req.user.addCourse(course, { enroll_date : Date.now(), enroll_times : 1});
     }).then(function(){
         res.status(200).end();
     }).catch(function(error){
