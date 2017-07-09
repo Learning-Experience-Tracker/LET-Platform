@@ -18,7 +18,7 @@
           data : { },
           views : {
               '' : {                
-                templateUrl : '/courses/views/list.html',
+                templateUrl : '/courses/views/list_admin.html',
                 controller : 'CoursesController',
                 controllerAs : 'courseCtr'
               }
@@ -38,7 +38,7 @@
           data : { },
           views : {
               '' : {                
-                templateUrl : '/courses/views/view.html',
+                templateUrl : '/courses/views/view_admin.html',
                 controller : 'CoursesController',
                 controllerAs : 'courseCtr'
               }

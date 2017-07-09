@@ -1,0 +1,86 @@
+<div ng-init="courseCtr.findOne()">
+  <div class="parallax bg-white page-section">
+    <div class="parallax-layer container" data-opacity="true">
+      <div class="media v-middle">
+        <div class="media-left">
+          <span class="icon-block s60 bg-lightred"><i class="fa fa-file"></i></span>
+        </div>
+        <div class="media-body">
+          <h1 class="text-display-1 margin-none">{{courseCtr.course.name}} Course</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="page-section">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="panel panel-default paper-shadow" data-z="0.5">
+              <div class="panel-heading">
+                <h4 class="text-headline margin-none">Resources</h4>
+                <p class="text-subhead text-light">A list of latest Course resources.</p>
+              </div>
+              <ul class="list-group">
+                <li class="list-group-item media v-middle" ng-repeat="resource in courseCtr.course.Resources.slice(0,10)">
+                  <div class="media-body">
+                    <a href="#">
+                      <div class="media v-middle">
+                        <div class="media-left">
+                          <div class="icon-block s30 bg-red-300 text-white">
+                            <i class="fa fa-star"></i>
+                          </div>
+                        </div>
+                        <div class="media-body text-body-2">
+                          {{resource.name}}
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                </li>
+              </ul>
+              <div class="panel-footer text-right">
+                <a href="admin/org/all" class="btn btn-primary paper-shadow relative" data-z="0" data-hover-z="1" data-animated href="#"> View all</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="panel panel-default paper-shadow" data-z="0.5">
+              <div class="panel-heading">
+                <h4 class="text-headline margin-none">Assessments</h4>
+                <p class="text-subhead text-light">A list of latest Course assessments.</p>
+              </div>
+              <ul class="list-group">
+                <li class="list-group-item media v-middle" ng-repeat="assessment in courseCtr.course.Assessments.slice(0,10)">
+                  <div class="media-body">
+                    <a href="/assessments/{{assessment.id}}">
+                      <div class="media v-middle">
+                        <div class="media-left">
+                          <div class="icon-block s30 bg-red-300 text-white img-circle">
+                            <i class="fa fa-star"></i>
+                          </div>
+                        </div>
+                        <div class="media-body text-body-2">
+                          {{assessment.name}}
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                </li>
+              </ul>
+              <div class="panel-footer text-right">
+                <a href="admin/assessments/all" class="btn btn-primary paper-shadow relative" data-z="0" data-hover-z="1" data-animated href="#"> View all</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
