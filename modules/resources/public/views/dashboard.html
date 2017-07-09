@@ -1,60 +1,71 @@
-<div ng-init="resourceCtr.initDashboard()" style="padding: 10px;">
-    <div class="jumbotron text-center bg-transparent margin-none">
-      <h1>{{resourceCtr.resource.name.toUpperCase()}} Resource Dashboard</h1>
-    </div>
-    
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="col-sm-4">
-                <div class="chart-wrapper">
-                  <div class="chart-title">
-                    Number of Unique Visitor
-                  </div>
-                  <div class="chart-stage">
-                    <div id="grid-1-1">
-                       {{resourceCtr.numUniqueVisitor}}  Visitor
-                    </div>
-                  </div>
-              </div>
-            </div>
-
-            <div class="col-sm-4">
-                <div class="chart-wrapper">
-                  <div class="chart-title">
-                    Avg Clicks per day
-                  </div>
-                  <div class="chart-stage">
-                    <div id="grid-1-1">
-                      {{resourceCtr.avgClickPerDay.toFixed(2)}} Clicks
-                    </div>
-                  </div>
-              </div>
-            </div>
-
-            <div class="col-sm-4">
-                <div class="chart-wrapper">
-                  <div class="chart-title">
-                    Avg Lunches per day
-                  </div>
-                  <div class="chart-stage">
-                    <div id="grid-1-1">
-                       {{resourceCtr.avgLunchPerDay.toFixed(2)}} Lunches
-                    </div>
-                  </div>
-              </div>
-            </div>
+<div ng-init="resourceCtr.initDashboard()">
+  <div class="parallax overflow-hidden bg-white page-section third">
+    <div class="parallax-layer container" data-opacity="true" style="opacity: 1;">
+      <div class="media v-middle">
+        <div class="media-body">
+          <h1 class="text-headline margin-none">{{resourceCtr.resource.name.toUpperCase()}} Resource Dashboard</h1>
+          <p class="text-subhead text-light">Some insights about this resource</p>
         </div>
+        <div class="media-right">
+        </div>
+      </div>
     </div>
+  </div>
 
-    <div class="row">
-      <div class="col-sm-12">
+  <div class="container-fluid">
+    <div class="page-section">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="col-sm-4">
+            <div class="chart-wrapper">
+              <div class="chart-title">
+                Number of Unique Visitor
+              </div>
+              <div class="chart-stage">
+                <div id="grid-1-1">
+                  {{resourceCtr.numUniqueVisitor}} Visitor
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-4">
+            <div class="chart-wrapper">
+              <div class="chart-title">
+                Avg Clicks per day
+              </div>
+              <div class="chart-stage">
+                <div id="grid-1-1">
+                  {{resourceCtr.avgClickPerDay.toFixed(2)}} Clicks
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-4">
+            <div class="chart-wrapper">
+              <div class="chart-title">
+                Avg Lunches per day
+              </div>
+              <div class="chart-stage">
+                <div id="grid-1-1">
+                  {{resourceCtr.avgLunchPerDay.toFixed(2)}} Lunches
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12">
           <div class="col-sm-6">
             <div class="chart-wrapper">
               <div class="chart-title">
                 Resource Lunch Interaction
               </div>
               <div class="chart-stage">
-                  <div id="resource_lunch_chart" style="width:100%; height:400px;"></div>
+                <div id="resource_lunch_chart" style="width:100%; height:400px;"></div>
               </div>
             </div>
           </div>
@@ -65,10 +76,12 @@
                 Resource Click Interaction
               </div>
               <div class="chart-stage">
-                  <div id="resource_click_chart" style="width:100%; height:400px;"></div>
+                <div id="resource_click_chart" style="width:100%; height:400px;"></div>
               </div>
             </div>
           </div>
+        </div>
       </div>
     </div>
+  </div>
 </div>

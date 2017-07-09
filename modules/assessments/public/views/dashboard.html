@@ -1,164 +1,207 @@
-<div ng-init="assessmentCtr.initDashboard()" style="padding: 10px;">
-    <div class="jumbotron text-center bg-transparent margin-none">
-      <h1>{{assessmentCtr.assessment.name.toUpperCase()}} Assessment Dashboard</h1>
+<div ng-init="assessmentCtr.initDashboard()">
+  <div class="parallax overflow-hidden bg-white page-section third">
+    <div class="parallax-layer container" data-opacity="true" style="opacity: 1;">
+      <div class="media v-middle">
+        <div class="media-body">
+          <h1 class="text-headline margin-none">{{assessmentCtr.assessment.name.toUpperCase()}} Assessment Dashboard</h1>
+          <p class="text-subhead text-light">Some insights about this assessment</p>
+        </div>
+        <div class="media-right">
+        </div>
+      </div>
     </div>
-    
+  </div>
+
+  <div class="container-fluid">
+    <div class="page-section">
+
       <div class="row">
 
+        <div class="col-sm-2">
+          <div class="chart-wrapper">
+            <div class="chart-title">
+              No of Questions
+            </div>
+            <div class="chart-stage" ng-if="assessmentCtr.questionsNum != 0">
+              <div id="grid-1-1">
+                {{assessmentCtr.questionsNum}} Questions
+              </div>
+            </div>
+            <div class="chart-stage" ng-if="assessmentCtr.questionsNum == 0">
+              <div id="grid-1-1">
+                Not Available
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-2">
+          <div class="chart-wrapper">
+            <div class="chart-title">
+              Avg Score
+            </div>
+            <div class="chart-stage">
+              <div id="grid-1-1">
+                {{assessmentCtr.avg.toFixed(2)}} %
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-2">
+          <div class="chart-wrapper">
+            <div class="chart-title">
+              Standard Deviation
+            </div>
+            <div class="chart-stage">
+              <div id="grid-1-1">
+                {{assessmentCtr.std.toFixed(2)}}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-2">
+          <div class="chart-wrapper">
+            <div class="chart-title">
+              No of attempted Students
+            </div>
+            <div class="chart-stage">
+              <div id="grid-1-1">
+                {{assessmentCtr.studentsNum}} Students
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-2">
+          <div class="chart-wrapper">
+            <div class="chart-title">
+              No of passed Students
+            </div>
+            <div class="chart-stage">
+              <div id="grid-1-1">
+                {{assessmentCtr.passedstudentsNum}} Students
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-2">
+          <div class="chart-wrapper">
+            <div class="chart-title">
+              No of failed Students
+            </div>
+            <div class="chart-stage">
+              <div id="grid-1-1">
+                {{assessmentCtr.faildSutdentsNum}} Students
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="chart-wrapper">
+            <div class="chart-title">
+              Distribution of scores
+            </div>
+            <div class="chart-stage">
+              <div id="scoresDistribution" style="width:100%; height:400px;"></div>
+            </div>
+            <div class="chart-notes">
+              <button class="btn btn-default" ng-click="assessmentCtr.scoresRangeChart.filterAll().redrawGroup();">Reset</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="chart-wrapper">
+            <div class="chart-title">
+              Students
+            </div>
+            <div class="chart-stage" style="height: 460px; overflow: auto">
+              <table class="table table-bordered table-striped" id="data-table">
+                <thead>
+                  <tr class="header">
+                    <th>Student ID</th>
+                    <th>Student Name</th>
+                    <th>Student Grade</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
         <div class="col-sm-12">
-
-            <div class="col-sm-2">
-                <div class="chart-wrapper">
-                  <div class="chart-title">
-                    Number of Questions
-                  </div>
-                  <div class="chart-stage" ng-if="assessmentCtr.questionsNum != 0">
-                    <div id="grid-1-1">
-                       {{assessmentCtr.questionsNum}} Questions
-                    </div>
-                  </div>
-                  <div class="chart-stage" ng-if="assessmentCtr.questionsNum == 0">
-                    <div id="grid-1-1">
-                       Not Available
-                    </div>
-                  </div>
-              </div>
+          <div class="chart-wrapper">
+            <div class="chart-title">
+              Students
             </div>
-
-            <div class="col-sm-2">
-                <div class="chart-wrapper">
-                  <div class="chart-title">
-                    Avg Score
-                  </div>
-                  <div class="chart-stage">
-                    <div id="grid-1-1">
-                      {{assessmentCtr.avg.toFixed(2)}} %
-                    </div>
-                  </div>
-              </div>
+            <div class="chart-stage">
+              <div id="studentsMarksChart" style="width:100%; height:430px;"></div>
             </div>
-
-            <div class="col-sm-2">
-                <div class="chart-wrapper">
-                  <div class="chart-title">
-                    Standard Deviation
-                  </div>
-                  <div class="chart-stage">
-                    <div id="grid-1-1">
-                       {{assessmentCtr.std.toFixed(2)}}
-                    </div>
-                  </div>
-              </div>
-            </div>
-
-            <div class="col-sm-2">
-                <div class="chart-wrapper">
-                  <div class="chart-title">
-                    Number of attempted Students
-                  </div>
-                  <div class="chart-stage">
-                    <div id="grid-1-1">
-                      {{assessmentCtr.studentsNum}} Students
-                    </div>
-                  </div>
-              </div>
-            </div>
-
-            <div class="col-sm-2">
-                <div class="chart-wrapper">
-                  <div class="chart-title">
-                    Number of passed Students
-                  </div>
-                  <div class="chart-stage">
-                    <div id="grid-1-1">
-                       {{assessmentCtr.passedstudentsNum}} Students
-                    </div>
-                  </div>
-              </div>
-            </div>
-
-            <div class="col-sm-2">
-                <div class="chart-wrapper">
-                  <div class="chart-title">
-                    Number of failed Students
-                  </div>
-                  <div class="chart-stage">
-                    <div id="grid-1-1">
-                       {{assessmentCtr.faildSutdentsNum}} Students
-                    </div>
-                  </div>
-              </div>
-            </div>
-
-        </div>
-
-        <div class="row">
-          <div class="col-sm-12">
-            <div class="col-sm-6">
-              <div class="chart-wrapper">
-                <div class="chart-title">
-                  Distribution of scores
-                </div>
-                <div class="chart-stage">
-                    <div id="scoresDistribution" style="width:100%; height:400px;"></div>
-                </div>
-                <div class="chart-notes">
-                    <button class="btn btn-default" ng-click="assessmentCtr.scoresRangeChart.filterAll().redrawGroup();">Reset</button>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-6">
-              <div class="chart-wrapper">
-                  <div class="chart-title">
-                    Students
-                  </div>
-                  <div class="chart-stage" style="height: 410px; overflow: auto">
-                    <table class="table table-bordered table-striped" id="data-table">
-                      <thead>
-                        <tr class="header">
-                          <th>Student ID</th>
-                          <th>Student Name</th>
-                          <th>Student Grade</th>
-                          <th>Status</th>                                                  
-                        </tr>
-                      </thead>
-                      <tbody></tbody>
-                    </table>
-                  </div>
-                </div>
-            </div>            
-          </div>
-        </div>
-
-      <div class="row">
-          <div class="col-sm-12">
-            <div class="chart-wrapper">
-              <div class="chart-title">
-                Students
-              </div>
-              <div class="chart-stage">
-                  <div id="studentsMarksChart" style="width:100%; height:430px;"></div>
-              </div>
-                <div class="chart-notes">
-                    <button class="btn btn-default" ng-click="assessmentCtr.studentsMarksChart.filterAll().redrawGroup();">Reset</button>
-                </div>
+            <div class="chart-notes">
+              <button class="btn btn-default" ng-click="assessmentCtr.studentsMarksChart.filterAll().redrawGroup();">Reset</button>
             </div>
           </div>
+        </div>
       </div>
 
       <div class="row" ng-if="assessmentCtr.questionsNum != 0">
-          <div class="col-sm-12">
-            <div class="chart-wrapper">
-              <div class="chart-title">
-                Questions Correct/InCorrect Counts
-              </div>
-              <div class="chart-stage">
-                  <div id="questionsCorrectInCorrect" style="width:100%; height:400px;"></div>
-              </div>
-                <div class="chart-notes">
-                    <button class="btn btn-default" ng-click="assessmentCtr.questionCorrectIncorrectChart.filterAll().redrawGroup();">Reset</button>
-                </div>
+        <div class="col-sm-12">
+          <div class="chart-wrapper">
+            <div class="chart-title">
+              Questions Correct/InCorrect Counts
+            </div>
+            <div class="chart-stage">
+              <div id="questionsCorrectInCorrect" style="width:100%; height:400px;"></div>
+            </div>
+            <div class="chart-notes">
+              <button class="btn btn-default" ng-click="assessmentCtr.questionCorrectIncorrectChart.filterAll().redrawGroup();">Reset</button>
             </div>
           </div>
+        </div>
       </div>
+
+      <div class="row" ng-if="false">
+        <div class="col-md-4">
+          <div class="panel panel-default paper-shadow" data-z="0.5">
+            <div class="panel-heading">
+              <h4 class="text-headline margin-none">Questions</h4>
+              <p class="text-subhead text-light">A list of assessments question.</p>
+            </div>
+            <ul class="list-group">
+              <li class="list-group-item media v-middle" ng-repeat="assessment in courseCtr.course.Assessments.slice(0,10)">
+                <div class="media-body">
+                  <a href="/assessments/{{assessment.id}}">
+                    <div class="media v-middle">
+                      <div class="media-left">
+                        <div class="icon-block s30 bg-red-300 text-white img-circle">
+                          <i class="fa fa-star"></i>
+                        </div>
+                      </div>
+                      <div class="media-body text-body-2">
+                        {{assessment.name}}
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              </li>
+            </ul>
+            <div class="panel-footer text-right">
+              <a href="admin/assessments/all" class="btn btn-primary paper-shadow relative" data-z="0" data-hover-z="1" data-animated href="#"> View all</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
 </div>

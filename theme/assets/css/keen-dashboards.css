@@ -80,6 +80,7 @@ body.application .return-link:hover,
   color: #666;
   font-size: 14px;
   font-weight: 200;
+  font-weight: bold;
   padding: 7px 10px 4px;
 }
 
