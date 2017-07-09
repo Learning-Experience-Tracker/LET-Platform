@@ -4,7 +4,7 @@
         .module('letApp')
         .controller('CoursesController', CoursesController);
 
-    CoursesController.$inject = ['CourseService', 'OrganizationService', '$rootScope', 'ngToast', '$state', '$stateParams'];
+    CoursesController.$inject = ['CourseService', 'OrganizationService', '$rootScope', 'ngToast', '$state', '$stateParams','moment'];
     
     function CoursesController(CourseService, OrganizationService, $rootScope, ngToast, $state, $stateParams){
        var vm = this;
