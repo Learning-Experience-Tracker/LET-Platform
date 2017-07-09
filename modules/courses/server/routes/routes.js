@@ -39,4 +39,9 @@ module.exports = function(app){
        .post(passport.authenticate('jwt', {session : false}),
              acl.studentOnly,
              courseCtr.enroll);
+
+    app.route('/api/student/course/:id/dashboard')
+       .get(passport.authenticate('jwt', {session : false}),
+             acl.studentOnly,
+             courseCtr.getStudentDashbaordDate);
 }

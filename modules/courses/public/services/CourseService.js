@@ -29,6 +29,9 @@ angular
                 },
                 enrollCourse : function(courseId){
                     return $http.post('/api/course/enroll', { courseId : courseId });
+                },
+                getStudentDashbaordDate : function(courseId){
+                    return $http.get('/api/student/course/'+courseId+"/dashboard");
                 }
             }
     }
