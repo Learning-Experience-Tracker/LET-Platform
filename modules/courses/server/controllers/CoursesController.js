@@ -25,9 +25,14 @@ module.exports.get = function(req, res){
             id : req.params.id
         },
         include : [{
-              model : db.Resource
+              model : db.Resource,
+              attributes : ['id','name']
           },{
-              model : db.Assessment
+              model : db.Assessment,
+              attributes : ['id','name']
+          },{
+              model : db.User,
+              attributes : ['id','name']
           }]
     }).then(function(course){
         if(!course){
