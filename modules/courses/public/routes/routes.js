@@ -53,14 +53,14 @@
                 controllerAs : 'courseCtr'
               }
           }
-        }).state('main.studentCourseView', {
-          url: '/student/course/:id',          
+        }).state('main.studentCourseDashboard', {
+          url: '/student/course/:id/dashboard',          
           data : { },
           views : {
               '' : {                
-                templateUrl : '/courses/views/view_student.html',
-                controller : 'CoursesController',
-                controllerAs : 'courseCtr'
+                templateUrl : '/courses/views/dashboard_student.html',
+                controller : 'StudentDashboardCtr',
+                controllerAs : 'dashboardCtr'
               }
           }
         });

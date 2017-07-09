@@ -11,12 +11,11 @@
 
        vm.init = init;
        vm.enroll = enroll;
-       vm.viewCourse = viewCourse;
+       vm.viewDashboard = viewDashboard;
 
        function init(){
-           CourseService.getStudentCourses().then(function(response){
-            console.log(response);
-            vm.courseList = response.data;
+           CourseService.getSpecifiedStudentCourses().then(function(response){
+                vm.courseList = response.data;
            }).catch(function(error){
             console.log(error);
            });
@@ -31,8 +30,8 @@
            });
        }
 
-       function viewCourse(courseId){
-          $state.go('main.studentCourseView', { id : courseId});
+       function viewDashboard(courseId){
+          $state.go('main.studentCourseDashboard', { id : courseId});
        }
     }
 })();

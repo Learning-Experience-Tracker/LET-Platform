@@ -1,13 +1,22 @@
-<div class="container" ng-init="courseCtr.init()">
-    <div class="jumbotron text-center bg-transparent margin-none">
-      <h1>Courses</h1>
-      <p>a list of Educational Courses.</p>
-    </div>
+<div ng-init="courseCtr.init()">
 
+  <div class="parallax overflow-hidden bg-white page-section third">
+    <div class="parallax-layer container" data-opacity="true" style="opacity: 1;">
+      <div class="media v-middle">
+        <div class="media-body">
+          <h1 class="text-headline margin-none">Courses</h1>
+          <p class="text-subhead text-light">a list of your registered Courses.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container">
     <div class="page-section">
       <div class="row">
-        <div class="col-md-10 col-lg-8 col-md-offset-1 col-lg-offset-2">
-          
+        <div class="col-md-9">
+
           <div class="panel panel-default">
             <!-- Data table -->
             <table data-toggle="data-table" class="table" cellspacing="0" width="100%" style="table-layout:fixed;">
@@ -15,6 +24,7 @@
                 <tr>
                   <th>Id</th>
                   <th>Name</th>
+                  <th>Regestraion Date</th>
                   <th></th>
                 </tr>
               </thead>
@@ -23,11 +33,11 @@
                   <td>{{course.id}}</td>
                   <td>{{course.name}}</td>
                   <td>
-                      <button ng-if="course.Users.length == 0" class="btn btn-primary" ng-click="courseCtr.enroll(course.id)" style="height: 24px;padding: 2px;padding-right: 5px;padding-left: 5px;">
+                    <button ng-if="course.Users.length == 0" class="btn btn-primary" ng-click="courseCtr.enroll(course.id)" style="height: 24px;padding: 2px;padding-right: 5px;padding-left: 5px;">
                           Enroll
                       </button>
-                      <button ng-if="course.Users.length != 0" class="btn btn-primary" ng-click="courseCtr.viewCourse(course.id)" style="height: 24px;padding: 2px;padding-right: 5px;padding-left: 5px;">
-                          Details
+                    <button ng-if="course.Users.length != 0" class="btn btn-primary" ng-click="courseCtr.viewDashboard(course.id)" style="height: 24px;padding: 2px;padding-right: 5px;padding-left: 5px;">
+                          Dashboard
                       </button>
                   </td>
                 </tr>
@@ -39,5 +49,4 @@
         </div>
       </div>
     </div>
-   
- </div>
+  </div>
