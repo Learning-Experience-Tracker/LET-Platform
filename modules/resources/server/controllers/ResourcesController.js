@@ -1,7 +1,9 @@
 'use strict';
 
 var db = require('./../../../../config/sequelize'),
-    winston = require('./../../../../config/winston');
+    winston = require('./../../../../config/winston'),
+    async = require('async'),
+    math = require('mathjs');
 
 module.exports.create = function(req, res){
     var resource = db.Resource.build({
@@ -71,5 +73,118 @@ module.exports.getTypes = function(req, res){
 
 
 module.exports.getAssessmentDashboard = function(req, res){
-    res.status(500).end();
+    async.parallel({
+        lunchedStatements: function(callback) { 
+                db.Statement
+                .findAll({
+                    attributes: { exclude: ['createdAt','updatedAt','ResourceId'] },
+                    where :{ ResourceId : req.params.id},
+                    order : [
+                            ['id', 'ASC']
+                    ],
+                    include : [
+                        {model : db.Resource ,attributes: { exclude: ['createdAt','updatedAt','ResourceId'] }},
+                        {model : db.Verb , attributes: [],where: {name:'launched'}},
+                        {model : db.User,  attributes: { exclude: ['createdAt','updatedAt','ResourceId'] }}
+                    ],
+                    raw : true,
+                    nest: true
+                }).then(function(statements){
+                    callback(null,statements);
+                }).catch(function(err){
+                    callback(err,null);
+                });
+        },
+        clickedStatements: function(callback) { 
+                db.Statement
+                .findAll({
+                    attributes: { exclude: ['createdAt','updatedAt','ResourceId'] },
+                    where :{ ResourceId : req.params.id},
+                    order : [
+                            ['id', 'ASC']
+                    ],
+                    include : [
+                        {model : db.Resource ,attributes: { exclude: ['createdAt','updatedAt','ResourceId'] }},
+                        {model : db.Verb , attributes: [],where: {name:'clicked'}},
+                        {model : db.User,  attributes: { exclude: ['createdAt','updatedAt','ResourceId'] }}
+                    ],
+                    raw : true,
+                    nest: true
+                }).then(function(statements){
+                    callback(null,statements);
+                }).catch(function(err){
+                    callback(err,null);
+                });
+        }, 
+        numUniqueVisitor : function(callback){
+        // this fucking query don't work because distinct only applied on statement.id, i figured it out through enableLogging
+            /*db.Statement
+            .count({
+                distinct: 'UserId',
+                where :{ ResourceId : req.params.id},
+                include : [
+                    {   model : db.Verb , 
+                        where :{ name : 'launched' },
+                        attributes: []
+                    }
+                ]
+            }).then(function(res){
+                callback(null,res);
+            }).catch(function(err){
+                callback(err,null);
+            });*/ // so i make this shity raw query -_-
+
+            db.sequelize.query(
+                    "SELECT count(DISTINCT(`Statement`.`UserId`)) AS `count` FROM `Statements` AS `Statement` INNER JOIN `Verbs` AS `Verb` ON `Statement`.`VerbId` = `Verb`.`id` AND `Verb`.`name` = 'launched' WHERE `Statement`.`ResourceId` = " + req.params.id
+            ).then(function(res){
+                    callback(null,res[0][0].count);
+            }).catch(function(err){
+                callback(err,null);
+            });         
+        },
+        avgLunchPerDay : function(callback){
+            db.Statement
+                .findAll({
+                    attributes: [[db.sequelize.fn('count', db.sequelize.col('Statement.id')), 'lunchPerDay']],
+                    where :{ ResourceId : req.params.id},
+                    include : [
+                        {model : db.Verb , attributes: [],where: {name:'launched'}},
+                    ],
+                    group: ['Statement.timestamp'],
+                    raw : true,
+                    nest: true
+                }).then(function(res){
+                    res = res.map(function(item) {return item.lunchPerDay;});
+                    callback(null,math.mean(res));
+                }).catch(function(err){
+                    callback(err,null);
+                });
+        },
+        avgClickPerDay : function(callback){
+            db.Statement
+                .findAll({
+                    attributes: [[db.sequelize.fn('count', db.sequelize.col('Statement.id')), 'clicksPerDay']],
+                    where :{ ResourceId : req.params.id},
+                    include : [
+                        {model : db.Verb , attributes: [],where: {name:'clicked'}},
+                    ],
+                    group: ['Statement.timestamp'],
+                    raw : true,
+                    nest: true
+                }).then(function(res){
+                    res = res.map(function(item) {return item.clicksPerDay;});
+                    callback(null,math.mean(res));
+                }).catch(function(err){
+                    callback(err,null);
+                });
+        }
+
+    }, function(err, results) {
+        if (err){
+            winston.error(err);
+            res.status(500).end();
+        }else{
+            return res.json(results);
+        }
+    });
 }
