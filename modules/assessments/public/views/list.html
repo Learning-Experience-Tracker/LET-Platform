@@ -1,14 +1,23 @@
-<div class="container" ng-init="assessmentCtr.init()">
-    <div class="jumbotron text-center bg-transparent margin-none">
-      <h1>Assessments</h1>
-      <p>a list of your Course Assessments.</p>
-      <a href="/admin/assessments/create"class="btn btn-primary">Create</a>
+<div ng-init="assessmentCtr.init()">
+  <div class="parallax overflow-hidden bg-white page-section third">
+    <div class="parallax-layer container" data-opacity="true" style="opacity: 1;">
+      <div class="media v-middle">
+        <div class="media-body">
+          <h1 class="text-headline margin-none">Assessments</h1>
+          <p class="text-subhead text-light">a list of all the Assessments.</p>
+        </div>
+        <div class="media-right">
+          <a href="/admin/assessments/create" class="btn btn-success">Create</a>
+        </div>
+      </div>
     </div>
+  </div>
 
+  <div class="container">
     <div class="page-section">
       <div class="row">
-        <div class="col-md-10 col-lg-8 col-md-offset-1 col-lg-offset-2">
-          
+        <div class="col-md-9">
+
           <div class="panel panel-default">
             <!-- Data table -->
             <table data-toggle="data-table" class="table" cellspacing="0" width="100%">
@@ -26,13 +35,10 @@
                   <td>{{assessment.name}}</td>
                   <td>{{assessment.id_IRI}}</td>
                   <td>
-                   <button class="btn btn-info" ng-click="assessmentCtr.viewDashboard(assessment.id)" style="height: 24px;padding: 2px;padding-right: 5px;padding-left: 5px;">
-                          insights
+                    <button class="btn btn-info" ng-click="assessmentCtr.viewDashboard(assessment.id)" style="height: 24px;padding: 2px;padding-right: 5px;padding-left: 5px;">
+                          dashboard
                       </button>
-                      <button class="btn btn-primary" ng-click="assessmentCtr.viewAssessment(assessment.id)" style="height: 24px;padding: 2px;padding-right: 5px;padding-left: 5px;">
-                          details
-                      </button>
-                      <button class="btn btn-danger" ng-click="assessmentCtr.delete(assessment.id)" style="height: 24px;padding: 2px;padding-right: 5px;padding-left: 5px;">
+                    <button class="btn btn-danger" ng-click="assessmentCtr.delete(assessment.id)" style="height: 24px;padding: 2px;padding-right: 5px;padding-left: 5px;">
                           delete
                       </button>
                   </td>
@@ -45,5 +51,5 @@
         </div>
       </div>
     </div>
-   
- </div>
+  </div>
+</div>

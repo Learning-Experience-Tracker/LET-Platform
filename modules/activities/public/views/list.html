@@ -1,13 +1,21 @@
-<div class="container" ng-init="activitiesCtr.init()">
-    <div class="jumbotron text-center bg-transparent margin-none">
-      <h1>Activities</h1>
-      <p>a list of your Course Activities.</p>
-    </div>
+<div ng-init="activitiesCtr.init()">
 
+  <div class="parallax overflow-hidden bg-white page-section third">
+    <div class="parallax-layer container" data-opacity="true" style="opacity: 1;">
+      <div class="media v-middle">
+        <div class="media-body">
+          <h1 class="text-headline margin-none">Activities</h1>
+          <p class="text-subhead text-light">a list of all the Activities.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
     <div class="page-section">
       <div class="row">
-        <div class="col-md-12 col-lg-12">
-          
+        <div class="col-md-9">
+
           <div class="panel panel-default">
             <!-- Data table -->
             <table data-toggle="data-table" class="table" cellspacing="0" width="100%">
@@ -24,21 +32,18 @@
                   <td>{{activity.id}}</td>
                   <td>{{activity.User.name}}</td>
                   <td>{{activity.Verb.name}}</td>
-                  <td ng-if="activity.AssessmentId">{{activity.Assessment.name}}</td>
+                  <td ng-if="activity.AssessmentId && !activity.QuestionId">{{activity.Assessment.name}}</td>
                   <td ng-if="activity.QuestionId">{{activity.Question.name}}</td>
                   <td ng-if="activity.ResourceId">{{activity.Resource.name}}</td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <div  paging 
-                page="activitiesCtr.currentPage" 
-                page-size="activitiesCtr.pageSize" 
-                total="activitiesCtr.activitiesCount" 
-                paging-action="activitiesCtr.getPage('clicked', page, pageSize, total)"
-                width="100%">
-          </div> 
+          <div paging page="activitiesCtr.currentPage" page-size="activitiesCtr.pageSize" total="activitiesCtr.activitiesCount" paging-action="activitiesCtr.getPage('clicked', page, pageSize, total)"
+            width="100%">
+          </div>
         </div>
       </div>
     </div>
- </div>
+  </div>
+</div>
