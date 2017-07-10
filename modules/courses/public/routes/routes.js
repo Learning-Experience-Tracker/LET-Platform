@@ -18,7 +18,7 @@
           data : { },
           views : {
               '' : {                
-                templateUrl : '/courses/views/list_admin.html',
+                templateUrl : '/courses/views/admin/list_admin.html',
                 controller : 'CoursesController',
                 controllerAs : 'courseCtr'
               }
@@ -28,7 +28,7 @@
           data : { },
           views : {
               '' : {                
-                templateUrl : '/courses/views/create.html',
+                templateUrl : '/courses/views/admin/create.html',
                 controller : 'CoursesController',
                 controllerAs : 'courseCtr'
               }
@@ -38,7 +38,7 @@
           data : { },
           views : {
               '' : {                
-                templateUrl : '/courses/views/view_admin.html',
+                templateUrl : '/courses/views/admin/view_admin.html',
                 controller : 'CoursesController',
                 controllerAs : 'courseCtr'
               }
@@ -48,7 +48,7 @@
           data : { },
           views : {
               '' : {                
-                templateUrl : '/courses/views/list_student.html',
+                templateUrl : '/courses/views/student/list_student.html',
                 controller : 'StudentCoursesController',
                 controllerAs : 'courseCtr'
               }
@@ -58,7 +58,7 @@
           data : { },
           views : {
               '' : {                
-                templateUrl : '/courses/views/dashboard_student.html',
+                templateUrl : '/courses/views/student/dashboard_student.html',
                 controller : 'StudentDashboardCtr',
                 controllerAs : 'dashboardCtr'
               }
