@@ -64,6 +64,7 @@
             }).then(function (response) {
                 drawCharts(response.data.clickedstatements, weekNo);
                 vm.top10AccessedResrouce = response.data.topTenAccessedResource;
+                vm.topTenActiveStudents = response.data.topTenActiveStudents;
             }).catch(function (err) {
                 console.log(err);
                 ngToast.create({

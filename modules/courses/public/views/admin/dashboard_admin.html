@@ -57,26 +57,65 @@
               Top 10 accessed resource in week {{dashboardCtr.weekSlider.value}}
             </div>
             <div class="table-responsive">
-            <table class="table table-striped" style="margin-bottom:0">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Type</th>
-                  <th>URL</th>          
-                  <th>No of Lunches</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr ng-repeat="resource in dashboardCtr.top10AccessedResrouce">
-                  <td>{{resource.Resource.name}}</td>
-                  <td>{{resource.Resource.type}}</td>
-                  <td>{{resource.Resource.id_IRI}}</td>                  
-                  <td>{{resource.numOfLaunches}}</td>
-                </tr>
-              </tbody>
-            </table>
+              <table class="table table-striped table-bordered" style="margin-bottom:0">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>URL</th>
+                    <th>No of Lunches</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="resource in dashboardCtr.top10AccessedResrouce">
+                    <td>{{resource.Resource.name}}</td>
+                    <td>{{resource.Resource.type}}</td>
+                    <td>{{resource.Resource.id_IRI}}</td>
+                    <td>{{resource.numOfLaunches}}</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
+          </div>
+        </div>
+
+        <div class="col-sm-6">
+          <div class="chart-wrapper">
+            <div class="chart-title">
+              Top 10 active students in week {{dashboardCtr.weekSlider.value}}
+            </div>
+            <div class="table-responsive">
+              <table class="table table-striped table-bordered" style="margin-bottom:0">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>No of Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="student in dashboardCtr.topTenActiveStudents">
+                    <td>{{student.User.name}}</td>
+                    <td>{{student.User.email}}</td>
+                    <td>{{student.numOfAction}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="chart-wrapper">
+            <div class="chart-title">
+              Time machine (choose week):
+            </div>
+            <div class="chart-stage">
+              <rzslider rz-slider-model="dashboardCtr.weekSlider.value" rz-slider-options="dashboardCtr.weekSlider.options"></rzslider>
+            </div>
           </div>
         </div>
       </div>
