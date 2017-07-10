@@ -136,27 +136,56 @@ module.exports.getStudentDashbaordDate = function (req, res) {
         assessmentsStatements: function (callback) {
             db.Statement
                 .findAll({
-                    attributes: { exclude: ['createdAt','updatedAt','ResourceId','QuestionId'] },
+                    attributes: {
+                        exclude: ['createdAt', 'updatedAt', 'ResourceId', 'QuestionId']
+                    },
                     where: {
                         UserId: req.user.id
                     },
-                    include : [
-                        {model : db.Assessment , attributes:['name']},
-                        {model : db.Verb , attributes: [],where: {name:'completed'}}
-                    ] 
+                    include: [{
+                            model: db.Assessment,
+                            attributes: ['name']
+                        },
+                        {
+                            model: db.Verb,
+                            attributes: [],
+                            where: {
+                                name: 'completed'
+                            }
+                        }
+                    ]
                 }).then(function (statements) {
                     callback(null, statements);
                 }).catch(function (err) {
                     callback(err, null);
                 });
         },
-        activityStatements : function (callback){
+        resourceStatements: function (callback) {
             db.Statement
                 .findAll({
-                    attributes: ['id','timestamp'] ,
+                    attributes: ['id', 'timestamp','ResourceId'],
                     where: {
                         UserId: req.user.id
-                    }
+                    },
+                    include: [{
+                            model: db.Resource,
+                            attributes: ['type'],
+                            where: {
+                                type: {
+                                    $notIn: ['homepage']
+                                }
+                            }
+                        },
+                        {
+                            model: db.Verb,
+                            attributes: [],
+                            where: {
+                                name: {
+                                    $in : ['launched','clicked']
+                                }
+                            }
+                        }
+                    ]
                 }).then(function (statements) {
                     callback(null, statements);
                 }).catch(function (err) {
