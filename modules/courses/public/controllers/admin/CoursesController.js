@@ -15,6 +15,7 @@
        vm.delete = _delete;
        vm.findOne = findOne;
        vm.viewCourse = viewCourse;
+       vm.viewCourseDashboard = viewCourseDashboard;
        
        function init(){
            CourseService.getAll().then(function(response){
@@ -101,6 +102,10 @@
 
        function viewCourse(courseId){
           $state.go('main.courseView', { id : courseId});
+       }
+
+       function viewCourseDashboard(courseId){
+          $state.go('main.adminCourseDashboard', { id : courseId});           
        }
     }
 })();

@@ -201,3 +201,19 @@ module.exports.getStudentDashbaordDate = function (req, res) {
         }
     });
 }
+
+
+module.exports.getAdminDashbaordDate = function (req, res) {
+    async.parallel({
+        test : function(callback){
+            callback("Not impletmented Yes",null);
+        }
+    }, function (err, results) {
+        if (err) {
+            winston.error(err);
+            res.status(500).end();
+        } else {
+            return res.json(results);
+        }
+    });
+}

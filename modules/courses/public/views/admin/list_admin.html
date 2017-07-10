@@ -21,7 +21,7 @@
 
           <div class="panel panel-default">
             <!-- Data table -->
-            <table data-toggle="data-table" class="table" cellspacing="0" width="100%" style="table-layout:fixed;">
+            <table data-toggle="data-table" class="table" cellspacing="0" width="100%">
               <thead>
                 <tr>
                   <th>Id</th>
@@ -37,14 +37,16 @@
                   <td>{{course.name}}</td>
                   <td>{{course.Organization.name}}</td>
                   <td>{{course.startDate | amDateFormat:'MMMM DD, YYYY'}}</td>
-                  
                   <td>
+                    <button class="btn btn-warning" ng-click="courseCtr.viewCourseDashboard(course.id)" style="height: 24px;padding: 2px;padding-right: 5px;padding-left: 5px;">
+                      dashboard
+                    </button>
                     <button class="btn btn-primary" ng-click="courseCtr.viewCourse(course.id)" style="height: 24px;padding: 2px;padding-right: 5px;padding-left: 5px;">
-                          details
-                      </button>
+                      details
+                    </button>
                     <button class="btn btn-danger" ng-click="courseCtr.delete(course.id)" style="height: 24px;padding: 2px;padding-right: 5px;padding-left: 5px;">
-                          delete
-                      </button>
+                      delete
+                    </button>
                   </td>
                 </tr>
               </tbody>

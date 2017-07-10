@@ -43,6 +43,16 @@
                 controllerAs : 'courseCtr'
               }
           }
+        }).state('main.adminCourseDashboard', {
+          url: '/admin/course/:id/dashboard',          
+          data : { },
+          views : {
+              '' : {                
+                templateUrl : '/courses/views/admin/dashboard_admin.html',
+                controller : 'AdminDashboardCtr',
+                controllerAs : 'dashboardCtr'
+              }
+          }
         }).state('main.studentCourseList', {
           url: '/student/courses/all',          
           data : { },
