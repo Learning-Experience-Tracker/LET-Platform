@@ -26,7 +26,8 @@
     "angular-paging": "^2.2.2",
     "angular-ui-router": "1.0.3",
     "dcjs": "^2.1.7",
-    "angular-moment": "^1.0.1"
+    "angular-moment": "^1.0.1",
+    "angularjs-slider": "^6.2.3"
   },
   "resolutions": {
     "angular": "^1.6.4",

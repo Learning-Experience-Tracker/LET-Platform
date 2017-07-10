@@ -25,7 +25,7 @@ module.exports.get = function (req, res) {
         where: {
             id: req.params.id
         },
-        include: [{
+        /*include: [{
             model: db.Resource,
             attributes: ['id', 'name']
         }, {
@@ -34,7 +34,7 @@ module.exports.get = function (req, res) {
         }, {
             model: db.User,
             attributes: ['id', 'name']
-        }]
+        }]*/
     }).then(function (course) {
         if (!course) {
             res.status(404).end();
@@ -163,7 +163,7 @@ module.exports.getStudentDashbaordDate = function (req, res) {
         resourceStatements: function (callback) {
             db.Statement
                 .findAll({
-                    attributes: ['id', 'timestamp','ResourceId'],
+                    attributes: ['id', 'timestamp', 'ResourceId'],
                     where: {
                         UserId: req.user.id
                     },
@@ -181,7 +181,7 @@ module.exports.getStudentDashbaordDate = function (req, res) {
                             attributes: [],
                             where: {
                                 name: {
-                                    $in : ['launched','clicked']
+                                    $in: ['launched', 'clicked']
                                 }
                             }
                         }
@@ -205,8 +205,32 @@ module.exports.getStudentDashbaordDate = function (req, res) {
 
 module.exports.getAdminDashbaordDate = function (req, res) {
     async.parallel({
-        test : function(callback){
-            callback("Not impletmented Yes",null);
+        clickedstatements: function (callback) {
+            db.Statement
+                .findAll({
+                    attributes: {
+                        exclude: ['createdAt', 'updatedAt', 'ResourceId', 'QuestionId']
+                    },
+                    where: {
+                        timestamp: {
+                            $gte: req.body.startDate,
+                            $lte: req.body.endDate
+                        }
+                    },include:[
+                        {
+                            model: db.Resource,
+                            attributes: ['type']
+                        },{
+                            model : db.Verb,
+                            attributes : ['name'],
+                            where : {name:'clicked'}
+                        }
+                    ]
+                }).then(function (statements) {
+                    callback(null, statements);
+                }).catch(function (err) {
+                    callback(err, null);
+                });
         }
     }, function (err, results) {
         if (err) {

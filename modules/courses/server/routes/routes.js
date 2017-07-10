@@ -26,7 +26,7 @@ module.exports = function(app){
              courseCtr.delete);
 
     app.route('/api/admin/course/:id/dashboard')
-       .get(passport.authenticate('jwt', {session : false}),
+       .post(passport.authenticate('jwt', {session : false}),
              acl.adminOnly,
              courseCtr.getAdminDashbaordDate);
     
