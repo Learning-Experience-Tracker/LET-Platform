@@ -62,3 +62,12 @@ module.exports.getCount = function(req, res){
         res.status(500).end();
     });
 }
+
+module.exports.getVerbs = function(req, res){
+    db.Verb.findAll().then(function(verbs){
+        res.json(verbs);
+    }).catch(function(error){
+        winston.error(error);
+        res.status(500).end();
+    });
+}

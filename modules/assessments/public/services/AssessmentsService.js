@@ -23,6 +23,9 @@ angular
                 },
                 getDashboardData : function(assessmentId){
                     return $http.get('/api/assessment/' + assessmentId+'/dashboard');
+                },
+                getAllAssessmentsQuestions : function(){
+                    return $http.get('/api/assessment/questions/all');
                 }
             }
     }

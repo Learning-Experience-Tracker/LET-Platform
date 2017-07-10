@@ -1,0 +1,45 @@
+<div ng-init="qCtr.init()">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="row">
+                <label>Did what?</label>
+                <select class="form-control" ng-model="qCtr.didWhat">
+                    <option ng-repeat="verb in qCtr.verbs" value="{{verb.id}}">{{verb.name}}</option>
+                </select>
+            </div>            
+
+            <div class="row">
+                <label>To what?</label>
+                <select class="form-control" ng-model="qCtr.toWhat">
+                    <option value="resource" selected>Resource</option>
+                    <option value="assessment">Assessment</option>
+                    <option value="question">Question</option>
+                </select>
+
+                <select class="form-control" ng-if="qCtr.toWhat == 'resource'" ng-model="qCtr.toWhatValue">
+                    <option ng-repeat="resource in qCtr.resources" value="{{resource.id}}}">{{resource.name}}</option>
+                </select>
+
+                <select class="form-control" ng-if="qCtr.toWhat == 'assessment'" ng-model="qCtr.toWhatValue">
+                    <option ng-repeat="assessments in qCtr.assessments" value="{{assessments.id}}}">{{assessments.name}}</option>
+                </select>
+
+                <select class="form-control" ng-if="qCtr.toWhat == 'question'" ng-model="qCtr.toWhatValue">
+                    <option ng-repeat="question in qCtr.question" value="{{question.id}}}">{{question.name}}</option>
+                </select>
+            </div>
+
+            <div class="row">
+                <label>Apply ?</label>
+                <select class="form-control" ng-model="qCtr.apply">
+                    <option value="none">None</option>
+                    <option value="min">Min</option>
+                    <option value="max">Max</option>
+                </select>
+            </div>
+            <div class="row">
+                <button class="btn btn-primary" style="margin:0 auto;display:block;" ng-click="qCtr.execute()">Execute</button>                
+            </div>
+        </div>        
+    </div>
+</div>

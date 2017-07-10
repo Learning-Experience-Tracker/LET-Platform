@@ -28,5 +28,10 @@ module.exports = function(app){
     app.route('/api/assessment/:id/dashboard')
        .get(passport.authenticate('jwt', {session : false}),
             acl.adminOnly,
-            assessmentCtr.getAssessmentDashboard);   
+            assessmentCtr.getAssessmentDashboard); 
+
+    app.route('/api/assessment/questions/all')
+       .get(passport.authenticate('jwt', {session : false}),
+            acl.adminOnly,
+            assessmentCtr.getAllAssessmentsQuestions);   
 }

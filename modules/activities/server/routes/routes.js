@@ -24,4 +24,9 @@ module.exports = function(app){
        .post(passport.authenticate('jwt', {session : false}),
              acl.adminOnly,
              activitiesCtr.page);  
+
+    app.route('/api/verbs/all')
+       .get(passport.authenticate('jwt', {session : false}),
+             acl.adminOnly,
+             activitiesCtr.getVerbs); 
 }

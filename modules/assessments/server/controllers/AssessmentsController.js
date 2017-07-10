@@ -229,3 +229,12 @@ module.exports.getAssessmentDashboard = function (req,res){
         }
     });
 }
+
+module.exports.getAllAssessmentsQuestions = function(req, res){
+    db.Question.findAll().then(function(questions){
+        res.json(questions);
+    }).catch(function(error){
+        winston.error(error);
+        res.status(500).end();
+    });
+}
