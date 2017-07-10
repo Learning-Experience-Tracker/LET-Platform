@@ -63,6 +63,7 @@
                 endDate: endDate
             }).then(function (response) {
                 drawCharts(response.data.clickedstatements, weekNo);
+                vm.top10AccessedResrouce = response.data.topTenAccessedResource;
             }).catch(function (err) {
                 console.log(err);
                 ngToast.create({

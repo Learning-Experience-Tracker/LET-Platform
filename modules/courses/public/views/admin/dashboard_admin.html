@@ -50,5 +50,35 @@
         </div>
       </div>
 
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="chart-wrapper">
+            <div class="chart-title">
+              Top 10 accessed resource in week {{dashboardCtr.weekSlider.value}}
+            </div>
+            <div class="table-responsive">
+            <table class="table table-striped" style="margin-bottom:0">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Type</th>
+                  <th>URL</th>          
+                  <th>No of Lunches</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="resource in dashboardCtr.top10AccessedResrouce">
+                  <td>{{resource.Resource.name}}</td>
+                  <td>{{resource.Resource.type}}</td>
+                  <td>{{resource.Resource.id_IRI}}</td>                  
+                  <td>{{resource.numOfLaunches}}</td>
+                </tr>
+              </tbody>
+            </table>
+            </div>
+
+          </div>
+        </div>
+      </div>
     </div>
   </div>

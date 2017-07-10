@@ -172,7 +172,7 @@ module.exports.getStudentDashbaordDate = function (req, res) {
                             attributes: ['type'],
                             where: {
                                 type: {
-                                    $notIn: ['homepage']
+                                    $ne: 'homepage'
                                 }
                             }
                         },
@@ -216,16 +216,57 @@ module.exports.getAdminDashbaordDate = function (req, res) {
                             $gte: req.body.startDate,
                             $lte: req.body.endDate
                         }
-                    },include:[
-                        {
-                            model: db.Resource,
-                            attributes: ['type']
-                        },{
-                            model : db.Verb,
-                            attributes : ['name'],
-                            where : {name:'clicked'}
+                    },
+                    include: [{
+                        model: db.Resource,
+                        attributes: ['type']
+                    }, {
+                        model: db.Verb,
+                        attributes: ['name'],
+                        where: {
+                            name: 'clicked'
                         }
-                    ]
+                    }]
+                }).then(function (statements) {
+                    callback(null, statements);
+                }).catch(function (err) {
+                    callback(err, null);
+                });
+        },
+        topTenAccessedResource: function (callback) {
+            db.Statement
+                .findAll({
+                    attributes: [
+                        [db.sequelize.fn('COUNT', db.sequelize.col('Statement.id')), 'numOfLaunches']
+                    ],
+                    where: {
+                        timestamp: {
+                            $gte: req.body.startDate,
+                            $lte: req.body.endDate
+                        }
+                    },
+                    include: [{
+                        model: db.Resource,
+                        attributes: ['name', 'id_IRI', 'type'],
+                        where: {
+                            type: {
+                                $ne: 'homepage'
+                            }
+                        }
+                    }, {
+                        model: db.Verb,
+                        attributes: [],
+                        where: {
+                            name: 'launched'
+                        }
+                    }],
+                    order: [
+                        [db.sequelize.fn('COUNT', db.sequelize.col('Statement.id')), 'DESC']
+                    ],
+                    group: 'ResourceId',
+                    raw: true,
+                    nest: true,
+                    limit: 10
                 }).then(function (statements) {
                     callback(null, statements);
                 }).catch(function (err) {
