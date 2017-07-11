@@ -62,8 +62,13 @@
                 startDate: startDate,
                 endDate: endDate
             }).then(function (response) {
-                drawCharts(response.data.clickedstatements, weekNo);
+
+                drawResourcesWeeklyChart(response.data.clickedstatements);
+
+                drawStudentsViewsHistoram(response.data.studensViewsHistogram);
+
                 vm.top10AccessedResrouce = response.data.topTenAccessedResource;
+
                 vm.topTenActiveStudents = response.data.topTenActiveStudents;
             }).catch(function (err) {
                 console.log(err);
@@ -74,8 +79,16 @@
             });
         }
 
-        function drawCharts(clickedstatements, weekNo) {
-            clickedstatements = prepareData(clickedstatements);
+        function drawResourcesWeeklyChart(clickedstatements) {
+            var parseDate = d3.time.format("%Y-%m-%dT%H:%M:%S.%LZ").parse;
+
+            clickedstatements.forEach(function (statement) {
+                statement.timestamp = parseDate(statement.timestamp);
+                statement.timestamp.setHours(0);
+                statement.timestamp.setMinutes(0);
+                statement.timestamp.setSeconds(0);
+                statement.timestamp.setMilliseconds(0);
+            });
 
             var minDate = d3.min(clickedstatements, function (x) {
                     return x.timestamp;
@@ -86,26 +99,6 @@
 
             var ndx = crossfilter(clickedstatements);
 
-            drawResourcesWeeklyChart(ndx, minDate, maxDate, weekNo);
-
-            dc.renderAll();
-        }
-
-        function prepareData(statements) {
-            var parseDate = d3.time.format("%Y-%m-%dT%H:%M:%S.%LZ").parse;
-
-            statements.forEach(function (statement) {
-                statement.timestamp = parseDate(statement.timestamp);
-                statement.timestamp.setHours(0);
-                statement.timestamp.setMinutes(0);
-                statement.timestamp.setSeconds(0);
-                statement.timestamp.setMilliseconds(0);
-            });
-
-            return statements;
-        }
-
-        function drawResourcesWeeklyChart(ndx, minDate, maxDate, weekNo) {
             var dateDim = ndx.dimension(function (item) {
                 return item.timestamp;
             });
@@ -120,8 +113,6 @@
             }, function () {
                 return {};
             });
-
-
 
             var typesOfGroupedResources = Object.keys(grouping.top(1)[0].value);
 
@@ -157,13 +148,71 @@
                 resourcesWeeklyChart.stack(grouping, type, sel_stack(type));
             });
 
-            console.log(typesOfGroupedResources);
-
             function sel_stack(i) {
                 return function (d) {
                     return d.value[i];
                 };
             }
+
+            dc.renderAll();
+        }
+
+        function drawStudentsViewsHistoram(data) {
+            var minValue = d3.min(data, function (x) {
+                    return x.numOfViews;
+                }),
+                maxValue = d3.max(data, function (x) {
+                    return x.numOfViews;
+                });
+
+            var quantize = d3.scale.quantize().domain([minValue, maxValue]).range(['0 %', '10 %', '20 %', '30 %', '40 %', '50 %', '60 %', '70 %', '80 %', '90 %', '100 %']);
+
+            data.forEach(function (item) {
+                item.range = quantize(parseInt(item.numOfViews));
+            });
+
+            console.log(data);
+
+            data.sort(function (a, b) {
+                return parseInt(a.numOfViews) - parseInt(b.numOfViews);
+            });
+
+            console.log(data);
+
+            var ndx = crossfilter(data);
+
+            var rangesDim = ndx.dimension(function (item) {
+                return item.range;
+            });
+
+            var grouping = rangesDim.group();
+
+            var studentsViewsHistoram = dc.barChart('#students-views-historam');
+
+            studentsViewsHistoram
+                .dimension(rangesDim)
+                .group(grouping)
+                .width(function (element) {
+                    var width = element && element.getBoundingClientRect && element.getBoundingClientRect().width;
+                    return (width && width > studentsViewsHistoram.minWidth()) ? width : studentsViewsHistoram.minWidth();
+                })
+                .title(function (d) {
+                    return d.value;
+                })
+                .renderHorizontalGridLines(true)
+                .xAxisLabel('Ranges')
+                .yAxisLabel('Unique Students')
+                .x(d3.scale.ordinal())
+                .y(d3.scale.linear().domain([0, grouping.top(1)[0].value + 10]))
+                .xUnits(dc.units.ordinal)
+                .renderLabel(true)
+                .ordering(function (d) {
+                    var rangeNumber = d.key.replace(' %', '');
+                    return +rangeNumber;
+                })
+
+            studentsViewsHistoram.margins().right = 20;
+            dc.renderAll();
         }
     }
 })()

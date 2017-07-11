@@ -301,6 +301,30 @@ module.exports.getAdminDashbaordDate = function (req, res) {
                 }).catch(function (err) {
                     callback(err, null);
                 });
+        },
+        studensViewsHistogram : function (callback) {
+            db.Statement
+                .findAll({
+                    attributes: [
+                        [db.sequelize.fn('COUNT', db.sequelize.col('Statement.id')), 'numOfViews']
+                    ],
+                    where: {
+                        timestamp: {
+                            $gte: req.body.startDate,
+                            $lte: req.body.endDate
+                        }
+                    },
+                    order: [
+                        [db.sequelize.fn('COUNT', db.sequelize.col('Statement.id')), 'ASC']
+                    ],
+                    group: 'UserId',
+                    raw: true,
+                    nest: true,
+                }).then(function (statements) {
+                    callback(null, statements);
+                }).catch(function (err) {
+                    callback(err, null);
+                });
         }
     }, function (err, results) {
         if (err) {
