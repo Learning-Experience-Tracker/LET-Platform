@@ -5,16 +5,16 @@
         .controller('AdminDashboardCtr', AdminDashboardCtr);
 
 
-    AdminDashboardCtr.$inject = ['CourseService', '$rootScope', 'ngToast', '$state', '$stateParams'];
+    AdminDashboardCtr.$inject = ['CourseDashboardService', '$rootScope', 'ngToast', '$state', '$stateParams'];
 
-    function AdminDashboardCtr(CourseService, $rootScope, ngToast, $state, $stateParams) {
+    function AdminDashboardCtr(CourseDashboardService, $rootScope, ngToast, $state, $stateParams) {
         var vm = this;
 
         vm.findOne = findOne;
         vm.initWeekSlider = initWeekSlider;
 
         function findOne() {
-            CourseService.get($stateParams.id).then(function (response) {
+            CourseDashboardService.get($stateParams.id).then(function (response) {
                 vm.course = response.data;
                 initWeekSlider();
                 initDashboard();
@@ -58,7 +58,7 @@
             var startDate = moment(vm.course.startDate).add(weekNo - 1, 'w').toDate();
             var endDate = moment(vm.course.startDate).add(weekNo, 'w').toDate();
 
-            CourseService.getAdminDashbaordDate($stateParams.id, {
+            CourseDashboardService.getAdminDashbaordDate($stateParams.id, {
                 startDate: startDate,
                 endDate: endDate
             }).then(function (response) {

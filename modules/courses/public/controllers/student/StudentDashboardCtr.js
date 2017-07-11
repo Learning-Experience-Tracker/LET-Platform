@@ -4,15 +4,15 @@
         .module('letApp')
         .controller('StudentDashboardCtr', StudentDashboardCtr);
 
-    StudentDashboardCtr.$inject = ['CourseService', 'OrganizationService', '$rootScope', 'ngToast', '$state', '$stateParams'];
+    StudentDashboardCtr.$inject = ['CourseDashboardService', '$rootScope', 'ngToast', '$state', '$stateParams'];
 
-    function StudentDashboardCtr(CourseService, OrganizationService, $rootScope, ngToast, $state, $stateParams) {
+    function StudentDashboardCtr(CourseDashboardService, $rootScope, ngToast, $state, $stateParams) {
         var vm = this;
 
         vm.initDashboard = initDashboard;
 
         function initDashboard() {
-            CourseService.getStudentDashbaordDate($stateParams.id).then(function (response) {
+            CourseDashboardService.getStudentDashbaordDate($stateParams.id).then(function (response) {
                 vm.assessmentsStatements = response.data.assessmentsStatements;
                 vm.resourceStatements = response.data.resourceStatements;
 

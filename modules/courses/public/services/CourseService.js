@@ -23,12 +23,6 @@
             get: function (courseId) {
                 return $http.get('/api/course/' + courseId);
             },
-            getAdminDashbaordDate: function (courseId,dateRange) {
-                return $http.post('/api/admin/course/' + courseId + "/dashboard",{
-                    startDate : dateRange.startDate,
-                    endDate : dateRange.endDate
-                });
-            },
             getStudentCourses: function () {
                 return $http.get('/api/student/courses/all');
             },
@@ -39,9 +33,6 @@
                 return $http.post('/api/course/enroll', {
                     courseId: courseId
                 });
-            },
-            getStudentDashbaordDate: function (courseId) {
-                return $http.get('/api/student/course/' + courseId + "/dashboard");
             }
         }
     }
