@@ -49,9 +49,41 @@
                apply : vm.apply
            }).then(function(response){
               console.log(response);
+              drawChart(response.data);
            }).catch(function(error){
               console.log(error);
            });
+       }
+
+       function drawChart(data){
+           
+            var ndx = crossfilter(data);
+
+            var dim = ndx.dimension(function(d) {
+                return d.count;
+            });
+
+            console.log(dim);
+
+            var group = dim.group();
+            var chart = dc.barChart('#chart');
+
+            console.log(chart);
+            chart
+                .dimension(dim)
+                .group(group)
+                .width(function(element){
+                    var width = element && element.getBoundingClientRect && element.getBoundingClientRect().width;
+                    return (width && width > chart.minWidth()) ? width : chart.minWidth();
+                })
+                .renderHorizontalGridLines(true)
+                .centerBar(true)
+                .xAxisLabel('Scores Ranges')
+                .yAxisLabel('Students Count')
+                //.x(d3.scale.ordinal().domain([10,20,30,40,50,60,70,80,90,100]))
+                .y(d3.scale.linear().domain([10,100]))
+                .xUnits(dc.units.ordinal)
+                .renderLabel(true);
        }
     }
 })();
