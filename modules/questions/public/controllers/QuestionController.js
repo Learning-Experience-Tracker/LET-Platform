@@ -48,27 +48,30 @@
                toWhatValue : vm.toWhatValue,
                apply : vm.apply
            }).then(function(response){
-              console.log(response);
+              //console.log(response);
               drawChart(response.data);
            }).catch(function(error){
-              console.log(error);
+              //console.log(error);
            });
        }
 
        function drawChart(data){
-           
+
             var ndx = crossfilter(data);
 
             var dim = ndx.dimension(function(d) {
-                return d.count;
+                return d.ResourceId;
             });
 
-            console.log(dim);
 
-            var group = dim.group();
+            var group = dim.group().reduceSum(function(d){
+                return d.count; // dummy grouping
+            });
+
+            console.log(group.all());
+            
             var chart = dc.barChart('#chart');
 
-            console.log(chart);
             chart
                 .dimension(dim)
                 .group(group)
@@ -79,11 +82,12 @@
                 .renderHorizontalGridLines(true)
                 .centerBar(true)
                 .xAxisLabel('Scores Ranges')
-                .yAxisLabel('Students Count')
-                //.x(d3.scale.ordinal().domain([10,20,30,40,50,60,70,80,90,100]))
+                .yAxisLabel('Students ّCount')
+                .x(d3.scale.ordinal())
                 .y(d3.scale.linear().domain([10,100]))
                 .xUnits(dc.units.ordinal)
                 .renderLabel(true);
+            dc.renderAll();
        }
     }
 })();
