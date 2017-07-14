@@ -6,7 +6,8 @@ var express = require('express'),
     methodOverride = require('method-override'),
     winston = require('./winston'),
     path = require('path'),
-    passport = require('./passport');
+    passport = require('./passport'),
+    cors = require('cors');
 
 module.exports = function(app){
     winston.info('Initializing Express...');
@@ -16,6 +17,8 @@ module.exports = function(app){
     app.use(bodyParser.json());
 
     app.use(methodOverride());
+    
+    app.use(cors());
 
     app.set('view engine', 'jade');
 

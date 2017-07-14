@@ -71,3 +71,9 @@ module.exports.getVerbs = function(req, res){
         res.status(500).end();
     });
 }
+
+module.exports.create = function (req,res){
+    console.log(JSON.stringify(req.body, null, 2));
+    console.log("-----------------------------");
+    res.end();
+}
