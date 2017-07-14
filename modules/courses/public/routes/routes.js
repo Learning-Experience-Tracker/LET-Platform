@@ -43,6 +43,46 @@
                 controllerAs : 'courseCtr'
               }
           }
+        }).state('main.adminCourseAssessments', {
+          url: '/admin/course/:id/assessments/',          
+          data : { },
+          views : {
+              '' : {                
+                templateUrl : '/courses/views/admin/course-elements/assessments-list.html',
+                controller : 'AdminCourseElementsCtr',
+                controllerAs : 'courseElementsCtr'
+              }
+          }
+        }).state('main.adminCourseRecources', {
+          url: '/admin/course/:id/resources/',          
+          data : { },
+          views : {
+              '' : {                
+                templateUrl : '/courses/views/admin/course-elements/resources-list.html',
+                controller : 'AdminCourseElementsCtr',
+                controllerAs : 'courseElementsCtr'
+              }
+          }
+        }).state('main.adminCourseActivities', {
+          url: '/admin/course/:id/activities/',          
+          data : { },
+          views : {
+              '' : {                
+                templateUrl : '/courses/views/admin/course-elements/activities-list.html',
+                controller : 'AdminCourseElementsCtr',
+                controllerAs : 'courseElementsCtr'
+              }
+          }
+        }).state('main.adminCourseStudents', {
+          url: '/admin/course/:id/students/',          
+          data : { },
+          views : {
+              '' : {                
+                templateUrl : '/courses/views/admin/course-elements/students-list.html',
+                controller : 'AdminCourseElementsCtr',
+                controllerAs : 'courseElementsCtr'
+              }
+          }
         }).state('main.adminCourseDashboard', {
           url: '/admin/course/:id/dashboard',          
           data : { },

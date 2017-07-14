@@ -1,0 +1,90 @@
+<div ng-init="courseElementsCtr.getAssessmentsList()">
+  <div class="parallax overflow-hidden bg-white page-section third">
+    <div class="parallax-layer container" data-opacity="true" style="opacity: 1;">
+      <div class="media v-middle">
+        <div class="media-body">
+          <h1 class="text-headline margin-none">Assessments</h1>
+          <p class="text-subhead text-light">a list of {{courseElementsCtr.course.name}} assessments.</p>
+        </div>
+        <div class="media-right">
+          <a href="/admin/assessments/create" class="btn btn-success">Create</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="page-section">
+      <div class="row">
+        <div class="col-md-9">
+
+          <div ng-if="courseElementsCtr.assessmentsList && courseElementsCtr.assessmentsList.length != 0" class="panel panel-default paper-shadow" data-z="0.5">
+            <div class="panel-heading">
+              <div class="row">
+                <div class="col-sm-6 pull-right">
+                  <select class="form-control max-width-100 pull-right" ng-model="courseElementsCtr.pageSize" ng-change="courseElementsCtr.getAssessmentsPage()">
+                      <option value="10">10 Item</option>
+                      <option value="25">25 Item</option>
+                      <option value="50">50 Item</option>
+                      <option value="100">100 Item</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table data-toggle="data-table" class="table" cellspacing="0" width="100%">
+                <thead>
+                  <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Id IRI</th>
+                    <th>Options</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="assessment in courseElementsCtr.assessmentsList">
+                    <td>{{assessment.id}}</td>
+                    <td>{{assessment.name}}</td>
+                    <td>{{assessment.id_IRI}}</td>
+                    <td>
+                      <button class="btn btn-info" ng-click="courseElementsCtr.viewAssessmentDashboard(assessment.id)" style="height: 24px;padding: 2px;padding-right: 5px;padding-left: 5px;">
+                          dashboard
+                      </button>
+                      <button class="btn btn-danger" style="height: 24px;padding: 2px;padding-right: 5px;padding-left: 5px;">
+                          delete
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="panel-footer" style="padding:0px 15px;">
+              <div paging page="courseElementsCtr.currentPage" paging-action="courseElementsCtr.getAssessmentsPage('clicked',page, pageSize, total)"
+                page-size="courseElementsCtr.pageSize" total="courseElementsCtr.assessmentsCount" width="100%">
+              </div>
+            </div>
+          </div>
+
+          <h1 ng-if="courseElementsCtr.assessmentsList.length ==0" class="text-headline margin-none">No Assessments in this course.</h1>
+
+        </div>
+
+        <div class="col-md-3">
+          <div class="panel panel-default paper-shadow" data-z="0.5" data-toggle="panel-collapse" data-open="true">
+            <div class="panel-heading panel-collapse-trigger">
+              <h4 class="panel-title">Course {{courseElementsCtr.coure.name}} Elements</h4>
+            </div>
+            <div class="panel-body list-group">
+              <ul class="list-group list-group-menu">
+                <li class="list-group-item active"><a class="link-text-color" href="admin/course/{{courseElementsCtr.course.id}}/assessments/">Assessments</a></li>
+                <li class="list-group-item"><a class="link-text-color" href="admin/course/{{courseElementsCtr.course.id}}/activities/">Activites</a></li>
+                <li class="list-group-item"><a class="link-text-color" href="admin/course/{{courseElementsCtr.course.id}}/resources/">Rersources</a></li>
+                <li class="list-group-item"><a class="link-text-color" href="admin/course/{{courseElementsCtr.course.id}}/students/">Students</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

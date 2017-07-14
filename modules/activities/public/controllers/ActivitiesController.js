@@ -11,13 +11,11 @@
 
        vm.init = init;
        vm.getPage = getPage;
-       vm.activitiesCount = 100;
        vm.currentPage = 0;
        vm.pageSize = 10;
 
        
        function init(){
-
            ActivitiesService.getCount().then(function(response){
                vm.activitiesCount = response.data;
            }).catch(function(err){
