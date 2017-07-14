@@ -7,6 +7,7 @@ var db = require('./../../../../config/sequelize'),
 module.exports.create = function (req, res) {
     var course = db.Course.build({
         name: req.body.name,
+        id_IRI : req.body.id_IRI,
         OrganizationId: req.body.orgId
     });
 

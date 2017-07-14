@@ -8,7 +8,8 @@ module.exports = function (sequelize, DataTypes) {
 	var Course = sequelize.define('Course',
 		{
 			name: DataTypes.STRING,
-			startDate : DataTypes.DATE,
+			id_IRI : DataTypes.STRING,
+			startDate : {type:DataTypes.DATE,defaultValue:new Date()},
 			endDate : DataTypes.DATE
 		},
 		{

@@ -24,18 +24,18 @@
             <table data-toggle="data-table" class="table" cellspacing="0" width="100%">
               <thead>
                 <tr>
-                  <th>Id</th>
                   <th>Name</th>
                   <th>Organization</th>
+                  <th>IRI</th>
                   <th>Offarning</th>
-                  <th></th>
+                  <th>Options</th>
                 </tr>
               </thead>
               <tbody>
                 <tr ng-repeat="course in courseCtr.courseList">
-                  <td>{{course.id}}</td>
                   <td>{{course.name}}</td>
                   <td>{{course.Organization.name}}</td>
+                  <td>{{course.id_IRI}}</td>                                
                   <td>{{course.startDate | amDateFormat:'MMMM DD, YYYY'}}</td>
                   <td>
                     <button class="btn btn-warning" ng-click="courseCtr.viewCourseDashboard(course.id)" style="height: 24px;padding: 2px;padding-right: 5px;padding-left: 5px;">

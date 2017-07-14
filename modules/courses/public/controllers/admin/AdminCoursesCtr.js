@@ -44,7 +44,7 @@
 
         function create() {
 
-            if (!vm.name || !vm.org) {
+            if (!vm.name || !vm.org || !vm.id_IRI) {
                 ngToast.create({
                     className: 'danger',
                     content: 'Please fill all required fields.'
@@ -54,7 +54,8 @@
 
             CourseService.create({
                 name: vm.name,
-                orgId: vm.org
+                orgId: vm.org,
+                id_IRI : vm.id_IRI
             }).then(function () {
                 $state.go('main.courseList');
                 ngToast.create({

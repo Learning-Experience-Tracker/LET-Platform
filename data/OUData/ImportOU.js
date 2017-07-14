@@ -192,7 +192,8 @@ sequelize.init(function (db) {
                         name: courseObject.name,
                         startDate: courseObject.startDate,
                         endDate: courseObject.endDate,
-                        OrganizationId: oranization.id
+                        OrganizationId: oranization.id,
+                        id_IRI : "http://open-university.edu/" + courseObject.name.toLowerCase()
                     });
                     course.save().then(function (newItem) {
                         coursesMap[courseObject.name] = newItem;
@@ -230,7 +231,7 @@ sequelize.init(function (db) {
 
                     res.name = item[0];
                     res.courseName = item[2] + item[1];
-                    res.id_IRI = "http://www.open-university.edu/" + res.courseName + "/resources/" + item[0];
+                    res.id_IRI = "http://open-university.edu/" + res.courseName.toLowerCase() + "/resources/" + item[0];
                     res.type = item[3];
 
                     resources.push(res);
@@ -286,7 +287,7 @@ sequelize.init(function (db) {
 
                     assessment.name = item[2];
                     assessment.courseName = item[0] + item[1];
-                    assessment.id_IRI = "http://www.open-university.edu/" + assessment.courseName + "/assessment/" + item[2];
+                    assessment.id_IRI = "http://open-university.edu/" + assessment.courseName.toLowerCase() + "/assessment/" + item[2];
                     assessment.type = item[3];
                     assessment.weight = item[5];
 
