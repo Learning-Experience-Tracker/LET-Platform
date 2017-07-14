@@ -1,0 +1,366 @@
+id_student,gender,region,highest_education,age_band,disability
+6516,M,Scotland,HE Qualification,thired,N
+24734,F,South Region,Lower Than A Level,first,N
+26192,F,East Anglian Region,A Level or Equivalent,second,N
+28061,M,Yorkshire Region,Lower Than A Level,second,N
+31600,F,South West Region,A Level or Equivalent,first,N
+46844,M,North Region,HE Qualification,second,N
+52765,F,Yorkshire Region,Lower Than A Level,second,N
+55104,F,West Midlands Region,A Level or Equivalent,first,N
+58071,M,East Anglian Region,HE Qualification,thired,N
+58316,F,Wales,A Level or Equivalent,first,N
+62487,F,East Midlands Region,A Level or Equivalent,first,N
+63165,M,South East Region,A Level or Equivalent,second,N
+65002,F,East Anglian Region,A Level or Equivalent,first,N
+70011,F,Scotland,HE Qualification,first,N
+75255,M,North Western Region,A Level or Equivalent,first,N
+79403,M,South Region,Lower Than A Level,second,N
+85092,F,South West Region,Lower Than A Level,first,N
+85144,M,Scotland,A Level or Equivalent,second,N
+85302,M,London Region,Lower Than A Level,second,N
+87431,M,South East Region,Lower Than A Level,second,N
+94961,M,South Region,Lower Than A Level,second,N
+95755,M,South East Region,Lower Than A Level,first,N
+101116,F,East Anglian Region,Lower Than A Level,second,N
+107489,F,London Region,HE Qualification,first,N
+108872,M,London Region,HE Qualification,thired,N
+109155,F,South Region,HE Qualification,first,N
+111512,M,Wales,A Level or Equivalent,first,N
+117818,F,London Region,A Level or Equivalent,second,N
+119902,F,South West Region,A Level or Equivalent,second,N
+121349,F,South West Region,A Level or Equivalent,second,N
+124064,F,South East Region,A Level or Equivalent,first,N
+125018,M,South Region,HE Qualification,second,N
+129955,M,West Midlands Region,A Level or Equivalent,first,N
+130034,F,East Anglian Region,A Level or Equivalent,second,N
+130547,F,South Region,A Level or Equivalent,second,N
+130636,M,South East Region,A Level or Equivalent,first,N
+131390,M,East Anglian Region,A Level or Equivalent,second,N
+133816,F,South Region,A Level or Equivalent,second,N
+133922,M,North Region,Lower Than A Level,first,N
+135335,F,East Anglian Region,Lower Than A Level,first,N
+135400,F,South East Region,Lower Than A Level,second,Y
+135471,M,East Anglian Region,Lower Than A Level,second,N
+139033,M,South East Region,A Level or Equivalent,second,N
+141377,M,South West Region,A Level or Equivalent,first,N
+141506,M,Scotland,A Level or Equivalent,second,N
+146503,M,East Anglian Region,Lower Than A Level,second,Y
+147756,M,North Region,Lower Than A Level,first,N
+148993,F,North Western Region,A Level or Equivalent,second,Y
+149741,F,Scotland,A Level or Equivalent,second,N
+149962,M,West Midlands Region,A Level or Equivalent,first,N
+151587,F,Wales,A Level or Equivalent,first,N
+152668,F,South Region,Lower Than A Level,first,N
+155984,F,East Anglian Region,Lower Than A Level,first,N
+158707,F,South East Region,A Level or Equivalent,first,N
+159954,M,East Midlands Region,A Level or Equivalent,second,N
+164944,F,East Anglian Region,A Level or Equivalent,first,Y
+165226,F,Wales,A Level or Equivalent,first,N
+167961,M,South West Region,HE Qualification,thired,N
+174024,M,North Region,A Level or Equivalent,second,N
+174094,F,South East Region,Lower Than A Level,second,Y
+174745,F,East Midlands Region,A Level or Equivalent,second,N
+175447,M,London Region,A Level or Equivalent,second,N
+175772,F,East Anglian Region,HE Qualification,second,N
+183057,M,Wales,Lower Than A Level,first,N
+185350,M,Yorkshire Region,Lower Than A Level,second,N
+188278,M,Yorkshire Region,A Level or Equivalent,second,N
+199636,M,East Anglian Region,A Level or Equivalent,second,N
+199897,M,East Midlands Region,HE Qualification,second,N
+200804,M,South Region,A Level or Equivalent,first,N
+205494,M,South West Region,HE Qualification,second,N
+228021,M,Scotland,A Level or Equivalent,second,N
+228383,M,Yorkshire Region,HE Qualification,first,N
+232307,M,South Region,Lower Than A Level,second,N
+235068,F,East Midlands Region,Lower Than A Level,second,N
+235507,M,Yorkshire Region,A Level or Equivalent,first,N
+236875,M,West Midlands Region,A Level or Equivalent,first,N
+237274,M,Yorkshire Region,A Level or Equivalent,first,N
+243510,F,South West Region,Lower Than A Level,first,N
+244246,F,South East Region,A Level or Equivalent,first,N
+248581,F,West Midlands Region,A Level or Equivalent,first,N
+252073,F,Yorkshire Region,A Level or Equivalent,second,N
+254625,M,Wales,A Level or Equivalent,second,N
+258587,M,South West Region,A Level or Equivalent,second,N
+260355,F,London Region,A Level or Equivalent,second,N
+260623,M,South East Region,Lower Than A Level,first,N
+263251,M,East Anglian Region,A Level or Equivalent,second,N
+263543,M,East Anglian Region,Lower Than A Level,second,N
+263952,M,North Region,Lower Than A Level,second,N
+266524,F,South Region,A Level or Equivalent,first,N
+268733,M,East Anglian Region,A Level or Equivalent,first,N
+273346,M,East Midlands Region,Lower Than A Level,second,N
+274947,M,East Anglian Region,Lower Than A Level,first,N
+275674,F,London Region,A Level or Equivalent,first,N
+275792,F,East Anglian Region,HE Qualification,first,N
+277123,F,East Midlands Region,A Level or Equivalent,second,N
+277880,F,South East Region,A Level or Equivalent,first,N
+281077,F,East Anglian Region,HE Qualification,first,N
+281636,F,West Midlands Region,A Level or Equivalent,first,N
+285315,M,East Anglian Region,HE Qualification,first,N
+287040,F,East Anglian Region,A Level or Equivalent,second,N
+287204,M,Scotland,A Level or Equivalent,first,N
+287210,M,Scotland,A Level or Equivalent,second,N
+288994,M,Scotland,A Level or Equivalent,first,N
+289449,M,East Midlands Region,HE Qualification,second,N
+290164,F,Scotland,HE Qualification,second,N
+292525,M,South Region,A Level or Equivalent,first,N
+292775,M,South East Region,A Level or Equivalent,first,N
+293824,F,South West Region,A Level or Equivalent,second,N
+294496,M,North Western Region,A Level or Equivalent,second,Y
+294655,M,Wales,A Level or Equivalent,second,N
+295060,M,East Anglian Region,A Level or Equivalent,first,N
+295075,M,South Region,HE Qualification,thired,N
+296424,M,Scotland,A Level or Equivalent,second,N
+298034,M,Scotland,A Level or Equivalent,second,N
+298838,F,Yorkshire Region,A Level or Equivalent,first,N
+301967,M,South West Region,A Level or Equivalent,first,N
+302476,M,South East Region,A Level or Equivalent,first,N
+303521,F,Ireland,A Level or Equivalent,second,N
+303985,F,Scotland,HE Qualification,first,N
+304465,F,West Midlands Region,A Level or Equivalent,first,N
+306646,M,South Region,A Level or Equivalent,first,N
+309142,F,South Region,A Level or Equivalent,second,N
+310412,F,London Region,A Level or Equivalent,second,N
+311235,M,South West Region,A Level or Equivalent,second,N
+311659,M,East Anglian Region,A Level or Equivalent,first,N
+313937,M,Scotland,HE Qualification,second,N
+315076,M,Yorkshire Region,A Level or Equivalent,first,N
+315744,M,Scotland,A Level or Equivalent,second,N
+323370,F,West Midlands Region,A Level or Equivalent,first,N
+323805,F,West Midlands Region,A Level or Equivalent,first,N
+328024,M,Yorkshire Region,A Level or Equivalent,second,N
+328734,F,East Anglian Region,A Level or Equivalent,first,N
+329659,F,East Anglian Region,A Level or Equivalent,first,Y
+330594,M,South West Region,Lower Than A Level,first,N
+331358,F,South Region,HE Qualification,second,N
+332884,M,Wales,A Level or Equivalent,first,N
+334441,M,London Region,HE Qualification,first,N
+335247,M,South West Region,A Level or Equivalent,first,N
+335764,F,South East Region,A Level or Equivalent,first,N
+337748,F,Yorkshire Region,A Level or Equivalent,first,N
+338407,M,East Midlands Region,A Level or Equivalent,second,N
+341876,M,East Anglian Region,HE Qualification,first,N
+342007,F,West Midlands Region,HE Qualification,first,N
+345440,M,South Region,HE Qualification,first,N
+345519,F,North Region,A Level or Equivalent,first,N
+346118,F,East Anglian Region,A Level or Equivalent,second,N
+348275,M,Scotland,HE Qualification,second,N
+348807,M,East Midlands Region,A Level or Equivalent,second,N
+350156,M,South West Region,A Level or Equivalent,first,N
+350939,M,East Anglian Region,Lower Than A Level,first,N
+351336,F,East Midlands Region,A Level or Equivalent,first,N
+353665,M,South Region,A Level or Equivalent,second,N
+354170,F,Wales,A Level or Equivalent,first,N
+356170,M,North Western Region,HE Qualification,first,N
+358182,M,South Region,Lower Than A Level,first,N
+364957,F,East Anglian Region,HE Qualification,second,N
+369834,M,West Midlands Region,A Level or Equivalent,first,N
+371710,M,Scotland,HE Qualification,first,N
+373872,F,South Region,A Level or Equivalent,first,N
+375260,M,Ireland,HE Qualification,first,N
+375646,M,London Region,A Level or Equivalent,first,N
+377546,M,East Anglian Region,A Level or Equivalent,first,Y
+381642,F,North Western Region,A Level or Equivalent,first,N
+382095,M,South Region,Lower Than A Level,first,N
+383180,F,South Region,A Level or Equivalent,first,N
+383600,M,Scotland,A Level or Equivalent,first,N
+383723,M,East Anglian Region,HE Qualification,thired,N
+384203,M,Scotland,HE Qualification,first,N
+384725,F,East Anglian Region,Lower Than A Level,second,N
+387533,M,Scotland,HE Qualification,second,N
+387954,F,South Region,A Level or Equivalent,second,N
+388147,F,South West Region,A Level or Equivalent,second,N
+390890,M,Scotland,A Level or Equivalent,first,N
+391249,M,South Region,HE Qualification,second,N
+396599,F,South Region,Lower Than A Level,first,Y
+396655,F,South Region,Lower Than A Level,first,Y
+398171,F,South West Region,A Level or Equivalent,first,N
+398349,F,East Midlands Region,HE Qualification,first,N
+400147,M,South East Region,Lower Than A Level,second,N
+400682,F,London Region,A Level or Equivalent,first,N
+401404,M,West Midlands Region,A Level or Equivalent,first,N
+402204,M,West Midlands Region,A Level or Equivalent,second,N
+402727,F,East Anglian Region,A Level or Equivalent,first,Y
+402961,F,North Western Region,Lower Than A Level,second,N
+404356,F,South East Region,A Level or Equivalent,first,N
+406671,M,South West Region,A Level or Equivalent,second,N
+406682,M,South East Region,HE Qualification,thired,N
+409100,M,South East Region,HE Qualification,second,N
+409703,M,East Anglian Region,A Level or Equivalent,first,N
+410092,F,North Western Region,A Level or Equivalent,second,N
+411971,M,Ireland,A Level or Equivalent,first,N
+415969,M,West Midlands Region,HE Qualification,second,N
+418731,M,Ireland,A Level or Equivalent,first,N
+421455,F,North Region,A Level or Equivalent,first,N
+424577,M,London Region,HE Qualification,first,N
+429858,M,Ireland,Lower Than A Level,first,N
+431025,M,East Anglian Region,A Level or Equivalent,first,N
+439305,M,South East Region,A Level or Equivalent,second,N
+440319,F,West Midlands Region,A Level or Equivalent,first,N
+442064,F,South West Region,HE Qualification,first,N
+442132,M,South West Region,HE Qualification,first,N
+446108,M,South West Region,A Level or Equivalent,first,N
+447481,M,Ireland,A Level or Equivalent,first,N
+468120,M,West Midlands Region,Lower Than A Level,first,N
+468694,M,South Region,A Level or Equivalent,first,N
+470588,M,South East Region,HE Qualification,second,N
+470982,F,East Anglian Region,HE Qualification,second,N
+476603,M,Wales,A Level or Equivalent,first,N
+481022,M,East Midlands Region,A Level or Equivalent,first,N
+483800,F,Yorkshire Region,A Level or Equivalent,first,N
+484897,F,South West Region,A Level or Equivalent,first,N
+485962,F,East Anglian Region,HE Qualification,first,N
+488382,F,London Region,A Level or Equivalent,first,N
+488990,M,South West Region,A Level or Equivalent,second,N
+500113,M,South East Region,A Level or Equivalent,first,N
+503889,F,Yorkshire Region,A Level or Equivalent,first,N
+514526,M,London Region,Lower Than A Level,first,Y
+518808,F,Scotland,HE Qualification,first,N
+522482,F,Scotland,HE Qualification,first,N
+527100,M,West Midlands Region,HE Qualification,first,N
+527801,M,South West Region,Lower Than A Level,second,N
+533068,M,South Region,HE Qualification,first,N
+537081,F,Scotland,HE Qualification,first,N
+544253,M,London Region,A Level or Equivalent,second,N
+548120,M,London Region,HE Qualification,first,N
+561467,F,South Region,A Level or Equivalent,first,N
+567922,F,North Western Region,A Level or Equivalent,first,N
+569505,F,East Midlands Region,HE Qualification,second,N
+570317,M,Wales,A Level or Equivalent,first,N
+574505,F,West Midlands Region,HE Qualification,first,N
+588477,M,Yorkshire Region,HE Qualification,first,N
+593846,M,South Region,HE Qualification,first,N
+593987,F,East Anglian Region,HE Qualification,second,N
+596288,F,Scotland,HE Qualification,first,N
+598070,F,London Region,A Level or Equivalent,first,N
+603834,F,Scotland,HE Qualification,first,N
+603861,M,North Region,HE Qualification,thired,N
+608440,F,South Region,HE Qualification,second,N
+623710,F,South East Region,A Level or Equivalent,second,N
+623840,M,East Anglian Region,A Level or Equivalent,first,N
+626240,M,South Region,HE Qualification,first,N
+628088,M,South East Region,A Level or Equivalent,first,Y
+628312,F,South East Region,HE Qualification,first,N
+630142,M,East Anglian Region,A Level or Equivalent,first,N
+637665,F,South Region,HE Qualification,first,N
+639053,M,North Region,A Level or Equivalent,first,N
+642878,M,South West Region,HE Qualification,first,N
+648130,M,Yorkshire Region,A Level or Equivalent,first,N
+676546,M,Scotland,HE Qualification,first,N
+677186,M,South East Region,HE Qualification,first,N
+677281,M,Wales,A Level or Equivalent,first,N
+684180,M,North Region,HE Qualification,first,N
+687698,M,Yorkshire Region,HE Qualification,first,N
+696073,F,Ireland,Lower Than A Level,first,N
+696578,M,South Region,HE Qualification,first,N
+721259,F,South Region,Lower Than A Level,thired,N
+852847,M,South West Region,A Level or Equivalent,thired,N
+998493,F,South Region,A Level or Equivalent,thired,N
+1045203,M,Wales,Lower Than A Level,second,N
+1112555,F,South Region,A Level or Equivalent,second,N
+1183831,M,South West Region,HE Qualification,thired,N
+1268696,M,South West Region,HE Qualification,second,N
+1336190,M,London Region,HE Qualification,thired,N
+1352868,M,Yorkshire Region,A Level or Equivalent,second,N
+1398979,F,South Region,A Level or Equivalent,thired,N
+1456619,M,South West Region,A Level or Equivalent,second,N
+1469279,F,East Anglian Region,HE Qualification,second,N
+1471214,M,East Midlands Region,A Level or Equivalent,second,N
+1472925,F,East Anglian Region,Lower Than A Level,second,Y
+1484804,F,West Midlands Region,A Level or Equivalent,second,N
+1511033,M,Wales,A Level or Equivalent,second,N
+1576513,F,East Midlands Region,A Level or Equivalent,second,N
+1609002,F,East Midlands Region,A Level or Equivalent,second,N
+1629771,M,South East Region,A Level or Equivalent,second,N
+1676594,M,London Region,HE Qualification,thired,N
+1686551,F,Scotland,A Level or Equivalent,second,N
+1689639,F,South East Region,Lower Than A Level,second,N
+1715896,M,South Region,A Level or Equivalent,second,N
+1721270,M,South East Region,Lower Than A Level,second,N
+1757766,F,North Western Region,A Level or Equivalent,second,N
+1773377,M,London Region,A Level or Equivalent,second,N
+1799111,M,Scotland,A Level or Equivalent,second,N
+1818673,F,Scotland,HE Qualification,second,N
+1839386,F,Yorkshire Region,Lower Than A Level,second,N
+1926668,M,London Region,Lower Than A Level,second,N
+1947156,F,South East Region,A Level or Equivalent,second,N
+1967783,F,South Region,A Level or Equivalent,second,Y
+1970390,M,West Midlands Region,Lower Than A Level,second,N
+1975209,M,South East Region,Lower Than A Level,second,N
+2010232,F,Scotland,A Level or Equivalent,first,N
+2045084,M,North Western Region,HE Qualification,second,N
+2057803,M,London Region,Lower Than A Level,second,N
+2073016,F,London Region,Lower Than A Level,second,N
+2085209,F,North Region,HE Qualification,second,N
+2086400,M,Scotland,A Level or Equivalent,second,N
+2139353,M,London Region,A Level or Equivalent,second,N
+2148681,F,East Midlands Region,Lower Than A Level,second,N
+2158048,F,Ireland,A Level or Equivalent,second,N
+2158196,F,South West Region,Lower Than A Level,second,N
+2165164,F,South West Region,Lower Than A Level,first,N
+2168833,M,South West Region,Lower Than A Level,second,N
+2207874,F,West Midlands Region,Lower Than A Level,first,N
+2240349,M,South West Region,Lower Than A Level,second,N
+2244332,M,North Western Region,A Level or Equivalent,second,N
+2273119,F,West Midlands Region,A Level or Equivalent,first,N
+2277857,F,West Midlands Region,A Level or Equivalent,second,N
+2297896,F,West Midlands Region,A Level or Equivalent,second,N
+2313257,M,London Region,A Level or Equivalent,second,N
+2318055,M,Wales,A Level or Equivalent,second,N
+2330254,M,London Region,Lower Than A Level,second,N
+2355470,M,East Midlands Region,A Level or Equivalent,second,N
+2358969,F,East Anglian Region,A Level or Equivalent,first,N
+2363863,F,North Western Region,A Level or Equivalent,first,N
+2365101,M,South East Region,HE Qualification,first,N
+2369415,M,London Region,A Level or Equivalent,second,N
+2375975,F,East Anglian Region,A Level or Equivalent,second,Y
+2397661,F,East Midlands Region,Lower Than A Level,second,N
+2398313,M,East Anglian Region,Lower Than A Level,second,N
+2404408,F,South West Region,Lower Than A Level,second,N
+2425993,M,Scotland,HE Qualification,first,N
+2429854,M,London Region,A Level or Equivalent,second,Y
+2432796,F,East Anglian Region,HE Qualification,second,N
+2434159,M,North Western Region,A Level or Equivalent,first,N
+2436812,F,South Region,A Level or Equivalent,first,N
+2467267,M,West Midlands Region,HE Qualification,first,N
+2470694,F,Scotland,HE Qualification,thired,N
+2473538,F,South East Region,A Level or Equivalent,second,N
+2474849,F,Scotland,A Level or Equivalent,second,N
+2494700,M,Yorkshire Region,HE Qualification,first,N
+2500258,F,North Western Region,A Level or Equivalent,first,N
+2507842,F,North Western Region,A Level or Equivalent,second,N
+2509639,M,West Midlands Region,A Level or Equivalent,first,N
+2514368,M,West Midlands Region,A Level or Equivalent,second,N
+2514898,F,East Anglian Region,Lower Than A Level,second,N
+2521865,F,South Region,A Level or Equivalent,second,Y
+2522927,F,South West Region,A Level or Equivalent,second,N
+2540168,F,East Midlands Region,HE Qualification,second,N
+2546445,M,Scotland,HE Qualification,thired,N
+2551797,F,South East Region,A Level or Equivalent,first,N
+2551932,M,South East Region,Lower Than A Level,first,N
+2569324,M,South Region,A Level or Equivalent,first,N
+2574990,F,South West Region,HE Qualification,second,N
+2576122,M,North Western Region,A Level or Equivalent,second,N
+2578676,M,North Region,Lower Than A Level,second,N
+2581477,F,East Anglian Region,Lower Than A Level,second,N
+2584873,F,East Anglian Region,A Level or Equivalent,first,N
+2595841,F,East Midlands Region,Lower Than A Level,second,N
+2596621,M,South West Region,A Level or Equivalent,thired,N
+2601889,M,West Midlands Region,HE Qualification,second,N
+2602338,F,North Western Region,Lower Than A Level,second,N
+2606802,M,North Region,A Level or Equivalent,first,N
+2624961,F,London Region,A Level or Equivalent,first,N
+2630087,F,East Midlands Region,Lower Than A Level,second,N
+2633226,M,South West Region,A Level or Equivalent,second,N
+2642616,F,Yorkshire Region,A Level or Equivalent,second,N
+2642935,F,East Midlands Region,Lower Than A Level,second,N
+2648611,F,South East Region,A Level or Equivalent,second,N
+2649800,M,West Midlands Region,Lower Than A Level,second,N
+2654628,F,East Anglian Region,Lower Than A Level,second,N
+2677624,M,North Western Region,A Level or Equivalent,second,N
+2680312,M,Scotland,HE Qualification,thired,N
+2688166,M,Yorkshire Region,Lower Than A Level,second,N
+2690062,F,North Western Region,A Level or Equivalent,second,N
+2692514,M,North Western Region,Lower Than A Level,second,N
+2694788,F,South Region,A Level or Equivalent,second,Y
