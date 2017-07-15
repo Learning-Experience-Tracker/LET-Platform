@@ -300,7 +300,8 @@ sequelize.init(function (db) {
     function addAsessments(callback) {
         var assessment = {
             name: "Quiz",
-            id_IRI: "http://adlnet.gov/samples/course/api-jqm/05-quiz"
+            id_IRI: "http://adlnet.gov/samples/course/api-jqm/05-quiz",
+            CourseId : courseObject.dataValues.id
         };
 
 

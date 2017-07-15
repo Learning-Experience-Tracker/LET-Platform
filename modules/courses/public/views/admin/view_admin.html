@@ -18,7 +18,7 @@
             <div class="panel panel-default paper-shadow" data-z="0.5">
               <div class="panel-heading">
                 <h4 class="text-headline margin-none">Students</h4>
-                <p class="text-subhead text-light" ng-if="courseCtr.course.Users.length != 0">A list of all course students.</p>
+                <p class="text-subhead text-light" ng-if="courseCtr.course.Users.length != 0">A list of recent course students.</p>
                 <p class="text-subhead text-light" ng-if="courseCtr.course.Users.length == 0">No Students in this course.</p>
               </div>
               <ul class="list-group">
@@ -38,7 +38,8 @@
                 </li>
               </ul>
               <div class="panel-footer text-right">
-                <a href="admin/course/{{courseCtr.course.id}}/students/" class="btn btn-primary paper-shadow relative" data-z="0" data-hover-z="1" data-animated href="#"> View all</a>
+                <a href="admin/course/{{courseCtr.course.id}}/students/" class="btn btn-primary paper-shadow relative" data-z="0" data-hover-z="1"
+                  data-animated href="#"> View all</a>
               </div>
             </div>
           </div>
@@ -47,7 +48,7 @@
             <div class="panel panel-default paper-shadow" data-z="0.5">
               <div class="panel-heading">
                 <h4 class="text-headline margin-none">Resources</h4>
-                <p class="text-subhead text-light" ng-if="courseCtr.course.Resources.length != 0">A list of all course resources.</p>
+                <p class="text-subhead text-light" ng-if="courseCtr.course.Resources.length != 0">A list of recent course resources.</p>
                 <p class="text-subhead text-light" ng-if="courseCtr.course.Resources.length == 0">No Resources in this course.</p>
               </div>
               <ul class="list-group">
@@ -67,7 +68,8 @@
                 </li>
               </ul>
               <div class="panel-footer text-right">
-                <a href="admin/course/{{courseCtr.course.id}}/resources/" class="btn btn-primary paper-shadow relative" data-z="0" data-hover-z="1" data-animated href="#"> View all</a>
+                <a href="admin/course/{{courseCtr.course.id}}/resources/" class="btn btn-primary paper-shadow relative" data-z="0" data-hover-z="1"
+                  data-animated href="#"> View all</a>
               </div>
             </div>
           </div>
@@ -76,7 +78,7 @@
             <div class="panel panel-default paper-shadow" data-z="0.5">
               <div class="panel-heading">
                 <h4 class="text-headline margin-none">Assessments</h4>
-                <p class="text-subhead text-light" ng-if="courseCtr.course.Assessments.length != 0">A list of all course assessments.</p>
+                <p class="text-subhead text-light" ng-if="courseCtr.course.Assessments.length != 0">A list of recent course assessments.</p>
                 <p class="text-subhead text-light" ng-if="courseCtr.course.Assessments.length == 0">No Assessments in this course.</p>
               </div>
               <ul class="list-group">
@@ -96,7 +98,40 @@
                 </li>
               </ul>
               <div class="panel-footer text-right">
-                <a href="admin/course/{{courseCtr.course.id}}/assessments/" class="btn btn-primary paper-shadow relative" data-z="0" data-hover-z="1" data-animated href="#"> View all</a>
+                <a href="admin/course/{{courseCtr.course.id}}/assessments/" class="btn btn-primary paper-shadow relative" data-z="0" data-hover-z="1"
+                  data-animated href="#"> View all</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+              <div class="panel panel-default paper-shadow" data-z="0.5">
+                <div class="panel-heading">
+                  <h4 class="text-headline margin-none">Activities</h4>
+                  <p class="text-subhead text-light" ng-if="courseCtr.course.activities.length != 0">A list of recent course activities.</p>
+                  <p class="text-subhead text-light" ng-if="courseCtr.course.activities.length == 0">No Activities in this course.</p>
+                </div>
+                <ul class="list-group">
+                  <li class="list-group-item media v-middle" ng-repeat="activity in courseCtr.course.activities">
+                    <div class="media-body">
+                      <div class="media v-middle">
+                        <div class="media-left">
+                          <div class="icon-block s30 bg-red-300 text-white img-circle">
+                            <i class="fa fa-star"></i>
+                          </div>
+                        </div>
+                        <div class="media-body text-body-2">
+                          {{activity.name}}
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+                <div class="panel-footer text-right">
+                  <a href="admin/course/{{courseCtr.course.id}}/activities/" class="btn btn-primary paper-shadow relative" data-z="0" data-hover-z="1"
+                    data-animated href="#"> View all</a>
+                </div>
               </div>
             </div>
           </div>
