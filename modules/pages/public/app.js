@@ -50,7 +50,7 @@ angular.module('letApp', ['ui.router', 'ngStorage', 'ngToast', 'angular-loading-
             }
         }).filter('pretty', function () {
             return function (text) {
-                return prettyPrintOne(text);
+                return JSON.stringify(text, null, 2);
             }
         });
 })();
