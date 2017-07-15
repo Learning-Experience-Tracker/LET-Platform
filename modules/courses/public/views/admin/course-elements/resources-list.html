@@ -16,7 +16,7 @@
   <div class="container">
     <div class="page-section">
       <div class="row">
-        <div class="col-md-9">
+        <div class="col-md-10">
 
           <div ng-if="courseElementsCtr.resourcesList && courseElementsCtr.resourcesList.length != 0" class="panel panel-default paper-shadow" data-z="0.5">
             <div class="panel-heading">
@@ -36,16 +36,16 @@
               <table data-toggle="data-table" class="table" cellspacing="0" width="100%">
                 <thead>
                   <tr>
-                    <th>Id</th>
                     <th>Name</th>
+                    <th>Type</th>
                     <th>Id IRI</th>
                     <th>Options</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr ng-repeat="resource in courseElementsCtr.resourcesList">
-                    <td>{{resource.id}}</td>
                     <td>{{resource.name}}</td>
+                    <td>{{resource.type}}</td>                    
                     <td>{{resource.id_IRI}}</td>
                     <td>
                       <button class="btn btn-info" ng-click="courseElementsCtr.viewResourceDashboard(resource.id)" style="height: 24px;padding: 2px;padding-right: 5px;padding-left: 5px;">
@@ -69,7 +69,7 @@
           <h1 ng-if="courseElementsCtr.resourcesList.length ==0" class="text-headline margin-none">No Resources in this course.</h1>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-2">
           <div class="panel panel-default paper-shadow" data-z="0.5">
             <div class="panel-heading panel-collapse-trigger">
               <h4 class="panel-title">Course {{courseElementsCtr.coure.name}} Elements</h4>
