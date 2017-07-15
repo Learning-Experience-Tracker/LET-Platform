@@ -372,7 +372,8 @@ sequelize.init(function (db) {
                 stored: Date.parse(item.stored),
                 platform: "Moodle LMS",
                 UserId: actorDBObject.id,
-                VerbId: verbDBObject.id
+                VerbId: verbDBObject.id,
+                xapi_statement : item
             };
 
 
