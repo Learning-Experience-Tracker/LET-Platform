@@ -48,7 +48,7 @@
             var parseDate = d3.time.format("%Y-%m-%dT%H:%M:%S.%LZ").parse;
 
 			vm.lunchedStatements.forEach(function(activity) {
-				activity.timestamp = parseDate(activity.timestamp); 
+				activity.timestamp = parseDate(activity.date); 
                 activity.timestamp.setHours(0);
                 activity.timestamp.setMinutes(0);
                 activity.timestamp.setSeconds(0);
@@ -56,7 +56,7 @@
 			});
 
 			vm.clickedStatements.forEach(function(activity) {
-				activity.timestamp = parseDate(activity.timestamp);            
+				activity.timestamp = parseDate(activity.date);            
 			});
 
             drawResource_lunch_chart(vm.lunchedStatements);
@@ -76,7 +76,9 @@
                 return d.timestamp;
             });
 
-            var grouping = dateDim.group().reduceCount();
+            var grouping = dateDim.group().reduceSum(item => {
+                return item.sum_lunches;
+            });
             var resource_lunch_chart = dc.lineChart('#resource_lunch_chart');
 
             resource_lunch_chart
@@ -113,7 +115,9 @@
                 return d.timestamp;
             });
 
-            var grouping = dateDim.group().reduceCount();
+            var grouping = dateDim.group().reduceSum(item => {
+                return item.sum_clicks;
+            });
             var resource_click_chart = dc.lineChart('#resource_click_chart');
 
             resource_click_chart
