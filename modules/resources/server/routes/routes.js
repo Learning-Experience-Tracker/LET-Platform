@@ -10,10 +10,10 @@ module.exports = function(app){
             acl.adminOnly,
             resourcesCtr.getAll);
 
-    app.route('/api/resource/:id')
+    app.route('/api/resource/types')
        .get(passport.authenticate('jwt', {session : false}),
             acl.adminOnly,
-            resourcesCtr.get);
+            resourcesCtr.getTypes);
 
     app.route('/api/resource/create')
        .post(passport.authenticate('jwt', {session : false}),
@@ -25,13 +25,13 @@ module.exports = function(app){
              acl.adminOnly,
              resourcesCtr.delete);
 
-    app.route('/api/resource/types')
-       .get(passport.authenticate('jwt', {session : false}),
-            acl.adminOnly,
-            resourcesCtr.getTypes);
-
     app.route('/api/resource/:id/dashboard')
        .get(passport.authenticate('jwt', {session : false}),
             acl.adminOnly,
-            resourcesCtr.getAssessmentDashboard);   
+            resourcesCtr.getAssessmentDashboard); 
+            
+    app.route('/api/resource/:id')
+       .get(passport.authenticate('jwt', {session : false}),
+            acl.adminOnly,
+            resourcesCtr.get);
 }
