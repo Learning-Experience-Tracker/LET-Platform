@@ -14,9 +14,15 @@ Date.prototype.addDays = function (days) {
 
 sequelize.init(function (db) {
 
+
+    var dateMap = new Map();
+
     async.series([
         function (callback) {
             seedDateTable(callback)
+        },
+        function (callback) {
+            fillMaps(callback);
         },
         function (callback) {
             aggregateResource(callback);
@@ -55,25 +61,72 @@ sequelize.init(function (db) {
         });
     }
 
+    function fillMaps(callback) {
+        db.Date.findAll({
+            raw: true
+        }).then(dates => {
+            dates.forEach(date => {
+                dateMap[moment(date.date).format('MM/DD/YYYY')] = date;
+            });
+            callback();
+        });
+    }
 
     function aggregateResource(callback) {
         db.Statement.findAll({
             attributes: [
-                [db.sequelize.fn('date_trunc', 'day', db.sequelize.col('Statement.timestamp'))],
-                'Statement.UserId', [db.sequelize.fn('count', db.sequelize.col('Statement.id')), 'lunchPerDayPerStudent']
+                'Statement.timestamp',
+                'Statement.UserId',
+                'Statement.ResourceId', [db.sequelize.fn('count', db.sequelize.col('Statement.id')), 'clicksPerDayPerStduentPerResource'],
             ],
             include: [{
-                model: db.Verv,
+                model: db.Verb,
                 where: {
                     name: {
-                        $eq: 'clicked'
+                        $in: ['clicked']
                     }
                 },
-                required: true
+                attributes: []
             }],
-            group: [db.sequelize.fn('date_trunc', 'day', db.sequelize.col('Statement.timestamp'), 'Statement.UserId')],
+            raw: true,
+            group: [
+                [db.sequelize.fn('DAYOFYEAR', db.sequelize.col('Statement.timestamp'))], 'Statement.UserId', 'Statement.ResourceId'
+            ],
         }).then(function (statements) {
-            console.log(statements);
+            var resStatement = [];
+            statements.forEach(statement => {
+                var obj = {};
+                obj.sum_clicks = statement.clicksPerDayPerStduentPerResource;
+                obj.sum_lunches = 1;
+                obj.UserId = statement.UserId;
+                obj.ResourceId = statement.ResourceId;
+                obj.DateId = dateMap[moment(statement.timestamp).format('MM/DD/YYYY')].id;
+                resStatement.push(obj);
+            });
+
+            var inserter = async.cargo(function (objects, inserterCallback) {
+                    db.ResStatement.bulkCreate(objects).then(function () {
+                        winston.info('Batch of resources activities created... ' + new Date().getUTCMilliseconds());
+                        inserterCallback();
+                    });
+                },
+                5000
+            );
+
+            resStatement.forEach(item => {
+                inserter.push(item);
+            });
+            callback(null);
+        });
+    }
+
+    function aggregateCourse(callback) {
+        db.Statement.findAll({
+            attributes: ['Statement.timestamp', [db.sequelize.fn('count', db.sequelize.col('Statement.id')), 'lunchPerDayPerStudent']],
+            group: [db.sequelize.fn('WEEKOFYEAR', db.sequelize.col('Statement.timestamp'))],
+            raw: true
+        }).then(function (statements) {
+            console.log(statements.length);
             callback();
         });
     }

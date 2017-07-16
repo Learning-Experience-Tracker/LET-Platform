@@ -28,7 +28,7 @@ module.exports = function(app){
     app.route('/api/resource/:id/dashboard')
        .get(passport.authenticate('jwt', {session : false}),
             acl.adminOnly,
-            resourcesCtr.getAssessmentDashboard); 
+            resourcesCtr.getResourceDashboard); 
             
     app.route('/api/resource/:id')
        .get(passport.authenticate('jwt', {session : false}),

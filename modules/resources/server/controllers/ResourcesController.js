@@ -72,7 +72,7 @@ module.exports.getTypes = function(req, res){
 }
 
 
-module.exports.getAssessmentDashboard = function(req, res){
+module.exports.getResourceDashboard = function(req, res){
     async.parallel({
         lunchedStatements: function(callback) { 
                 db.Statement
