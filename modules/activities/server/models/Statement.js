@@ -53,6 +53,9 @@ module.exports = function (sequelize, DataTypes) {
             Statement.belongsTo(models.Question, {
                 onDelete: 'cascade'
             });
+            Statement.belongsTo(models.Course, {
+                onDelete: 'cascade'
+            });
         }
     });
     return Statement;

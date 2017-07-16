@@ -348,7 +348,8 @@ sequelize.init(function (db) {
                 platform: "Moodle LMS",
                 UserId: actorDBObject.id,
                 VerbId: verbDBObject.id,
-                xapi_statement: item
+                xapi_statement: item,
+                CourseId : courseObject.id
             };
 
             if (verbObject.name == "answered") {

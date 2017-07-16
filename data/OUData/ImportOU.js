@@ -14,7 +14,7 @@ Date.prototype.addDays = function (days) {
 
 sequelize.init(function (db) {
 
-    var datasetFolderPath = 'data/OUData/AAA2014J/'
+    var datasetFolderPath = 'data/OUData/AAA2013J/'
     var maxLimit = 100; // max insert operation in parallel
     var admin = {};
     var oranization = {};
@@ -500,7 +500,6 @@ sequelize.init(function (db) {
 
                 output.forEach(function (item) {
                     var actorDBObject = usersMap[item[1]];
-                    var assessmentDBObject = assessmentMap[item[0]];
 
                     var courseDBObject = coursesMap[item[4] + item[5]];
 
@@ -514,7 +513,7 @@ sequelize.init(function (db) {
                         UserId: actorDBObject.id,
                         VerbId: verbsMap['https://w3id.org/xapi/adl/verbs/attempted'].id,
                         has_result: false,
-                        AssessmentId: assessmentDBObject.id
+                        AssessmentId: assessmentMap[item[0]]
                     };
 
                     var completedActivity = {
@@ -528,7 +527,7 @@ sequelize.init(function (db) {
                         raw: score,
                         min: 0,
                         max: 100,
-                        AssessmentId: assessmentDBObject.id
+                        AssessmentId: assessmentMap[item[0]]
                     };
 
                     assActivities.push({
@@ -588,7 +587,6 @@ sequelize.init(function (db) {
 
                 output.forEach(function (item) {
                     var actorDBObject = usersMap[item[2]];
-                    var resourcesDBObject = resourcesMap[item[3]];
 
                     var courseDBObject = coursesMap[item[0] + item[1]];
 
@@ -601,7 +599,7 @@ sequelize.init(function (db) {
                         UserId: actorDBObject.id,
                         VerbId: verbsMap['https://w3id.org/xapi/adl/verbs/launched'].id,
                         has_result: false,
-                        ResourceId: resourcesDBObject.id
+                        ResourceId: resourcesMap[item[3]]
                     };
 
                     resActivities.push(launchedActivity);
@@ -645,7 +643,7 @@ sequelize.init(function (db) {
 
                 output.forEach(function (item) {
                     var actorDBObject = usersMap[item[2]];
-                    var resourcesDBObject = resourcesMap[item[3]];
+            
 
                     var courseDBObject = coursesMap[item[0] + item[1]];
 
@@ -661,7 +659,7 @@ sequelize.init(function (db) {
                             UserId: actorDBObject.id,
                             VerbId: verbsMap['https://w3id.org/xapi/let/verbs/clicked'].id,
                             has_result: false,
-                            ResourceId: resourcesDBObject.id
+                            ResourceId: resourcesMap[item[3]]
                         };
                         resActivities.push(clickedActivity);
                     }
