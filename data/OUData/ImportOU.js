@@ -184,6 +184,7 @@ sequelize.init(function (db) {
                     var date = new Date(courseObject.startDate);
                     courseObject.endDate = date.addDays(length);
                     courseObject.id_IRI = "http://open-university.edu/" + courseObject.name.toLowerCase();
+                    courseObject.OrganizationId = oranization.id;
                     courses.push(courseObject);
                 });
 
