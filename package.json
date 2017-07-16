@@ -9,7 +9,9 @@
     "importAss": "node data/assessmentData/ImportAssData.js",
     "importMS": "node data/multiSourceDEmo/genrateData.js",    
     "importOU": "node data/OUData/ImportOU.js",
-    "export": "node data/OUData/ExportOUForMining.js"
+    "export": "node data/OUData/ExportOUForMining.js",
+    "aggregate": "node data/aggregate.js"
+    
   },
   "author": "",
   "license": "ISC",

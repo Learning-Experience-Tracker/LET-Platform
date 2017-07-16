@@ -60,16 +60,16 @@ sequelize.init(function (db) {
             //callback();  
         },
         function (callback) {
-            //addResourcesLunchedActivites(callback);
-            callback();  
+            addResourcesLunchedActivites(callback);
+            //callback();  
         },
         function (callback) {
-            //addResourcesClickedActivites(callback);
-            callback();  
+            addResourcesClickedActivites(callback);
+            //callback();  
         },
         function (callback) {
-            //addAssActivites(callback);
-            callback();  
+            addAssActivites(callback);
+            //callback();  
         }
     ], function (err) {
         winston.info('All objects are created...');
