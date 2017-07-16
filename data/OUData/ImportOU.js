@@ -53,11 +53,11 @@ sequelize.init(function (db) {
         },
         function (callback) {
             addRegistered(callback);
-            //callback();  
+            //callback();
         },
         function (callback) {
             addVerbs(callback);
-            //callback();  
+            //callback();
         },
         function (callback) {
             addResourcesLunchedActivites(callback);
@@ -65,11 +65,11 @@ sequelize.init(function (db) {
         },
         function (callback) {
             addResourcesClickedActivites(callback);
-            //callback();  
+            //callback();
         },
         function (callback) {
             addAssActivites(callback);
-            //callback();  
+            callback();
         }
     ], function (err) {
         winston.info('All objects are created...');
@@ -183,26 +183,22 @@ sequelize.init(function (db) {
                     }
                     var date = new Date(courseObject.startDate);
                     courseObject.endDate = date.addDays(length);
+                    courseObject.id_IRI = "http://open-university.edu/" + courseObject.name.toLowerCase();
                     courses.push(courseObject);
                 });
 
                 winston.info('Start courses import series..');
-                async.eachLimit(courses, maxLimit, function (courseObject, callback) {
-                    var course = db.Course.build({
-                        name: courseObject.name,
-                        startDate: courseObject.startDate,
-                        endDate: courseObject.endDate,
-                        OrganizationId: oranization.id,
-                        id_IRI : "http://open-university.edu/" + courseObject.name.toLowerCase()
+                db.Course.bulkCreate(courses, {
+                    updateOnDuplicate: []
+                }).then(results => {
+
+                    db.Course.findAll({}).then(coursesObjects => {
+                        coursesObjects.forEach(courseObject => {
+                            coursesMap[courseObject.name] = courseObject;
+                        });
+                        winston.info('All courses created...');
+                        callback(null);
                     });
-                    course.save().then(function (newItem) {
-                        coursesMap[courseObject.name] = newItem;
-                        winston.info('Course %s created...', courseObject.name);
-                        callback();
-                    });
-                }, function () {
-                    winston.info('All courses created...');
-                    callback(null);
                 });
             });
         });
@@ -228,10 +224,11 @@ sequelize.init(function (db) {
 
                 output.forEach(function (item) {
                     var res = {};
-
+                    var courseName = item[2] + item[1];
+                    var courseDBObject = coursesMap[courseName];
                     res.name = item[0];
-                    res.courseName = item[2] + item[1];
-                    res.id_IRI = "http://open-university.edu/" + res.courseName.toLowerCase() + "/resources/" + item[0];
+                    res.CourseId = courseDBObject.id;
+                    res.id_IRI = "http://open-university.edu/" + courseName.toLowerCase() + "/resources/" + item[0];
                     res.type = item[3];
 
                     resources.push(res);
@@ -239,26 +236,20 @@ sequelize.init(function (db) {
 
                 winston.info('Start resources import series..');
 
-                async.eachLimit(resources, maxLimit, function (resObject, callback) {
-
-                    var courseDBObject = coursesMap[resObject.courseName];
-
-                    var res = db.Resource.build({
-                        name: resObject.name,
-                        id_IRI: resObject.id_IRI,
-                        type: resObject.type,
-                        CourseId: courseDBObject.id
+                db.Resource.bulkCreate(resources, {
+                    updateOnDuplicate: []
+                }).then(function (results) {
+                    db.Resource.findAll({ // to get resource ids because results don't have id see bulkCreate docs
+                        where: {
+                            CourseId: results[0].CourseId
+                        }
+                    }).then(resObjects => {
+                        resObjects.forEach(resObject => {
+                            resourcesMap[resObject.name] = resObject.id;
+                        });
+                        winston.info('All resources created...');
+                        callback(null);
                     });
-
-                    res.save().then(function (newItem) {
-                        resourcesMap[resObject.name] = newItem.dataValues;
-                        winston.info('Resource %s created...', resObject.name);
-                        callback();
-                    });
-
-                }, function () {
-                    winston.info('All resources created...');
-                    callback(null);
                 });
             });
         });
@@ -301,33 +292,16 @@ sequelize.init(function (db) {
 
                 winston.info('Start assessments import series..');
 
-                async.eachLimit(assessments, maxLimit, function (assessmentObject, callback) {
-
-                    var courseDBObject = coursesMap[assessmentObject.courseName];
-
-                    var inputValues = {
-                        name: assessmentObject.name,
-                        id_IRI: assessmentObject.id_IRI,
-                        type: assessmentObject.type,
-                        CourseId: courseDBObject.id,
-                        weight: assessmentObject.weight
-                    };
-
-                    if (assessmentObject.deadline) {
-                        inputValues.deadline = assessmentObject.deadline;
-                    }
-
-                    var assessment = db.Assessment.build(inputValues);
-
-                    assessment.save().then(function (newItem) {
-                        assessmentMap[assessmentObject.name] = newItem.dataValues;
-                        winston.info('Assessment %s created...', assessmentObject.name);
-                        callback();
+                db.Assessment.bulkCreate(assessments, {
+                    updateOnDuplicate: []
+                }).then(function (results) {
+                    db.Assessment.findAll().then(assessmentsObjects => {
+                        assessmentsObjects.forEach(assObject => {
+                            assessmentMap[assObject.name] = assObject.id;
+                        });
+                        winston.info('All Assessment created...');
+                        callback(null);
                     });
-
-                }, function () {
-                    winston.info('All Assessment created...');
-                    callback(null);
                 });
             });
         });
@@ -369,43 +343,16 @@ sequelize.init(function (db) {
 
                 winston.info('Start users import series..');
 
-                async.eachLimit(users, maxLimit, function (userObject, callback) {
-
-                    var user = db.User.build(userObject);
-
-
-
-                    db.User.find({
-                            where: {
-                                email: userObject.email
-                            }
-                        })
-                        .then(function (user) {
-                            if (!user) {
-                                winston.info('No user found with email ' + userObject.email);
-                                user = db.User.build(userObject);
-
-                                user.save().then(function (newItem) {
-                                    usersMap[userObject.name] = newItem;
-                                    winston.info('User %s created...', userObject.name);
-                                    callback();
-                                });
-
-                            } else {
-                                winston.info('User is already created with email ' + userObject.email);
-                                usersMap[user.name] = user;
-                                callback(); // process next statement
-                            }
-                        })
-                        .catch(function (error) {
-                            winston.error('Error adding user');
-                            winston.error(error);
-                            callback(error);
+                db.User.bulkCreate(users, {
+                    updateOnDuplicate: []
+                }).then(function (results) {
+                    db.User.findAll().then(usersObjects => {
+                        usersObjects.forEach(userObject => {
+                            usersMap[userObject.name] = userObject;
                         });
-
-                }, function () {
-                    winston.info('All Users created...');
-                    callback(null);
+                        winston.info('All Users created...');
+                        callback(null);
+                    });
                 });
             });
         });
@@ -521,36 +468,14 @@ sequelize.init(function (db) {
 
         winston.info('Start verbs import series...');
 
-        async.eachSeries(verbs, function (verbObject, callback) {
-            db.Verb.find({
-                    where: {
-                        id_IRI: verbObject.id_IRI
-                    }
-                })
-                .then(function (verb) {
-                    if (!verb) {
-                        winston.info('No verb found with ' + verbObject.id_IRI);
-                        verb = db.Verb.build(verbObject);
-                        verb.save().then(function (newItem) {
-                            winston.info('Verb Created');
-                            verbsMap[newItem.dataValues.id_IRI] = newItem.dataValues;
-                            callback(); // process next statement    
-                        });
-
-                    } else {
-                        winston.info('Verb is already created ' + verbObject.id_IRI);
-                        verbsMap[verb.dataValues.id_IRI] = verb.dataValues;
-                        callback(); // process next statement
-                    }
-                })
-                .catch(function (error) {
-                    winston.error('Error adding verb');
-                    winston.error(error);
-                    callback(error);
+        db.Verb.bulkCreate(verbs,{updateOnDuplicate:[]}).then(()=>{
+            db.Verb.findAll({}).then(verbs => {
+                verbs.forEach(verb => {
+                    verbsMap[verb.id_IRI] = verb;
                 });
-        }, function () {
-            winston.info('All verbs added...');
-            callback(null);
+                winston.info('All verbs added...');
+                callback(null);
+            });
         });
     }
 
@@ -612,33 +537,31 @@ sequelize.init(function (db) {
                 });
 
                 winston.info('Start assessment activities statements import series..');
-                // each object will add two statement (completed and attempted)
-                async.eachLimit(assActivities, maxLimit, function (assActivityObject, callback) {
 
-                    async.parallel([
-                        function (callback) {
-                            var statement = db.Statement.build(assActivityObject.activity1);
+                async.parallel([
+                    function (callback) {
+                        var attemptedActivities = assActivities.map(item => {
+                            return item.activity1;
+                        });
 
-                            statement.save().then(function (newItem) {
-                                winston.info('Assessment activity statement %s created...', assActivityObject.activity1.timestamp);
-                                callback(); // next statement          
-                            });
-                        },
-                        function (callback) {
-                            var statement = db.Statement.build(assActivityObject.activity2);
+                        db.Statement.bulkCreate(attemptedActivities).then(() => {
+                            winston.info('Attempted Assessments activities created...');
+                            callback(null);
+                        });
+                    },
+                    function (callback) {
+                        var completedActivities = assActivities.map(item => {
+                            return item.activity2;
+                        });
 
-                            statement.save().then(function (newItem) {
-                                winston.info('Assessment activity statement %s created...', assActivityObject.activity2.timestamp);
-                                callback(); // next statement          
-                            });
+                        db.Statement.bulkCreate(completedActivities).then(() => {
+                            winston.info('Completed Assessments activities created...');
+                            callback(null);
+                        });
 
-                        }
-                    ], function (err) {
-                        callback();
-                    });
-                }, function () {
-                    winston.info('All Assessment activities statements created...');
-                    callback(null);
+                    }
+                ], function (err) {
+                    callback(); // next step
                 });
             });
         });
@@ -684,19 +607,19 @@ sequelize.init(function (db) {
                 });
 
                 winston.info('Start resources lunched activities import series..');
+                var inserter = async.cargo(function (resActivities, inserterCallback) {
+                        db.Statement.bulkCreate(resActivities).then(function () {
+                            winston.info('Batch of resources lunched activities created... ' + new Date().getUTCMilliseconds());
+                            inserterCallback();
+                        });
+                    },
+                    5000
+                );
 
-                async.eachLimit(resActivities, maxLimit, function (launchedActivityObject, callback) {
-
-                    var statement = db.Statement.build(launchedActivityObject);
-                    statement.save().then(function (newItem) {
-                        winston.info('Resource launch activity %s created...', launchedActivityObject.timestamp);
-                        callback();
-                    });
-
-                }, function () {
-                    winston.info('All resource lunched activities created...');
-                    callback(null);
+                resActivities.forEach(item => {
+                    inserter.push(item);
                 });
+                callback(null);
             });
         });
     }
@@ -745,18 +668,20 @@ sequelize.init(function (db) {
 
                 winston.info('Start resources lunched activities import series..');
 
-                async.eachLimit(resActivities, maxLimit, function (launchedActivityObject, callback) {
 
-                    var statement = db.Statement.build(launchedActivityObject);
-                    statement.save().then(function (newItem) {
-                        winston.info('Resource launch activity %s created...', launchedActivityObject.timestamp);
-                        callback();
-                    });
+                var inserter = async.cargo(function (resActivities, inserterCallback) {
+                        db.Statement.bulkCreate(resActivities).then(function () {
+                            winston.info('Batch of resources clicks activities created... ' + new Date().getUTCMilliseconds());
+                            inserterCallback();
+                        });
+                    },
+                    5000
+                );
 
-                }, function () {
-                    winston.info('All resource lunched activities created...');
-                    callback(null);
+                resActivities.forEach(item => {
+                    inserter.push(item);
                 });
+                callback(null);
             });
         });
     }

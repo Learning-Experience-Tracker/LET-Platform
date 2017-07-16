@@ -129,7 +129,7 @@ sequelize.init(function (db) {
                         name: 'Cop-3223',
                         startDate: new Date(),
                         OrganizationId: oranization.id,
-                        id_IRI : "http://adlnet.gov/samples/course/cop-3223"
+                        id_IRI: "http://adlnet.gov/samples/course/cop-3223"
                     });
 
                     course.save().then(function (newItem) {
@@ -202,51 +202,52 @@ sequelize.init(function (db) {
         });
     }
 
-    function addVerbs(statements, callback) {
+    function addVerbs(statement, callback) {
+
+        var verbs = [{
+            name: 'answered',
+            id_IRI: 'https://w3id.org/xapi/adl/verbs/answered'
+        }, {
+            name: 'attempted',
+            id_IRI: 'https://w3id.org/xapi/adl/verbs/attempted'
+        }, {
+            name: 'completed',
+            id_IRI: 'https://w3id.org/xapi/adl/verbs/completed'
+        }, {
+            name: 'clicked',
+            id_IRI: 'https://w3id.org/xapi/let/verbs/clicked'
+        }, {
+            name: 'loggedin',
+            id_IRI: 'https://w3id.org/xapi/adl/verbs/logged-in'
+        }, {
+            name: 'commented',
+            id_IRI: 'https://w3id.org/xapi/adl/verbs/commented'
+        }, {
+            name: 'launched',
+            id_IRI: 'https://w3id.org/xapi/adl/verbs/launched'
+        }];
+
         winston.info('Start verbs import series...');
-        async.eachSeries(statements, function (item, callback) {
 
-            var verbObject = {
-                name: item.verb.display['en-US'],
-                id_IRI: item.verb.id
-            };
-
-            db.Verb.find({
-                    where: {
-                        id_IRI: verbObject.id_IRI
-                    }
-                })
-                .then(function (verb) {
-                    if (!verb) {
-                        winston.info('No verb found with ' + verbObject.id_IRI);
-                        verb = db.Verb.build(verbObject);
-                        verb.save().then(function (newItem) {
-                            winston.info('Verb Created');
-                            verbsMap[newItem.dataValues.id_IRI] = newItem.dataValues;
-                            callback(); // process next statement    
-                        });
-
-                    } else {
-                        winston.info('Verb is already created ' + verbObject.id_IRI);
-                        verbsMap[verb.dataValues.id_IRI] = verb.dataValues;
-                        callback(); // process next statement
-                    }
-                })
-                .catch(function (error) {
-                    winston.error('Error adding verb');
-                    winston.error(error);
-                    callback(error);
+        db.Verb.bulkCreate(verbs, {
+            updateOnDuplicate: []
+        }).then(() => {
+            db.Verb.findAll({}).then(verbs => {
+                verbs.forEach(verb => {
+                    verbsMap[verb.id_IRI] = verb;
                 });
-        }, function () {
-            winston.info('All verbs added...');
-            callback(null);
+                winston.info('All verbs added...');
+                callback();
+            });
         });
     }
 
     function addAssessments(statements, callback) {
         winston.info('Start Assessments import series...');
-        async.eachSeries(statements, function (item, callback) {
 
+        var assessments = [];
+        var assessmentsSet = new Set();
+        statements.forEach(item => {
             var verbObject = {
                 name: item.verb.display['en-US'],
                 id_IRI: item.verb.id
@@ -254,7 +255,6 @@ sequelize.init(function (db) {
 
             if (verbObject.name != "attempted") {
                 winston.info('Next Statement');
-                callback();
                 return;
             }
 
@@ -266,42 +266,31 @@ sequelize.init(function (db) {
                 type: 'CMA'
             };
 
-            db.Assessment.find({
-                    where: {
-                        id_IRI: assesmentObject.id_IRI
-                    }
-                })
-                .then(function (assessment) {
-                    if (!assessment) {
-                        winston.info('No assessment found with ' + assesmentObject.id_IRI);
-                        assessment = db.Assessment.build(assesmentObject);
-                        assessment.save().then(function (newItem) {
-                            winston.info('Assessment Created');
-                            assessmentsMap[newItem.dataValues.id_IRI] = newItem.dataValues;
-                            callback(); // process next statement    
-                        });
+            if (assessmentsSet.has(assesmentObject.id_IRI))
+                return;
+            assessmentsSet.add(assesmentObject.id_IRI);
+            assessments.push(assesmentObject);
+        });
 
-                    } else {
-                        winston.info('Assessment is already created ' + assesmentObject.id_IRI);
-                        assessmentsMap[assessment.dataValues.id_IRI] = assessment.dataValues;
-                        callback(); // process next statement
-                    }
-                })
-                .catch(function (error) {
-                    winston.error('Error adding assessment');
-                    winston.error(error);
-                    callback(error);
+        db.Assessment.bulkCreate(assessments, {
+            updateOnDuplicate: []
+        }).then(function (results) {
+            db.Assessment.findAll().then(assessmentsObjects => {
+                assessmentsObjects.forEach(assObject => {
+                    assessmentsMap[assObject.id_IRI] = assObject.id;
                 });
-        }, function () {
-            winston.info('All assessments added...');
-            callback(null);
+                winston.info('All Assessment created...');
+                callback();
+            });
         });
     }
 
     function addQuestions(statements, callback) {
         winston.info('Start Questions import series...');
-        async.eachSeries(statements, function (item, callback) {
 
+        var questions = [];
+        var questionsSet = new Set();
+        statements.forEach(item => {
             var verbObject = {
                 name: item.verb.display['en-US'],
                 id_IRI: item.verb.id
@@ -309,56 +298,42 @@ sequelize.init(function (db) {
 
             if (verbObject.name != "answered") {
                 winston.info('Next Statement');
-                callback();
                 return;
             }
 
             var assessmentID = item.context.contextActivities.parent[0].id;
 
-            var assessmenctObject = assessmentsMap[assessmentID];
+            var assessmenctId = assessmentsMap[assessmentID];
 
             var questionObject = {
                 name: item.object.definition.name['en-US'],
                 id_IRI: item.object.id,
-                AssessmentId: assessmenctObject.id
+                AssessmentId: assessmenctId
             };
+            if (questionsSet.has(questionObject.id_IRI))
+                return;
+            questionsSet.add(questionObject.id_IRI);
+            questions.push(questionObject);
+        });
 
-
-            db.Question.find({
-                    where: {
-                        id_IRI: questionObject.id_IRI
-                    }
-                })
-                .then(function (question) {
-                    if (!question) {
-                        winston.info('No question found with ' + questionObject.id_IRI);
-                        question = db.Question.build(questionObject);
-                        question.save().then(function (newItem) {
-                            winston.info('Question Created');
-                            questionSMap[newItem.dataValues.id_IRI] = newItem.dataValues;
-                            callback(); // process next statement   
-                        });
-                    } else {
-                        winston.info('Questions is already created ' + questionObject.id_IRI);
-                        questionSMap[question.dataValues.id_IRI] = question.dataValues;
-                        callback(); // process next statement
-                    }
-                })
-                .catch(function (error) {
-                    winston.error('Error adding question');
-                    winston.error(error);
-                    callback(error);
+        db.Question.bulkCreate(questions, {
+            updateOnDuplicate: []
+        }).then(function (results) {
+            db.Question.findAll().then(questionsObjects => {
+                questionsObjects.forEach(questionObject => {
+                    questionSMap[questionObject.id_IRI] = questionObject.id;
                 });
-        }, function () {
-            winston.info('All questions added...');
-            callback(null);
+                winston.info('All questions added...');
+                callback();
+            });
         });
     }
 
     function addActivities(statements, callback) {
         winston.info('Start activities import series...');
-        async.eachLimit(statements, 100, function (item, callback) {
 
+        var statementsObjects = [];
+        statements.forEach(item => {
             var verbObject = {
                 name: item.verb.display['en-US'],
                 id_IRI: item.verb.id
@@ -373,18 +348,15 @@ sequelize.init(function (db) {
                 platform: "Moodle LMS",
                 UserId: actorDBObject.id,
                 VerbId: verbDBObject.id,
-                xapi_statement : item
+                xapi_statement: item
             };
-
 
             if (verbObject.name == "answered") {
                 statementObject.has_result = true;
                 statementObject.success = item.result.success;
 
-                var questionDB = questionSMap[item.object.id];
-                var asessmentDB = assessmentsMap[item.context.contextActivities.parent[0].id];
-                statementObject.AssessmentId = asessmentDB.id;
-                statementObject.QuestionId = questionDB.id;
+                statementObject.AssessmentId = assessmentsMap[item.context.contextActivities.parent[0].id];
+                statementObject.QuestionId = questionSMap[item.object.id];
             }
 
             if (verbObject.name == "completed") {
@@ -393,27 +365,28 @@ sequelize.init(function (db) {
                 statementObject.raw = item.result.score.raw;
                 statementObject.min = item.result.score.min;
                 statementObject.max = item.result.score.max;
-
-                var objectDB = assessmentsMap[item.object.id];
-                statementObject.AssessmentId = objectDB.id;
+                statementObject.AssessmentId = assessmentsMap[item.object.id];
             }
 
             if (verbObject.name == "attempted") {
                 statementObject.has_result = false;
-
-                var objectDB = assessmentsMap[item.object.id];
-                statementObject.AssessmentId = objectDB.id;
+                statementObject.AssessmentId = assessmentsMap[item.object.id];
             }
-
-            var statement = db.Statement.build(statementObject);
-            statement.save().then(function (newItem) {
-                winston.info('Added new activity record ' + newItem.dataValues.id);
-                callback(); // process next statement
-            });
-
-        }, function () {
-            winston.info('All activities added...');
-            callback(null);
+            statementsObjects.push(statementObject);
         });
+
+        var inserter = async.cargo(function (activities, inserterCallback) {
+                db.Statement.bulkCreate(activities).then(function () {
+                    winston.info('Batch of activities created... ' + new Date().getUTCMilliseconds());
+                    inserterCallback();
+                });
+            },
+            1000
+        );
+
+        statementsObjects.forEach(item => {
+            inserter.push(item);
+        });
+        callback();
     }
 });

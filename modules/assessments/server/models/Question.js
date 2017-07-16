@@ -8,7 +8,7 @@ module.exports = function (sequelize, DataTypes) {
 	var Question = sequelize.define('Question',
 		{
 			name: DataTypes.STRING,
-            id_IRI : DataTypes.STRING
+			id_IRI : {type : DataTypes.STRING , unique : true},
 		},
 		{
 			associate: function (models) {
