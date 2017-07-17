@@ -10,4 +10,13 @@ module.exports = function(app){
             acl.adminOnly,
             questionCtr.execute);
 
+    app.route('/api/question/all')
+       .get(passport.authenticate('jwt', {session : false}),
+            acl.adminOnly,
+            questionCtr.getAllQuestions);
+    
+    app.route('/api/question/:id')
+       .get(passport.authenticate('jwt', {session : false}),
+            acl.adminOnly,
+            questionCtr.get);
 }

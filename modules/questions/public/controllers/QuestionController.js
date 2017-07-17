@@ -4,16 +4,22 @@
         .module('letApp')
         .controller('QuestionController', QuestionController);
 
-    QuestionController.$inject = ['QuestionsService', 'VerbsService', 'ResourcesService', 'AssessmentsService', '$rootScope', 'ngToast', '$state'];
+    QuestionController.$inject = ['QuestionsService', 'VerbsService', 'ResourcesService', 'AssessmentsService', '$rootScope', 'ngToast', '$state', '$stateParams'];
     
-    function QuestionController(QuestionsService, VerbsService, ResourcesService, AssessmentsService, $rootScope, ngToast, $state){
+    function QuestionController(QuestionsService, VerbsService, ResourcesService, AssessmentsService, $rootScope, ngToast, $state, $stateParams){
        var vm = this;
        
        vm.init = init;
+       vm.initList = initList;
+       vm.initDetails = initDetails;
+
        vm.execute = execute;
+       vm.goDetails = goDetails;
 
        vm.toWhat = 'resource';
        vm.apply =  'none';
+
+       vm.questionIndics = [{}];
 
        function init(){
            VerbsService.getAll().then(function(response){
@@ -41,7 +47,9 @@
            });
        }
 
-       function execute(){
+       function execute(btn){
+           console.log(btn);
+           
            QuestionsService.execute({
                didWhat : vm.didWhat,
                toWhat : vm.toWhat,
@@ -57,10 +65,12 @@
 
        function drawChart(data){
 
+            
+
             var ndx = crossfilter(data);
 
             var dim = ndx.dimension(function(d) {
-                return d.ResourceId;
+                return d.QueriedId;
             });
 
 
@@ -80,14 +90,35 @@
                     return (width && width > chart.minWidth()) ? width : chart.minWidth();
                 })
                 .renderHorizontalGridLines(true)
-                .centerBar(true)
+                //.centerBar(true)
                 .xAxisLabel('Scores Ranges')
                 .yAxisLabel('Students ّCount')
                 .x(d3.scale.ordinal())
-                .y(d3.scale.linear().domain([10,100]))
+                .y(d3.scale.linear().domain([0, group.top(1)[0].value + 10]))
                 .xUnits(dc.units.ordinal)
                 .renderLabel(true);
             dc.renderAll();
+       }
+
+       function initList(){
+           QuestionsService.getAll().then(function(response){
+              console.log(response);
+              vm.questionsList = response.data;
+           }).catch(function(error){
+            console.log(error);
+           });
+       }
+
+       function goDetails(questionId){
+           $state.go('main.questionDetails', { id : questionId });
+       }
+
+       function initDetails(){
+           QuestionsService.get($stateParams.id).then(function(response){
+              vm.question = response.data;
+           }).catch(function(error){
+              console.log(error);              
+           });
        }
     }
 })();
