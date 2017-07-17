@@ -11,6 +11,12 @@ angular
             return {
                 execute : function(query){
                     return $http.post('/api/question/execute', query);
+                },
+                getAll : function(query){
+                    return $http.get('/api/question/all');
+                },
+                get : function(id){
+                    return $http.get('/api/question/' + id);
                 }
             }
     }

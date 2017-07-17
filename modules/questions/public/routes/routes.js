@@ -13,6 +13,28 @@
 
       // states
       $stateProvider
+        .state('main.questionList', {
+          url: '/admin/question/all',          
+          data : { },
+          views : {
+              '' : {                
+                templateUrl : '/questions/views/list.html',
+                controller : 'QuestionController',
+                controllerAs : 'qCtr'
+              }
+          }
+        })
+        .state('main.questionDetails', {
+          url: '/admin/question/:id/details',          
+          data : { },
+          views : {
+              '' : {                
+                templateUrl : '/questions/views/details.html',
+                controller : 'QuestionController',
+                controllerAs : 'qCtr'
+              }
+          }
+        })
         .state('main.question', {
           url: '/admin/question',          
           data : { },
