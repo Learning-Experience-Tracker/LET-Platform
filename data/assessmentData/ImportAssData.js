@@ -230,7 +230,7 @@ sequelize.init(function (db) {
         winston.info('Start verbs import series...');
 
         db.Verb.bulkCreate(verbs, {
-            updateOnDuplicate: []
+            updateOnDuplicate: ['name']
         }).then(() => {
             db.Verb.findAll({}).then(verbs => {
                 verbs.forEach(verb => {
@@ -273,7 +273,7 @@ sequelize.init(function (db) {
         });
 
         db.Assessment.bulkCreate(assessments, {
-            updateOnDuplicate: []
+            updateOnDuplicate: ['name']
         }).then(function (results) {
             db.Assessment.findAll().then(assessmentsObjects => {
                 assessmentsObjects.forEach(assObject => {
@@ -317,7 +317,7 @@ sequelize.init(function (db) {
         });
 
         db.Question.bulkCreate(questions, {
-            updateOnDuplicate: []
+            updateOnDuplicate: ['name']
         }).then(function (results) {
             db.Question.findAll().then(questionsObjects => {
                 questionsObjects.forEach(questionObject => {

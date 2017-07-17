@@ -14,7 +14,7 @@ Date.prototype.addDays = function (days) {
 
 sequelize.init(function (db) {
 
-    var datasetFolderPath = 'data/OUData/AAA2013J/'
+    var datasetFolderPath = 'data/OUData/AAA2014J/'
     var maxLimit = 100; // max insert operation in parallel
     var admin = {};
     var oranization = {};
@@ -69,7 +69,7 @@ sequelize.init(function (db) {
         },
         function (callback) {
             addAssActivites(callback);
-            callback();
+            //callback();
         }
     ], function (err) {
         winston.info('All objects are created...');
@@ -190,7 +190,7 @@ sequelize.init(function (db) {
 
                 winston.info('Start courses import series..');
                 db.Course.bulkCreate(courses, {
-                    updateOnDuplicate: []
+                    updateOnDuplicate: ['name']
                 }).then(results => {
 
                     db.Course.findAll({}).then(coursesObjects => {
@@ -238,7 +238,7 @@ sequelize.init(function (db) {
                 winston.info('Start resources import series..');
 
                 db.Resource.bulkCreate(resources, {
-                    updateOnDuplicate: []
+                    updateOnDuplicate: ['name']
                 }).then(function (results) {
                     db.Resource.findAll({ // to get resource ids because results don't have id see bulkCreate docs
                         where: {
@@ -294,7 +294,7 @@ sequelize.init(function (db) {
                 winston.info('Start assessments import series..');
 
                 db.Assessment.bulkCreate(assessments, {
-                    updateOnDuplicate: []
+                    updateOnDuplicate: ['name']
                 }).then(function (results) {
                     db.Assessment.findAll().then(assessmentsObjects => {
                         assessmentsObjects.forEach(assObject => {
@@ -343,9 +343,8 @@ sequelize.init(function (db) {
                 });
 
                 winston.info('Start users import series..');
-
                 db.User.bulkCreate(users, {
-                    updateOnDuplicate: []
+                    updateOnDuplicate: ['name']
                 }).then(function (results) {
                     db.User.findAll().then(usersObjects => {
                         usersObjects.forEach(userObject => {
@@ -469,7 +468,7 @@ sequelize.init(function (db) {
 
         winston.info('Start verbs import series...');
 
-        db.Verb.bulkCreate(verbs,{updateOnDuplicate:[]}).then(()=>{
+        db.Verb.bulkCreate(verbs,{updateOnDuplicate:['name']}).then(()=>{
             db.Verb.findAll({}).then(verbs => {
                 verbs.forEach(verb => {
                     verbsMap[verb.id_IRI] = verb;
@@ -513,7 +512,8 @@ sequelize.init(function (db) {
                         UserId: actorDBObject.id,
                         VerbId: verbsMap['https://w3id.org/xapi/adl/verbs/attempted'].id,
                         has_result: false,
-                        AssessmentId: assessmentMap[item[0]]
+                        AssessmentId: assessmentMap[item[0]],
+                        CourseId : courseDBObject.id
                     };
 
                     var completedActivity = {
@@ -527,7 +527,8 @@ sequelize.init(function (db) {
                         raw: score,
                         min: 0,
                         max: 100,
-                        AssessmentId: assessmentMap[item[0]]
+                        AssessmentId: assessmentMap[item[0]],
+                        CourseId : courseDBObject.id
                     };
 
                     assActivities.push({
@@ -599,7 +600,8 @@ sequelize.init(function (db) {
                         UserId: actorDBObject.id,
                         VerbId: verbsMap['https://w3id.org/xapi/adl/verbs/launched'].id,
                         has_result: false,
-                        ResourceId: resourcesMap[item[3]]
+                        ResourceId: resourcesMap[item[3]],
+                        CourseId : courseDBObject.id
                     };
 
                     resActivities.push(launchedActivity);
@@ -659,7 +661,8 @@ sequelize.init(function (db) {
                             UserId: actorDBObject.id,
                             VerbId: verbsMap['https://w3id.org/xapi/let/verbs/clicked'].id,
                             has_result: false,
-                            ResourceId: resourcesMap[item[3]]
+                            ResourceId: resourcesMap[item[3]],
+                            CourseId : courseDBObject.id
                         };
                         resActivities.push(clickedActivity);
                     }

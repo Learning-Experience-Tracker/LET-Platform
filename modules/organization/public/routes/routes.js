@@ -33,6 +33,16 @@
                 controllerAs : 'orgCtr'
               }
           }
+        }).state('main.orgView', {
+          url: '/admin/org/:id',          
+          data : { },
+          views : {
+              '' : {                
+                templateUrl : '/organization/views/view.html',
+                controller : 'OrgViewCtr',
+                controllerAs : 'orgCtr'
+              }
+          }
         });
   }
 

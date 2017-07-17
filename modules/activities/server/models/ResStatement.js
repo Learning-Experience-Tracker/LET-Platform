@@ -20,6 +20,9 @@ module.exports = function (sequelize, DataTypes) {
             ResStatement.belongsTo(models.Date, {
                 onDelete: 'cascade'
             });
+            ResStatement.belongsTo(models.Course, {
+                onDelete: 'cascade'
+            });
         }
     });
 

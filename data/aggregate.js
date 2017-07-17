@@ -26,6 +26,9 @@ sequelize.init(function (db) {
         },
         function (callback) {
             aggregateResource(callback);
+        },
+        function (callback) {
+            aggregateCourse(callback);
         }
     ], function (err) {
         winston.info('All objects are created...');
@@ -33,31 +36,31 @@ sequelize.init(function (db) {
 
 
     function seedDateTable(callback) {
+        db.Date.count({}).then(count => {
+            if (count == 0) {
+                var startDate = moment('2010-01-01');
+                var endDate = moment('2020-01-01');
 
-        db.Date.destroy({
-            where: {},
-            truncate: false
-        });
+                var dates = [];
+                for (var m = startDate; m.isBefore(endDate); m.add(1, 'days')) {
+                    dates.push({
+                        date: m.toDate(),
+                        year: m.format('YYYY'),
+                        month: m.format('MM'),
+                        day_of_month: m.format('DD'),
+                        week_of_year: m.week(),
+                        day_of_week: m.format('dddd'),
+                        timestamp: m.unix()
+                    });
+                }
 
-        var startDate = moment('2010-01-01');
-        var endDate = moment('2020-01-01');
-
-        var dates = [];
-        for (var m = startDate; m.isBefore(endDate); m.add(1, 'days')) {
-            dates.push({
-                date: m.toDate(),
-                year: m.format('YYYY'),
-                month: m.format('MM'),
-                day_of_month: m.format('DD'),
-                week_of_year: m.week(),
-                day_of_week: m.format('dddd'),
-                timestamp: m.unix()
-            });
-        }
-
-        db.Date.bulkCreate(dates).then(function () {
-            winston.info("Date Table filled");
-            callback();
+                db.Date.bulkCreate(dates).then(function () {
+                    winston.info("Date Table filled");
+                    callback();
+                });
+            } else {
+                callback();
+            }
         });
     }
 
@@ -73,61 +76,107 @@ sequelize.init(function (db) {
     }
 
     function aggregateResource(callback) {
-        db.Statement.findAll({
-            attributes: [
-                'Statement.timestamp',
-                'Statement.UserId',
-                'Statement.ResourceId', [db.sequelize.fn('count', db.sequelize.col('Statement.id')), 'clicksPerDayPerStduentPerResource'],
-            ],
-            include: [{
-                model: db.Verb,
-                where: {
-                    name: {
-                        $in: ['clicked']
-                    }
-                },
-                attributes: []
-            }],
-            raw: true,
-            group: [
-                [db.sequelize.fn('DAYOFYEAR', db.sequelize.col('Statement.timestamp'))], 'Statement.UserId', 'Statement.ResourceId'
-            ],
-        }).then(function (statements) {
-            var resStatement = [];
-            statements.forEach(statement => {
-                var obj = {};
-                obj.sum_clicks = statement.clicksPerDayPerStduentPerResource;
-                obj.sum_lunches = 1;
-                obj.UserId = statement.UserId;
-                obj.ResourceId = statement.ResourceId;
-                obj.DateId = dateMap[moment(statement.timestamp).format('MM/DD/YYYY')].id;
-                resStatement.push(obj);
-            });
+        db.ResStatement.destroy({
+            where: {},
+            truncate: false
+        }).then(() => {
+            db.Statement.findAll({
+                attributes: [
+                    'Statement.CourseId',
+                    'Statement.timestamp',
+                    'Statement.UserId',
+                    'Statement.ResourceId', [db.sequelize.fn('count', db.sequelize.col('Statement.id')), 'clicksPerDayPerStduentPerResource'],
+                ],
+                include: [{
+                    model: db.Verb,
+                    where: {
+                        name: {
+                            $in: ['clicked']
+                        }
+                    },
+                    attributes: []
+                }],
+                raw: true,
+                group: [
+                   'Statement.CourseId',[db.sequelize.fn('DAYOFYEAR', db.sequelize.col('Statement.timestamp'))], 'Statement.UserId', 'Statement.ResourceId'
+                ],
+            }).then(function (statements) {
+                var resStatement = [];
+                statements.forEach(statement => {
+                    var obj = {};
+                    obj.sum_clicks = statement.clicksPerDayPerStduentPerResource;
+                    obj.sum_lunches = 1;
+                    obj.UserId = statement.UserId;
+                    obj.ResourceId = statement.ResourceId;
+                    obj.DateId = dateMap[moment(statement.timestamp).format('MM/DD/YYYY')].id;
+                    obj.CourseId = statement.CourseId
+                    resStatement.push(obj);
+                });
 
-            var inserter = async.cargo(function (objects, inserterCallback) {
-                    db.ResStatement.bulkCreate(objects).then(function () {
-                        winston.info('Batch of resources activities created... ' + new Date().getUTCMilliseconds());
-                        inserterCallback();
-                    });
-                },
-                5000
-            );
+                var inserter = async.cargo(function (objects, inserterCallback) {
+                        db.ResStatement.bulkCreate(objects).then(function () {
+                            winston.info('Batch of resources activities created... ' + new Date().getUTCMilliseconds());
+                            inserterCallback();
+                        });
+                    },
+                    5000
+                );
 
-            resStatement.forEach(item => {
-                inserter.push(item);
+                resStatement.forEach(item => {
+                    inserter.push(item);
+                });
+                callback(null);
             });
-            callback(null);
         });
     }
 
     function aggregateCourse(callback) {
-        db.Statement.findAll({
-            attributes: ['Statement.timestamp', [db.sequelize.fn('count', db.sequelize.col('Statement.id')), 'lunchPerDayPerStudent']],
-            group: [db.sequelize.fn('WEEKOFYEAR', db.sequelize.col('Statement.timestamp'))],
-            raw: true
-        }).then(function (statements) {
-            console.log(statements.length);
-            callback();
+        db.CourseStatement.destroy({
+            where: {},
+            truncate: false
+        }).then(() => {
+            db.Statement.findAll({
+                attributes: [
+                    'Statement.CourseId', 'Statement.timestamp', [db.sequelize.fn('count', db.sequelize.col('Statement.id')), 'num_activities'],
+                ],
+                include: [{
+                    model: db.Verb,
+                    where: {
+                        name: {
+                            $in: ['clicked', 'launched']
+                        }
+                    },
+                    attributes: []
+                }],
+                raw: true,
+                group: [
+                   'Statement.CourseId', [db.sequelize.fn('WEEKOFYEAR', db.sequelize.col('Statement.timestamp'))]
+                ],
+            }).then(function (statements) {
+                var resStatement = [];
+                statements.forEach(statement => {
+                    var obj = {};
+                    obj.num_activities = statement.num_activities;
+                    obj.DateId = dateMap[moment(statement.timestamp).format('MM/DD/YYYY')].id;
+                    obj.CourseId = statement.CourseId;
+                    resStatement.push(obj);
+                });
+
+                var inserter = async.cargo(function (objects, inserterCallback) {
+                        db.CourseStatement.bulkCreate(objects).then(function () {
+                            winston.info('Batch of course activities created... ' + new Date().getUTCMilliseconds());
+                            inserterCallback();
+                        });
+                    },
+                    1000
+                );
+
+                resStatement.forEach(item => {
+                    inserter.push(item);
+                });
+                callback(null);
+            });
         });
+
     }
 });

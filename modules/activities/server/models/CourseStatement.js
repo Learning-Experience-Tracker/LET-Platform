@@ -13,6 +13,9 @@ module.exports = function (sequelize, DataTypes) {
             CourseStatement.belongsTo(models.Date, {
                 onDelete: 'cascade'
             });
+            CourseStatement.belongsTo(models.Course, {
+                onDelete: 'cascade'
+            });
         }
     });
 

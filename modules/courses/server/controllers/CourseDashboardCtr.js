@@ -80,34 +80,38 @@ module.exports.getStudentDashbaordDate = function (req, res) {
 module.exports.getAdminDashbaordDate = function (req, res) {
     async.parallel({
         clickedstatements: function (callback) {
-            db.Statement
-                .findAll({
-                    attributes: {
-                        exclude: ['createdAt', 'updatedAt', 'ResourceId', 'QuestionId']
-                    },
+            db.ResStatement.findAll({
+                attributes: [
+                    'Date.date', 'Resource.type', [db.sequelize.fn('SUM', db.sequelize.col('ResStatement.sum_clicks')), 'sum_clicks'],
+                    [db.sequelize.fn('SUM', db.sequelize.col('ResStatement.sum_lunches')), 'sum_lunches']
+                ],
+                include: [{
+                    model: db.Resource,
+                    attributes: ['type']
+                }, {
+                    model: db.Date,
+                    attributes: [],
                     where: {
-                        timestamp: {
+                        date: {
                             $gte: req.body.startDate,
                             $lte: req.body.endDate
                         }
-                    },
-                    include: [{
-                        model: db.Resource,
-                        attributes: ['type']
-                    }, {
-                        model: db.Verb,
-                        attributes: ['name'],
-                        where: {
-                            name: 'clicked'
-                        }
-                    }]
-                }).then(function (statements) {
-                    callback(null, statements);
-                }).catch(function (err) {
-                    callback(err, null);
-                });
+                    }
+                }],
+                group: [
+                    [db.sequelize.fn('DAYOFYEAR', db.sequelize.col('Date.date'))], 'Resource.type'
+                ],
+                raw: true,
+                nest: true,
+            }).then(function (statements) {
+                callback(null, statements);
+            }).catch(function (err) {
+                callback(err, null);
+            });
         },
         topTenAccessedResource: function (callback) {
+            callback();
+            return;
             db.Statement
                 .findAll({
                     attributes: [
@@ -148,6 +152,8 @@ module.exports.getAdminDashbaordDate = function (req, res) {
                 });
         },
         topTenActiveStudents: function (callback) {
+            callback();
+            return;
             db.Statement
                 .findAll({
                     attributes: [
@@ -176,21 +182,22 @@ module.exports.getAdminDashbaordDate = function (req, res) {
                     callback(err, null);
                 });
         },
-        studensViewsHistogram : function (callback) {
-            db.Statement
+        studensViewsHistogram: function (callback) {
+            db.ResStatement
                 .findAll({
                     attributes: [
-                        [db.sequelize.fn('COUNT', db.sequelize.col('Statement.id')), 'numOfViews']
+                        [db.sequelize.fn('SUM', db.sequelize.col('ResStatement.sum_lunches')), 'numOfViews']
                     ],
-                    where: {
-                        timestamp: {
-                            $gte: req.body.startDate,
-                            $lte: req.body.endDate
+                    include: [{
+                        model: db.Date,
+                        attributes: [],
+                        where: {
+                            date: {
+                                $gte: req.body.startDate,
+                                $lte: req.body.endDate
+                            }
                         }
-                    },
-                    order: [
-                        [db.sequelize.fn('COUNT', db.sequelize.col('Statement.id')), 'ASC']
-                    ],
+                    }],
                     group: 'UserId',
                     raw: true,
                     nest: true,
@@ -199,6 +206,25 @@ module.exports.getAdminDashbaordDate = function (req, res) {
                 }).catch(function (err) {
                     callback(err, null);
                 });
+        },
+        overallActivities: function (callback) {
+            db.CourseStatement.findAll({
+                attributes: ['CourseStatement.num_activities','Date.date'],
+                where: {
+                    CourseId: req.params.id
+                },
+                include: [{
+                    model: db.Date,
+                    attributes : []
+                }],
+                nest: true,
+                raw: true
+            }).then(statements => {
+                console.log(statements);
+                callback(null, statements);
+            }).catch(function (err) {
+                callback(err, null);
+            });
         }
     }, function (err, results) {
         if (err) {

@@ -67,6 +67,8 @@
 
                 drawStudentsViewsHistoram(response.data.studensViewsHistogram);
 
+                drawOverallChart(response.data.overallActivities);
+
                 vm.top10AccessedResrouce = response.data.topTenAccessedResource;
 
                 vm.topTenActiveStudents = response.data.topTenActiveStudents;
@@ -83,7 +85,7 @@
             var parseDate = d3.time.format("%Y-%m-%dT%H:%M:%S.%LZ").parse;
 
             clickedstatements.forEach(function (statement) {
-                statement.timestamp = parseDate(statement.timestamp);
+                statement.timestamp = parseDate(statement.date);
                 statement.timestamp.setHours(0);
                 statement.timestamp.setMinutes(0);
                 statement.timestamp.setSeconds(0);
@@ -105,10 +107,10 @@
 
             // aggregate click statements in each day based on resource type
             var grouping = dateDim.group().reduce(function (p, v) {
-                p[v.Resource.type] = (p[v.Resource.type] || 0) + 1;
+                p[v.Resource.type] = (p[v.Resource.type] || 0) + v.sum_clicks;
                 return p;
             }, function (p, v) {
-                p[v.Resource.type] = (p[v.Resource.type] || 0) - 1;
+                p[v.Resource.type] = (p[v.Resource.type] || 0) - v.sum_clicks;
                 return p;
             }, function () {
                 return {};
@@ -120,7 +122,7 @@
 
             resourcesWeeklyChart
                 .dimension(dateDim)
-                .group(grouping, typesOfGroupedResources[0], sel_stack(typesOfGroupedResources[0]))
+                .group(grouping, typesOfGroupedResources[3], sel_stack(typesOfGroupedResources[3]))
                 .width(function (element) {
                     var width = element && element.getBoundingClientRect && element.getBoundingClientRect().width;
                     return (width && width > resourcesWeeklyChart.minWidth()) ? width : resourcesWeeklyChart.minWidth();
@@ -139,14 +141,12 @@
                     top: 20,
                     right: 15,
                     bottom: 50
-                })
-                .yAxisLabel('Daily Resources Click')
+                }).yAxisLabel('Daily Resources Click');
 
-            typesOfGroupedResources.shift();
+            resourcesWeeklyChart.stack(grouping, typesOfGroupedResources[2], sel_stack(typesOfGroupedResources[2]));
+            resourcesWeeklyChart.stack(grouping, typesOfGroupedResources[1], sel_stack(typesOfGroupedResources[1]));
+            resourcesWeeklyChart.stack(grouping, typesOfGroupedResources[0], sel_stack(typesOfGroupedResources[0]));
 
-            typesOfGroupedResources.forEach(function (type) {
-                resourcesWeeklyChart.stack(grouping, type, sel_stack(type));
-            });
 
             function sel_stack(i) {
                 return function (d) {
@@ -171,13 +171,9 @@
                 item.range = quantize(parseInt(item.numOfViews));
             });
 
-            console.log(data);
-
             data.sort(function (a, b) {
                 return parseInt(a.numOfViews) - parseInt(b.numOfViews);
             });
-
-            console.log(data);
 
             var ndx = crossfilter(data);
 
@@ -212,6 +208,69 @@
                 })
 
             studentsViewsHistoram.margins().right = 20;
+            dc.renderAll();
+        }
+
+
+
+        function drawOverallChart(statements) {
+            var parseDate = d3.time.format("%Y-%m-%dT%H:%M:%S.%LZ").parse;
+
+            statements.forEach(function (statement) {
+                statement.timestamp = parseDate(statement.date);
+                statement.timestamp.setHours(0);
+                statement.timestamp.setMinutes(0);
+                statement.timestamp.setSeconds(0);
+                statement.timestamp.setMilliseconds(0);
+            });
+
+            var minDate = d3.min(statements, function (x) {
+                    return x.timestamp;
+                }),
+                maxDate = d3.max(statements, function (x) {
+                    return x.timestamp;
+                });
+
+
+            minDate =  moment(minDate).subtract(1,'week').toDate();
+
+            statements.push({num_activities:0,timestamp:minDate}); // to begin from zero
+
+            var ndx = crossfilter(statements);
+
+            var dateDim = ndx.dimension(function (item) {
+                return item.timestamp;
+            });
+
+            var grouping = dateDim.group().reduceSum(item => {
+                return item.num_activities;
+            });
+
+            var courseOverAllChart = dc.lineChart('#course-overall-chart');
+
+            courseOverAllChart
+                .dimension(dateDim)
+                .group(grouping)
+                .width(function(element){
+                    var width = element && element.getBoundingClientRect && element.getBoundingClientRect().width;
+                    return (width && width > courseOverAllChart.minWidth()) ? width : courseOverAllChart.minWidth();
+                }).title(function(d){
+                    return (d.key.getMonth() + 1) + '/' + d.key.getDate() + '/' +  d.key.getFullYear() + " " + d.value + " Clicks";
+                })
+                .x(d3.time.scale().domain([minDate,maxDate]))
+                .mouseZoomable(true)
+                .renderHorizontalGridLines(true)
+                .renderVerticalGridLines(true)
+                .brushOn(false)
+                .xAxisLabel('Timeline')
+                .yAxisLabel('Number of Activities')
+                .elasticY(true)
+                .interpolate('linear')
+                .margins({left: 70, top: 20, right: 20, bottom: 50})
+           
+
+            vm.courseOverAllChart = courseOverAllChart;
+
             dc.renderAll();
         }
     }

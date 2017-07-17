@@ -328,7 +328,7 @@ module.exports.getResourceDashboard2 = function (req, res) {
         avgClickPerDay: function (callback) {
             db.ResStatement.findAll({
                 attributes: [
-                    [db.sequelize.fn('SUM', db.sequelize.col('ResStatement.sum_clicks')), 'sum_clicks']
+                    [db.sequelize.fn('SUM', db.sequelize.col('ResStatement.sum_clicks')), 'numOfViews']
                 ],
                 where: {
                     ResourceId: req.params.id
