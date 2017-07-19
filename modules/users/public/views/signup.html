@@ -1,67 +1,57 @@
-<div id="content">
-    <div class="container-fluid">
+<div class="container" style="max-width:500px;">
+  <div class="panel panel-default text-center paper-shadow" data-z="0.5">
+    <h1 class="text-display-1">Create account</h1>
+    <div class="panel-body">
 
-      <div class="lock-container">
-        <div class="panel panel-default text-center paper-shadow" data-z="0.5">
-          <h1 class="text-display-1">Create account</h1>
-          <div class="panel-body">
+      <!-- Signup -->
+      <form role="form" action="index.html">
 
-            <!-- Signup -->
-            <form role="form" action="index.html">
-              <div class="form-group">
-                <div class="form-control-material">
-                  <input id="Name" type="text" class="form-control" placeholder="Name" ng-model="signupCtr.name">
-                  <label for="Name">Name</label>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="form-control-material">
-                  <input id="username" type="text" class="form-control" placeholder="Username" ng-model="signupCtr.username">
-                  <label for="username">Username</label>
-                </div>
-             <div class="form-group">
-                <div class="form-control-material">
-                  <input id="mbox" type="text" class="form-control" placeholder="E-mail" ng-model="signupCtr.email">
-                  <label for="username">Email</label>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="form-control-material">
-                  <input id="password" type="password" class="form-control" placeholder="Password" ng-model="signupCtr.password">
-                  <label for="password">Password</label>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="form-control-material">
-                  <input id="passwordConfirmation" type="password" class="form-control" placeholder="Password Confirmation" ng-model="signupCtr.rePassword">
-                  <label for="passwordConfirmation">Re-type password</label>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="form-control-material">
-                  <select class="form-control" ng-model="signupCtr.role">
+        <div class="form-group">
+          <label for="Name">Name</label>
+          <input id="Name" type="text" class="form-control" placeholder="Name" ng-model="signupCtr.name">
+        </div>
+
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input id="username" type="text" class="form-control" placeholder="Username" ng-model="signupCtr.username">
+        </div>
+
+        <div class="form-group">
+          <label for="username">Email</label>
+          <input id="mbox" type="text" class="form-control" placeholder="E-mail" ng-model="signupCtr.email">
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input id="password" type="password" class="form-control" placeholder="Password" ng-model="signupCtr.password">
+        </div>
+
+        <div class="form-group">
+          <label for="passwordConfirmation">Re-type password</label>
+          <input id="passwordConfirmation" type="password" class="form-control" placeholder="Password Confirmation" ng-model="signupCtr.rePassword">
+        </div>
+
+        <div class="form-group">
+          <label>Account Role</label>
+          <select class="form-control" ng-model="signupCtr.role">
                     <option value="admin">Owner</option>
                     <option value="student">Student</option>
                     <option value="teacher">Teacher</option>                    
                   </select>
-                  <label>Account Role</label>
-                </div>
-              </div>
-              <div class="form-group text-center">
-                <div class="checkbox">
-                  <input type="checkbox" id="agree" />
-                  <label for="agree">* I Agree with <a href="#">Terms &amp; Conditions!</a></label>
-                </div>
-              </div>
-              <div class="text-center">
-                <a href="signup" ng-click="signupCtr.signup()" class="btn btn-primary">Create an Account</a>
-              </div>
-            </form>
-            <!-- //Signup -->
+        </div>
 
+        <div class="form-group text-center">
+          <div class="checkbox">
+            <input type="checkbox" id="agree" />
+            <label for="agree">* I Agree with <a href="#">Terms &amp; Conditions!</a></label>
           </div>
         </div>
-      </div>
+        <div class="text-center">
+          <a href="signup" ng-click="signupCtr.signup()" class="btn btn-primary">Create an Account</a>
+        </div>
+      </form>
+      <!-- //Signup -->
 
     </div>
   </div>
+</div>
