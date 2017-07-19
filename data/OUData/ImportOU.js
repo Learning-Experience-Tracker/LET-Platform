@@ -14,7 +14,7 @@ Date.prototype.addDays = function (days) {
 
 sequelize.init(function (db) {
 
-    var datasetFolderPath = 'data/OUData/AAA2014J/'
+    var datasetFolderPath = 'data/OUData/AAA2013J/'
     var maxLimit = 100; // max insert operation in parallel
     var admin = {};
     var oranization = {};
@@ -276,16 +276,18 @@ sequelize.init(function (db) {
 
                 output.forEach(function (item) {
                     var assessment = {};
+                    var courseName = item[0] + item[1];
+                    var courseDBObject = coursesMap[courseName];
 
                     assessment.name = item[2];
-                    assessment.courseName = item[0] + item[1];
-                    assessment.id_IRI = "http://open-university.edu/" + assessment.courseName.toLowerCase() + "/assessment/" + item[2];
+                    assessment.CourseId = courseDBObject.id;
+                    assessment.id_IRI = "http://open-university.edu/" + courseName.toLowerCase() + "/assessment/" + item[2];
                     assessment.type = item[3];
                     assessment.weight = item[5];
 
                     var days = parseInt(item[4]);
                     if (!isNaN(days)) {
-                        var date = new Date(coursesMap[assessment.courseName].startDate);
+                        var date = new Date(coursesMap[courseName].startDate);
                         assessment.deadline = date.addDays(days);
                     }
                     assessments.push(assessment);
