@@ -7,41 +7,41 @@ var db = require('./../../../../config/sequelize'),
 
 module.exports.getStudentDashbaordDate = function (req, res) {
     async.parallel({
-        assessmentsStatements: function (callback) {
-            db.Statement
-                .findAll({
-                    attributes: {
-                        exclude: ['createdAt', 'updatedAt', 'ResourceId', 'QuestionId']
-                    },
-                    where: {
-                        UserId: req.user.id
-                    },
-                    include: [{
-                            model: db.Assessment,
-                            attributes: ['name']
+            assessmentsStatements: function (callback) {
+                db.Statement
+                    .findAll({
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt', 'ResourceId', 'QuestionId']
                         },
-                        {
-                            model: db.Verb,
-                            attributes: [],
-                            where: {
-                                name: 'completed'
+                        where: {
+                            UserId: req.user.id
+                        },
+                        include: [{
+                                model: db.Assessment,
+                                attributes: ['name']
+                            },
+                            {
+                                model: db.Verb,
+                                attributes: [],
+                                where: {
+                                    name: 'completed'
+                                }
                             }
-                        }
-                    ]
-                }).then(function (statements) {
-                    callback(null, statements);
-                }).catch(function (err) {
-                    callback(err, null);
-                });
-        },
-        resourceStatements: function (callback) {
-            db.Statement
-                .findAll({
-                    attributes: ['id', 'timestamp', 'ResourceId'],
-                    where: {
-                        UserId: req.user.id
-                    },
-                    include: [{
+                        ]
+                    }).then(function (statements) {
+                        callback(null, statements);
+                    }).catch(function (err) {
+                        callback(err, null);
+                    });
+            },
+            resourceStatements: function (callback) {
+                db.ResStatement
+                    .findAll({
+                        attributes: ['id','Date.date', 'ResourceId'],
+                        where: {
+                            UserId: req.user.id
+                        },
+                        include: [{
                             model: db.Resource,
                             attributes: ['type'],
                             where: {
@@ -49,31 +49,27 @@ module.exports.getStudentDashbaordDate = function (req, res) {
                                     $ne: 'homepage'
                                 }
                             }
-                        },
-                        {
-                            model: db.Verb,
-                            attributes: [],
-                            where: {
-                                name: {
-                                    $in: ['launched', 'clicked']
-                                }
-                            }
-                        }
-                    ]
-                }).then(function (statements) {
-                    callback(null, statements);
-                }).catch(function (err) {
-                    callback(err, null);
-                });
-        }
-    }, function (err, results) {
-        if (err) {
-            winston.error(err);
-            res.status(500).end();
-        } else {
-            return res.json(results);
-        }
-    });
+                        }, {
+                            model: db.Date,
+                            attributes: ['date'],
+                        }],
+                        nest : true,
+                        raw : true
+                    }).then(function (statements) {
+                        callback(null, statements);
+                    }).catch(function (err) {
+                        callback(err, null);
+                    });
+            }
+        },
+        function (err, results) {
+            if (err) {
+                winston.error(err);
+                res.status(500).end();
+            } else {
+                return res.json(results);
+            }
+        });
 }
 
 

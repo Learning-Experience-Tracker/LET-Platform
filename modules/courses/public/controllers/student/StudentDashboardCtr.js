@@ -83,7 +83,7 @@
             var parseDate = d3.time.format("%Y-%m-%dT%H:%M:%S.%LZ").parse;
 
             activityStatement.forEach(function (activity) {
-                activity.timestamp = parseDate(activity.timestamp);
+                activity.timestamp = parseDate(activity.Date.date);
                 activity.timestamp.setHours(0);
                 activity.timestamp.setMinutes(0);
                 activity.timestamp.setSeconds(0);
