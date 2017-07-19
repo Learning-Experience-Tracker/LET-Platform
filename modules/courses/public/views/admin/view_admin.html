@@ -18,8 +18,7 @@
             <div class="panel panel-default paper-shadow" data-z="0.5">
               <div class="panel-heading">
                 <h4 class="text-headline margin-none">Students</h4>
-                <p class="text-subhead text-light" ng-if="courseCtr.course.Users.length != 0">A list of recent course students.</p>
-                <p class="text-subhead text-light" ng-if="courseCtr.course.Users.length == 0">No Students in this course.</p>
+                <p class="text-subhead text-light">Numbers of students {{courseCtr.course.studentsCount}}</p>
               </div>
               <ul class="list-group">
                 <li class="list-group-item media v-middle" ng-repeat="user in courseCtr.course.Users">
@@ -48,8 +47,7 @@
             <div class="panel panel-default paper-shadow" data-z="0.5">
               <div class="panel-heading">
                 <h4 class="text-headline margin-none">Resources</h4>
-                <p class="text-subhead text-light" ng-if="courseCtr.course.Resources.length != 0">A list of recent course resources.</p>
-                <p class="text-subhead text-light" ng-if="courseCtr.course.Resources.length == 0">No Resources in this course.</p>
+                <p class="text-subhead text-light">Numbers of resources {{courseCtr.course.resourcesCount}}</p>
               </div>
               <ul class="list-group">
                 <li class="list-group-item media v-middle" ng-repeat="resource in courseCtr.course.Resources">
@@ -78,8 +76,7 @@
             <div class="panel panel-default paper-shadow" data-z="0.5">
               <div class="panel-heading">
                 <h4 class="text-headline margin-none">Assessments</h4>
-                <p class="text-subhead text-light" ng-if="courseCtr.course.Assessments.length != 0">A list of recent course assessments.</p>
-                <p class="text-subhead text-light" ng-if="courseCtr.course.Assessments.length == 0">No Assessments in this course.</p>
+                <p class="text-subhead text-light">Numbers of assessment {{courseCtr.course.assessmentsCount}}</p>
               </div>
               <ul class="list-group">
                 <li class="list-group-item media v-middle" ng-repeat="assessment in courseCtr.course.Assessments">
@@ -109,8 +106,7 @@
               <div class="panel panel-default paper-shadow" data-z="0.5">
                 <div class="panel-heading">
                   <h4 class="text-headline margin-none">Activities</h4>
-                  <p class="text-subhead text-light" ng-if="courseCtr.course.activities.length != 0">A list of recent course activities.</p>
-                  <p class="text-subhead text-light" ng-if="courseCtr.course.activities.length == 0">No Activities in this course.</p>
+                  <p class="text-subhead text-light">Numbers of activities {{courseCtr.course.activitiesCount}}</p>
                 </div>
                 <ul class="list-group">
                   <li class="list-group-item media v-middle" ng-repeat="activity in courseCtr.course.activities">

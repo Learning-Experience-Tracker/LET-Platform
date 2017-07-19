@@ -23,6 +23,9 @@
             get: function (courseId) {
                 return $http.get('/api/course/' + courseId);
             },
+            getDetails: function (courseId) {
+                return $http.get('/api/course/' + courseId + '/details');
+            },
             getStudentCourses: function () {
                 return $http.get('/api/student/courses/all');
             },

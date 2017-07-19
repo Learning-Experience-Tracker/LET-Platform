@@ -7,7 +7,7 @@ var db = require('./../../../../config/sequelize'),
 module.exports.create = function (req, res) {
     var course = db.Course.build({
         name: req.body.name,
-        id_IRI : req.body.id_IRI,
+        id_IRI: req.body.id_IRI,
         OrganizationId: req.body.orgId
     });
 
@@ -25,17 +25,7 @@ module.exports.get = function (req, res) {
     db.Course.findOne({
         where: {
             id: req.params.id
-        },
-        /*include: [{
-            model: db.Resource,
-            attributes: ['id', 'name']
-        }, {
-            model: db.Assessment,
-            attributes: ['id', 'name']
-        }, {
-            model: db.User,
-            attributes: ['id', 'name']
-        }]*/
+        }
     }).then(function (course) {
         if (!course) {
             res.status(404).end();
@@ -46,6 +36,73 @@ module.exports.get = function (req, res) {
     }).catch(function (error) {
         winston.error(error);
         res.status(500).end();
+    });
+}
+
+module.exports.getDetails = function (req, res) {
+    async.parallel({
+        course: (callback) => {
+            db.Course.findOne({
+                where: {
+                    id: req.params.id
+                },raw : true
+            }).then((course) => {
+                callback(null,course);
+            });
+        },
+        studentsCount: (callback) => {
+            db.UserCourses.count({
+                where: {
+                    courseId: req.params.id
+                }
+            }).then(count => {
+                callback(null, count)
+            });
+        },
+        resourcesCount: (callback) => {
+            db.Resource.count({
+                where: {
+                    courseId: req.params.id
+                }
+            }).then(count => {
+                callback(null, count)
+            });
+        },
+        assessmentsCount: (callback) => {
+            db.Assessment.count({
+                where: {
+                    courseId: req.params.id
+                }
+            }).then(count => {
+                callback(null, count)
+            });
+        },
+        activitiesCount: (callback) => {
+            db.Statement.count({
+                where: {
+                    courseId: req.params.id
+                }
+            }).then(count => {
+                callback(null, count)
+            });
+        },
+    }, (err, results) => {
+        if (err) {
+            winston.error(error);
+            res.status(500).end();
+        } else {
+            if (!results.course) {
+                res.status(404).end();
+                return;
+            }else{
+                var course = results.course;
+                course.studentsCount = results.studentsCount;
+                course.resourcesCount = results.resourcesCount;
+                course.assessmentsCount = results.assessmentsCount;
+                course.activitiesCount = results.activitiesCount;
+                return res.json(course);
+            }
+        }
     });
 }
 
