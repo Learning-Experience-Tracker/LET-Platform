@@ -33,7 +33,8 @@ sequelize.init(function (db) {
         },
         function (callback) {
             addResources(callback)
-        },function (callback){
+        },
+        function (callback) {
             addAsessments(callback);
         }
     ], function (err) {
@@ -285,6 +286,23 @@ sequelize.init(function (db) {
                 type: "wiki",
                 name: "Wiki Help",
                 CourseId: course.id
+            }, {
+                id_IRI: courseObject.dataValues.id_IRI + "healthy-food",
+                type: "content",
+                name: "Healthy Food",
+                CourseId: course.id
+            },
+            {
+                id_IRI: courseObject.dataValues.id_IRI + "drinks",
+                type: "content",
+                name: "Drinks",
+                CourseId: course.id
+            },
+            {
+                id_IRI: courseObject.dataValues.id_IRI + "meat-chicken",
+                type: "content",
+                name: "Meats & Chicken",
+                CourseId: course.id
             }
         ];
 
@@ -301,7 +319,7 @@ sequelize.init(function (db) {
         var assessment = {
             name: "Quiz",
             id_IRI: "http://adlnet.gov/samples/course/api-jqm/05-quiz",
-            CourseId : courseObject.dataValues.id
+            CourseId: courseObject.dataValues.id
         };
 
 

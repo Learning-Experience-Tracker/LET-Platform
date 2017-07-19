@@ -47,6 +47,7 @@
                                         <th>Student</th>
                                         <th>Action</th>
                                         <th>Object</th>
+                                        <th>Platform</th>
                                         <th>Timestamp</th>
                                         <th></th>
                                     </tr>
@@ -58,6 +59,7 @@
                                         <td ng-if="activity.AssessmentId && !activity.QuestionId">{{activity.Assessment.name}}</td>
                                         <td ng-if="activity.QuestionId">{{activity.Question.name}}</td>
                                         <td ng-if="activity.ResourceId">{{activity.Resource.name}}</td>
+                                        <td>{{activity.platform}}</td>                                        
                                         <td>{{activity.timestamp | amDateFormat:'HH:mm MMMM DD, YYYY'}}</td>
                                         <td>
                                             <button class="btn btn-success" ng-init="toggle[$index] = false" ng-click="toggle[$index] = !toggle[$index]" style="height: 24px;padding: 2px;padding-right: 5px;padding-left: 5px;">
