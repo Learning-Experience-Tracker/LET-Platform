@@ -25,10 +25,15 @@ sequelize.init(function (db) {
             fillMaps(callback);
         },
         function (callback) {
-            aggregateResource(callback);
+            //aggregateResource(callback);
+            callback();
         },
         function (callback) {
             aggregateCourse(callback);
+            //callback();
+        },
+        function (callback){
+            aggregateUser(callback);
         }
     ], function (err) {
         winston.info('All objects are created...');
@@ -137,17 +142,8 @@ sequelize.init(function (db) {
         }).then(() => {
             db.Statement.findAll({
                 attributes: [
-                    'Statement.CourseId', 'Statement.timestamp', [db.sequelize.fn('count', db.sequelize.col('Statement.id')), 'num_activities'],
+                    'Statement.CourseId', 'Statement.timestamp', [db.sequelize.fn('count', db.sequelize.col('Statement.id')), 'sum_activities'],
                 ],
-                include: [{
-                    model: db.Verb,
-                    where: {
-                        name: {
-                            $in: ['clicked', 'launched']
-                        }
-                    },
-                    attributes: []
-                }],
                 raw: true,
                 group: [
                    'Statement.CourseId', [db.sequelize.fn('WEEKOFYEAR', db.sequelize.col('Statement.timestamp'))]
@@ -156,7 +152,7 @@ sequelize.init(function (db) {
                 var resStatement = [];
                 statements.forEach(statement => {
                     var obj = {};
-                    obj.num_activities = statement.num_activities;
+                    obj.sum_activities = statement.sum_activities;
                     obj.DateId = dateMap[moment(statement.timestamp).format('MM/DD/YYYY')].id;
                     obj.CourseId = statement.CourseId;
                     resStatement.push(obj);
@@ -177,6 +173,46 @@ sequelize.init(function (db) {
                 callback(null);
             });
         });
+    }
 
+    function aggregateUser(callback){
+        db.UserStatement.destroy({
+            where: {},
+            truncate: false
+        }).then(() => {
+            db.Statement.findAll({
+                attributes: [
+                    'Statement.UserId', 'Statement.CourseId', 'Statement.timestamp', [db.sequelize.fn('count', db.sequelize.col('Statement.id')), 'sum_activities'],
+                ],
+                raw: true,
+                group: [
+                   'Statement.UserId', [db.sequelize.fn('WEEKOFYEAR', db.sequelize.col('Statement.timestamp'))]
+                ],
+            }).then(function (statements) {
+                var userStatement = [];
+                statements.forEach(statement => {
+                    var obj = {};
+                    obj.sum_activities = statement.sum_activities;
+                    obj.DateId = dateMap[moment(statement.timestamp).format('MM/DD/YYYY')].id;
+                    obj.CourseId = statement.CourseId;
+                    obj.UserId = statement.UserId;
+                    userStatement.push(obj);
+                });
+
+                var inserter = async.cargo(function (objects, inserterCallback) {
+                        db.UserStatement.bulkCreate(objects).then(function () {
+                            winston.info('Batch of user activities created... ' + new Date().getUTCMilliseconds());
+                            inserterCallback();
+                        });
+                    },
+                    1000
+                );
+
+                userStatement.forEach(item => {
+                    inserter.push(item);
+                });
+                callback(null);
+            });
+        });
     }
 });

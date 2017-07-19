@@ -1,23 +1,26 @@
 'use strict';
 /**
- * ResStatement Model
+ * UserStatement Model
  */
 
 module.exports = function (sequelize, DataTypes) {
 
-    var CourseStatement = sequelize.define('CourseStatement', {
+    var UserStatement = sequelize.define('UserStatement', {
         sum_activities: DataTypes.INTEGER
     }, {
         timestamps: false,
         associate: function (models) {
-            CourseStatement.belongsTo(models.Date, {
+            UserStatement.belongsTo(models.User, {
                 onDelete: 'cascade'
             });
-            CourseStatement.belongsTo(models.Course, {
+            UserStatement.belongsTo(models.Date, {
+                onDelete: 'cascade'
+            });
+            UserStatement.belongsTo(models.Course, {
                 onDelete: 'cascade'
             });
         }
     });
 
-    return CourseStatement;
+    return UserStatement;
 };
