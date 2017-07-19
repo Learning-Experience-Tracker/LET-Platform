@@ -47,18 +47,13 @@ module.exports.getCourseResources = function (req, res) {
 module.exports.getCourseActivities = function (req, res) {
     db.Statement
         .findAndCountAll({
+            where: {
+                CourseId: req.params.id
+            },
             include: [{
-                    model: db.User,
-                    attributes: ['name'],
-                    include: [{
-                        model: db.Course,
-                        through: db.UserCourses,
-                        where: {
-                            id: req.params.id
-                        }
-                    }]
-                },
-                {
+                    model : db.User,
+                    attributes : ['name']
+                }, {
                     model: db.Verb,
                     attributes: ['name']
                 }, {
@@ -110,7 +105,7 @@ module.exports.getCourseStudents = function (req, res) {
                 course.getStudents({
                     limit: parseInt(req.params.pagesize),
                     offset: parseInt(req.params.page) * parseInt(req.params.pagesize),
-                    raw : true
+                    raw: true
                 }).then(users => {
                     callback(null, users);
                 }).catch(error => {
