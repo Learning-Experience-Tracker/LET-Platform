@@ -110,46 +110,43 @@ module.exports.getAdminDashbaordDate = function (req, res) {
             });
         },
         topTenAccessedResource: function (callback) {
-            callback();
-            return;
-            db.Statement
-                .findAll({
-                    attributes: [
-                        [db.sequelize.fn('COUNT', db.sequelize.col('Statement.id')), 'numOfLaunches']
-                    ],
+            db.ResStatement.findAll({
+                attributes: [
+                    [db.sequelize.fn('SUM', db.sequelize.col('sum_lunches')), 'numOfLaunches']
+                ],
+                where: {
+                    CourseId: req.params.id
+                },
+                include: [{
+                    model: db.Resource,
+                    attributes: ['name', 'id_IRI', 'type'],
                     where: {
-                        timestamp: {
+                        type: {
+                            $ne: 'homepage'
+                        }
+                    }
+                }, {
+                    model: db.Date,
+                    attributes: [],
+                    where: {
+                        date: {
                             $gte: req.body.startDate,
                             $lte: req.body.endDate
                         }
-                    },
-                    include: [{
-                        model: db.Resource,
-                        attributes: ['name', 'id_IRI', 'type'],
-                        where: {
-                            type: {
-                                $ne: 'homepage'
-                            }
-                        }
-                    }, {
-                        model: db.Verb,
-                        attributes: [],
-                        where: {
-                            name: 'launched'
-                        }
-                    }],
-                    order: [
-                        [db.sequelize.fn('COUNT', db.sequelize.col('Statement.id')), 'DESC']
-                    ],
-                    group: 'ResourceId',
-                    raw: true,
-                    nest: true,
-                    limit: 10
-                }).then(function (statements) {
-                    callback(null, statements);
-                }).catch(function (err) {
-                    callback(err, null);
-                });
+                    }
+                }],
+                group: 'ResourceId',
+                order: [
+                    [db.sequelize.fn('SUM', db.sequelize.col('sum_lunches')), 'DESC']
+                ],
+                raw: true,
+                nest: true,
+                limit: 10
+            }).then(function (statements) {
+                callback(null, statements);
+            }).catch(function (err) {
+                callback(err, null);
+            });
         },
         topTenActiveStudents: function (callback) {
             callback();
@@ -209,18 +206,17 @@ module.exports.getAdminDashbaordDate = function (req, res) {
         },
         overallActivities: function (callback) {
             db.CourseStatement.findAll({
-                attributes: ['CourseStatement.num_activities','Date.date'],
+                attributes: ['CourseStatement.num_activities', 'Date.date'],
                 where: {
                     CourseId: req.params.id
                 },
                 include: [{
                     model: db.Date,
-                    attributes : []
+                    attributes: []
                 }],
                 nest: true,
                 raw: true
             }).then(statements => {
-                console.log(statements);
                 callback(null, statements);
             }).catch(function (err) {
                 callback(err, null);
