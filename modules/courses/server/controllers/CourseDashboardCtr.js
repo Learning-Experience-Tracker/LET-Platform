@@ -149,25 +149,27 @@ module.exports.getAdminDashbaordDate = function (req, res) {
             });
         },
         topTenActiveStudents: function (callback) {
-            db.Statement
+            db.UserStatement
                 .findAll({
                     attributes: [
-                        [db.sequelize.fn('COUNT', db.sequelize.col('Statement.id')), 'numOfAction']
+                        ['sum_activities', 'numOfAction']
                     ],
-                    where: {
-                        timestamp: {
-                            $gte: req.body.startDate,
-                            $lte: req.body.endDate
-                        }
-                    },
                     include: [{
                         model: db.User,
                         attributes: ['name', 'email']
+                    }, {
+                        model: db.Date,
+                        attributes: [],
+                        where: {
+                            date: {
+                                $gte: req.body.startDate,
+                                $lte: req.body.endDate
+                            }
+                        }
                     }],
                     order: [
-                        [db.sequelize.fn('COUNT', db.sequelize.col('Statement.id')), 'DESC']
+                        ['sum_activities', 'DESC']
                     ],
-                    group: 'UserId',
                     raw: true,
                     nest: true,
                     limit: 10
