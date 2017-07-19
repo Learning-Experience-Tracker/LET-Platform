@@ -322,13 +322,13 @@ module.exports.getResourceDashboard2 = function (req, res) {
                 res = res.map(function (item) {
                     return item.sum_lunches;
                 });
-                callback(null, math.mean(res));
+                callback(null,math.mean(res));
             });
         },
         avgClickPerDay: function (callback) {
             db.ResStatement.findAll({
                 attributes: [
-                    [db.sequelize.fn('SUM', db.sequelize.col('ResStatement.sum_clicks')), 'numOfViews']
+                    [db.sequelize.fn('SUM', db.sequelize.col('ResStatement.sum_clicks')), 'sum_clicks']
                 ],
                 where: {
                     ResourceId: req.params.id
@@ -345,6 +345,7 @@ module.exports.getResourceDashboard2 = function (req, res) {
                 res = res.map(function (item) {
                     return item.sum_clicks;
                 });
+                console.log(res);
                 callback(null, math.mean(res));
             });
         }
