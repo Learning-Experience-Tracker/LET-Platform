@@ -149,8 +149,6 @@ module.exports.getAdminDashbaordDate = function (req, res) {
             });
         },
         topTenActiveStudents: function (callback) {
-            callback();
-            return;
             db.Statement
                 .findAll({
                     attributes: [
@@ -206,7 +204,7 @@ module.exports.getAdminDashbaordDate = function (req, res) {
         },
         overallActivities: function (callback) {
             db.CourseStatement.findAll({
-                attributes: ['CourseStatement.num_activities', 'Date.date'],
+                attributes: ['CourseStatement.sum_activities', 'Date.date'],
                 where: {
                     CourseId: req.params.id
                 },

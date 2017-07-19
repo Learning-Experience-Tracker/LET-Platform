@@ -89,7 +89,7 @@
 
 
                 statements.push({
-                    num_activities: 0,
+                    sum_activities: 0,
                     CourseId: courseId,
                     timestamp: moment(minDate).subtract(1, 'week').toDate()
                 });
@@ -110,7 +110,7 @@
             });
 
             var grouping = dateDim.group().reduceSum(item => {
-                return item.num_activities;
+                return item.sum_activities;
             });
 
             var chart = dc.seriesChart("#org-overall-chart");

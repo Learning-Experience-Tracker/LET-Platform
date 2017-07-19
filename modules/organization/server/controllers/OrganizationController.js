@@ -53,7 +53,7 @@ module.exports.getAll = function (req, res) {
 
 module.exports.getDashobardDate = function (req, res) {
     db.CourseStatement.findAll({
-        attributes: ['CourseStatement.num_activities','Date.date','CourseId'],
+        attributes: ['CourseStatement.sum_activities','Date.date','CourseId'],
         where: {
             CourseId: {
                 $in: req.body.coursesIds

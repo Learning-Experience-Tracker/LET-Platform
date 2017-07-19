@@ -234,7 +234,7 @@
 
             minDate =  moment(minDate).subtract(1,'week').toDate();
 
-            statements.push({num_activities:0,timestamp:minDate}); // to begin from zero
+            statements.push({sum_activities:0,timestamp:minDate}); // to begin from zero
 
             var ndx = crossfilter(statements);
 
@@ -243,7 +243,7 @@
             });
 
             var grouping = dateDim.group().reduceSum(item => {
-                return item.num_activities;
+                return item.sum_activities;
             });
 
             var courseOverAllChart = dc.lineChart('#course-overall-chart');
