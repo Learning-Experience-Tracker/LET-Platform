@@ -27,7 +27,7 @@
                   <th>Id</th>
                   <th>Name</th>
                   <th>Num of Courses</th>
-                  <th></th>
+                  <th>Options</th>
                 </tr>
               </thead>
               <tbody>
@@ -36,8 +36,11 @@
                   <td>{{org.name}}</td>
                   <th>{{org.Courses.length}}</th>
                   <td>
+                    <button class="btn btn-warning" ng-click="orgCtr.viewOrgDetails(org.id)" style="height: 24px;padding: 2px;padding-right: 5px;padding-left: 5px;">
+                          Dashboard
+                      </button>
                     <button class="btn btn-primary" ng-click="orgCtr.viewOrgDetails(org.id)" style="height: 24px;padding: 2px;padding-right: 5px;padding-left: 5px;">
-                          details
+                          Details
                       </button>
                     <button class="btn btn-danger" ng-click="" style="height: 24px;padding: 2px;padding-right: 5px;padding-left: 5px;">
                           delete
@@ -50,7 +53,7 @@
           </div>
         </div>
 
-        <div class="col-md-2">
+         <!-- <div class="col-md-2">
           <div class="panel panel-default" data-toggle="panel-collapse" data-open="true">
             <div class="panel-heading panel-collapse-trigger">
               <h4 class="panel-title">My Account</h4>
@@ -63,7 +66,7 @@
               </ul>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
