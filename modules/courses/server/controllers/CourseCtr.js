@@ -177,7 +177,7 @@ module.exports.enroll = function (req, res) {
         }
     }).then(function (course) {
 
-        return req.user.addCourse(course, {
+        return req.user.addEnroll(course, {
             enroll_date: Date.now(),
             enroll_times: 1
         });

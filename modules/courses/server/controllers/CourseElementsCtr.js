@@ -100,14 +100,14 @@ module.exports.getCourseStudents = function (req, res) {
         }
         async.parallel({
             count: function (callback) {
-                course.getUsers().then(users => {
+                course.getStudents().then(users => {
                     callback(null, users.length);
                 }).catch(error => {
                     callback(error, null);
                 });
             },
             rows: function (callback) {
-                course.getUsers({
+                course.getStudents({
                     limit: parseInt(req.params.pagesize),
                     offset: parseInt(req.params.page) * parseInt(req.params.pagesize),
                     raw : true

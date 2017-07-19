@@ -174,7 +174,7 @@ sequelize.init(function (db) {
             var userObject = db.User.build(user);
             userObject.save().then(function () {
                 winston.info('User Created');
-                userObject.addCourse(courseObject, {
+                userObject.addEnroll(courseObject, {
                     enroll_date: Date.now(),
                     enroll_times: 1
                 }).then(function () {

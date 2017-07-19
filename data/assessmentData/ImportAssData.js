@@ -178,7 +178,7 @@ sequelize.init(function (db) {
                         user.save().then(function (newItem) {
                             winston.info('User Created');
                             usersMap[newItem.dataValues.email] = newItem.dataValues;
-                            user.addCourse(courseObject, {
+                            user.addEnroll(courseObject, {
                                 enroll_date: Date.now(),
                                 enroll_times: 1
                             });

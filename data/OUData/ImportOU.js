@@ -426,7 +426,7 @@ sequelize.init(function (db) {
                         inputValues.unenroll_date = userCourse.unenroll_date;
                     }
 
-                    userCourse.User.addCourse(userCourse.Course, inputValues).then(function () {
+                    userCourse.User.addEnroll(userCourse.Course, inputValues).then(function () {
                         winston.info('Registerd students %s created...', userCourse.uniqueID);
                         callback();
                     }).catch(function (error) {
