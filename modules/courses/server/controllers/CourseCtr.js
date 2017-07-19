@@ -51,7 +51,7 @@ module.exports.getDetails = function (req, res) {
             });
         },
         studentsCount: (callback) => {
-            db.UserCourses.count({
+            db.StudentCourses.count({
                 where: {
                     courseId: req.params.id
                 }

@@ -1,6 +1,6 @@
 module.exports = function (sequelize, DataTypes) {
 
-	var UserCourses = sequelize.define('UserCourses',
+	var StudentCourses = sequelize.define('StudentCourses',
 		{			
 			enroll_date : DataTypes.DATE,
 			unenroll_date : DataTypes.DATE,
@@ -10,6 +10,6 @@ module.exports = function (sequelize, DataTypes) {
 		}
 	);
 
-	return UserCourses;
+	return StudentCourses;
 };
 

@@ -41,7 +41,7 @@ module.exports = function (sequelize, DataTypes) {
             },
 			associate: function (models) {
 				User.hasMany(models.Organization);
-				User.belongsToMany(models.Course, {through : models.UserCourses});
+				User.belongsToMany(models.Course, {through : models.StudentCourses});
 			}
 		}
 	);
