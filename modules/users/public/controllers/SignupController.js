@@ -28,7 +28,7 @@
                return;
            }
 
-           UserService.signup({name : vm.name, username : vm.username,email: vm.email, password : vm.password, role : vm.role });
+           UserService.signup({name : vm.name, username : vm.username,email: vm.email, password : vm.password, role : 'admin' });
        }
 
        $rootScope.$on('signupFailed', function(){
