@@ -45,9 +45,10 @@ module.exports.getDetails = function (req, res) {
             db.Course.findOne({
                 where: {
                     id: req.params.id
-                },raw : true
+                },
+                raw: true
             }).then((course) => {
-                callback(null,course);
+                callback(null, course);
             });
         },
         studentsCount: (callback) => {
@@ -94,7 +95,7 @@ module.exports.getDetails = function (req, res) {
             if (!results.course) {
                 res.status(404).end();
                 return;
-            }else{
+            } else {
                 var course = results.course;
                 course.studentsCount = results.studentsCount;
                 course.resourcesCount = results.resourcesCount;
@@ -154,15 +155,7 @@ module.exports.getStudentCourses = function (req, res) {
 }
 
 module.exports.getSpecifiedStudentCourses = function (req, res) {
-    db.Course.findAll({
-        include: [{
-            model: db.User,
-            where: {
-                Id: req.user.id
-            },
-            required: true
-        }]
-    }).then(function (courses) {
+    req.user.getEnroll().then(courses => {
         res.json(courses);
     }).catch(function (error) {
         winston.error(error);
