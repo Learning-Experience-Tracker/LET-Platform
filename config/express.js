@@ -34,6 +34,8 @@ module.exports = function(app){
         
     app.use('/bower_components/', express.static(config.rootPath + '/bower_components'));
     app.use('/theme/', express.static(config.rootPath + '/theme'));
+    app.use('/docs/', express.static(config.rootPath + '/docs'));
+    
 
     config.getGlobbedFiles(['./modules/*/server/routes/routes.js', './modules/*/app.js']).forEach(function(routePath){
         require(path.resolve(routePath))(app);
