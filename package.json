@@ -46,5 +46,10 @@
     "description": "Welcome to Learning Experience Tracking API Documentation",
     "title": "LET API Documentation",
     "url": ""
+  },
+  "devDependencies": {
+    "chai": "^4.1.0",
+    "chai-http": "^3.0.0",
+    "mocha": "^3.4.2"
   }
 }
