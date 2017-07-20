@@ -148,25 +148,25 @@ sequelize.init(function (db) {
             name: "Mohammed Ghanem",
             username: "MG",
             password: "MG",
-            email: "ghanem-mhd@adlnet.gov",
+            email: "mailto:ghanem-mhd@adlnet.gov",
             role: "student"
         }, {
             name: "Aalaa alhamwi",
             username: "AA",
             password: "AA",
-            email: "aalaa.alhamwi@adlnet.gov",
+            email: "mailto:aalaa.alhamwi@adlnet.gov",
             role: "student"
         }, {
             name: "Bassel shemali",
             username: "BS",
             password: "BS",
-            email: "bass3l@adlnet.gov",
+            email: "mailto:bass3l@adlnet.gov",
             role: "student"
         }, {
             name: "Hania Almalki",
             username: "HA",
             password: "HA",
-            email: "haniah-mk@adlnet.gov",
+            email: "mailto:haniah-mk@adlnet.gov",
             role: "student"
         }];
 

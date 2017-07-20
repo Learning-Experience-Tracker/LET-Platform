@@ -25,12 +25,10 @@ sequelize.init(function (db) {
             fillMaps(callback);
         },
         function (callback) {
-            //aggregateResource(callback);
-            callback();
+            aggregateResource(callback);
         },
         function (callback) {
             aggregateCourse(callback);
-            //callback();
         },
         function (callback){
             aggregateUser(callback);

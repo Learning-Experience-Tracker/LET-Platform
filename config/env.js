@@ -27,5 +27,10 @@ module.exports = {
         password: 'admin',
         role: 'admin'
     },
-    jwtSecret: 'batman'
+    jwtSecret: 'batman',
+    LRS:{
+        endpoint : 'http://localhost:8081/learninglocker/public/data/xAPI/',
+        username : 'd957d2a2d007ebb0528051f90992c9a1cf32c3f9',
+        password : '21b1af92cf37672c5d4f116fd9757c8166df8a7c'
+    }
 }

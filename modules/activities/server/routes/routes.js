@@ -1,6 +1,7 @@
 var passport = require('./../../../../config/passport'),
     activitiesCtr = require('./../controllers/ActivitiesController'),
-    acl = require('./../../../../config/acl');
+    acl = require('./../../../../config/acl'),
+    xapiCtr = require('./../controllers/XapiController');
 
 module.exports = function (app) {
 
@@ -38,7 +39,10 @@ module.exports = function (app) {
             }),
             acl.adminOnly,
             activitiesCtr.getVerbs);
-    
+
     app.route('/api/activity/create')
         .post(activitiesCtr.create);
+
+    app.route('/api/xapi/statements')
+        .post(xapiCtr.statements);
 }

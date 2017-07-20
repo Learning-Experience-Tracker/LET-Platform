@@ -333,7 +333,7 @@ sequelize.init(function (db) {
                     user.name = item[0];
                     user.username = item[0];
                     user.password = item[0];
-                    user.email = item[0] + '@open-university.edu';
+                    user.email = 'mailto:' + item[0] + '@open-university.edu';
                     user.gender = item[1] == 'M' ? 'Male' : 'Female';
                     user.region = item[2];
                     user.highest_education = item[3];
