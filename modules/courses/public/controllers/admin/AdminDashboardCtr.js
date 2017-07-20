@@ -63,7 +63,7 @@
                 endDate: endDate
             }).then(function (response) {
 
-                drawResourcesWeeklyChart(response.data.clickedstatements);
+
 
                 drawStudentsViewsHistoram(response.data.studensViewsHistogram);
 
@@ -72,6 +72,10 @@
                 vm.top10AccessedResrouce = response.data.topTenAccessedResource;
 
                 vm.topTenActiveStudents = response.data.topTenActiveStudents;
+
+                drawResourcesWeeklyChart(response.data.clickedstatements);
+
+                dc.renderAll();
             }).catch(function (err) {
                 console.log(err);
                 ngToast.create({
@@ -91,6 +95,12 @@
                 statement.timestamp.setSeconds(0);
                 statement.timestamp.setMilliseconds(0);
             });
+
+            for (var i = clickedstatements.length - 1; i >= 0; i--) {
+                if (clickedstatements[i].Resource.type == 'glossary') {
+                    clickedstatements.splice(i, 1);
+                }
+            }
 
             var minDate = d3.min(clickedstatements, function (x) {
                     return x.timestamp;
@@ -122,7 +132,7 @@
 
             resourcesWeeklyChart
                 .dimension(dateDim)
-                .group(grouping, typesOfGroupedResources[3], sel_stack(typesOfGroupedResources[3]))
+                .group(grouping, typesOfGroupedResources[0], sel_stack(typesOfGroupedResources[0]))
                 .width(function (element) {
                     var width = element && element.getBoundingClientRect && element.getBoundingClientRect().width;
                     return (width && width > resourcesWeeklyChart.minWidth()) ? width : resourcesWeeklyChart.minWidth();
@@ -131,11 +141,10 @@
                 .xUnits(d3.time.days)
                 .renderArea(true)
                 .renderDataPoints(true)
-                .renderArea(true)
                 .brushOn(false)
                 .legend(dc.legend().x(resourcesWeeklyChart.minWidth()).y(380).gap(5).horizontal(1).autoItemWidth(1))
                 .hidableStacks(true)
-                .clipPadding(10)
+                .elasticY(true)
                 .margins({
                     left: 40,
                     top: 20,
@@ -143,9 +152,12 @@
                     bottom: 50
                 }).yAxisLabel('Daily Resources Click');
 
-            resourcesWeeklyChart.stack(grouping, typesOfGroupedResources[2], sel_stack(typesOfGroupedResources[2]));
-            resourcesWeeklyChart.stack(grouping, typesOfGroupedResources[1], sel_stack(typesOfGroupedResources[1]));
-            resourcesWeeklyChart.stack(grouping, typesOfGroupedResources[0], sel_stack(typesOfGroupedResources[0]));
+
+            typesOfGroupedResources.shift();
+
+            typesOfGroupedResources.forEach(function (type) {
+                resourcesWeeklyChart.stack(grouping, type, sel_stack(type));
+            });
 
 
             function sel_stack(i) {
@@ -153,8 +165,6 @@
                     return d.value[i];
                 };
             }
-
-            dc.renderAll();
         }
 
         function drawStudentsViewsHistoram(data) {
@@ -208,7 +218,6 @@
                 })
 
             studentsViewsHistoram.margins().right = 20;
-            dc.renderAll();
         }
 
 
@@ -232,9 +241,12 @@
                 });
 
 
-            minDate =  moment(minDate).subtract(1,'week').toDate();
+            minDate = moment(minDate).subtract(1, 'week').toDate();
 
-            statements.push({sum_activities:0,timestamp:minDate}); // to begin from zero
+            statements.push({
+                sum_activities: 0,
+                timestamp: minDate
+            }); // to begin from zero
 
             var ndx = crossfilter(statements);
 
@@ -251,13 +263,13 @@
             courseOverAllChart
                 .dimension(dateDim)
                 .group(grouping)
-                .width(function(element){
+                .width(function (element) {
                     var width = element && element.getBoundingClientRect && element.getBoundingClientRect().width;
                     return (width && width > courseOverAllChart.minWidth()) ? width : courseOverAllChart.minWidth();
-                }).title(function(d){
-                    return (d.key.getMonth() + 1) + '/' + d.key.getDate() + '/' +  d.key.getFullYear() + " " + d.value + " Clicks";
+                }).title(function (d) {
+                    return (d.key.getMonth() + 1) + '/' + d.key.getDate() + '/' + d.key.getFullYear() + " " + d.value + " Clicks";
                 })
-                .x(d3.time.scale().domain([minDate,maxDate]))
+                .x(d3.time.scale().domain([minDate, maxDate]))
                 .mouseZoomable(true)
                 .renderHorizontalGridLines(true)
                 .renderVerticalGridLines(true)
@@ -266,12 +278,15 @@
                 .yAxisLabel('Number of Activities')
                 .elasticY(true)
                 .interpolate('linear')
-                .margins({left: 70, top: 20, right: 20, bottom: 50})
-           
+                .margins({
+                    left: 70,
+                    top: 20,
+                    right: 20,
+                    bottom: 50
+                })
+
 
             vm.courseOverAllChart = courseOverAllChart;
-
-            dc.renderAll();
         }
     }
 })()
