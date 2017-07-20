@@ -1,1 +1,1 @@
-# LET-Platform
+# LET-Platform [![Build Status](https://travis-ci.org/Learning-Experience-Tracker/LET-Platform.svg?branch=master)](https://travis-ci.org/Learning-Experience-Tracker/LET-Platform)
