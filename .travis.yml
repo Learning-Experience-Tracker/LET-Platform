@@ -5,6 +5,3 @@ node_js:
 # database service
 services:
   - mysql
-
-
-script : node data/multiSourceDEmo/genrateData.js
