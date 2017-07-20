@@ -10,8 +10,7 @@
     "importMS": "node data/multiSourceDEmo/genrateData.js",
     "importOU": "node data/OUData/ImportOU.js",
     "export": "node data/OUData/ExportOUForMining.js",
-    "aggregate": "node data/aggregate.js",
-    "test": "./node_modules/jshint/bin/jshint helloTravis.js"
+    "aggregate": "node data/aggregate.js"
   },
   "author": "",
   "license": "ISC",
@@ -51,7 +50,6 @@
   "devDependencies": {
     "chai": "^4.1.0",
     "chai-http": "^3.0.0",
-    "jshint": "^2.9.5",
     "mocha": "^3.4.2"
   }
 }
