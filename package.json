@@ -11,7 +11,7 @@
     "importOU": "node data/OUData/ImportOU.js",
     "export": "node data/OUData/ExportOUForMining.js",
     "aggregate": "node data/aggregate.js",
-    "test": "SET NODE_ENV=test&& mocha"
+    "test": "mocha"
   },
   "author": "",
   "license": "ISC",

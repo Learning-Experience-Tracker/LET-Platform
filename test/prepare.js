@@ -1,3 +1,5 @@
+process.env.NODE_ENV = 'test';
+
 var prepare = require('mocha-prepare'),
     sequelize = require('../config/sequelize'),
     bootstrap = require('../config/bootstrap'),
