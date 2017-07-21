@@ -1,5 +1,14 @@
 'use strict';
-angular.module('letApp', ['ui.router', 'ngStorage', 'ngToast', 'angular-loading-bar', 'bw.paging', 'angularMoment', 'rzModule']);
+angular.module('letApp', [
+    'ui.router',
+    'ngStorage',
+    'ngToast',
+    'angular-loading-bar',
+    'bw.paging',
+    'angularMoment',
+    'rzModule',
+    'ngFileUpload'
+]);
 
 (function () {
 

@@ -1,0 +1,39 @@
+<div class="container">
+  <div class="jumbotron bg-transparent text-center margin-none">
+    <h1>Import</h1>
+    <p>Import course elements data</p>
+  </div>
+
+  <div class="page-section">
+    <div class="row">
+      <div class="col-md-10 col-lg-8 col-md-offset-1 col-lg-offset-2">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <form>
+              <div class="row form-group required" style="margin-bottom:11px;">
+                <label class="col-sm-3 control-label">Data Types</label>
+                <div class="col-sm-9">
+                  <select id="type_select" class="form-control" ng-model="importCtr.type">
+                    <option value="students">Students</option>
+                    <option value="resources">Resource</option>
+                    <option value="assessments">Assessments</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="row form-group required" style="margin-bottom:11px;">
+                <label class="col-sm-3 control-label">File</label>
+                <div class="col-sm-9">
+                  <input type="file" class="form-control" ngf-select ng-model="importCtr.file" name="file" id="file">
+                </div>
+              </div>
+              <div class="row" style="text-align:center;">
+                <button class="btn btn-primary" ng-click="importCtr.submit()">Submit</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

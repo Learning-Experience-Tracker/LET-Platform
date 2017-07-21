@@ -1,8 +1,9 @@
 var passport = require('./../../../../config/passport'),
 	courseCtr = require('./../controllers/CourseCtr'),
 	courseDashboardCtr = require('./../controllers/CourseDashboardCtr'),
-	courseElementsCtr = require('./../controllers/CourseElementsCtr')
-acl = require('./../../../../config/acl');
+	courseElementsCtr = require('./../controllers/CourseElementsCtr'),
+	importCtr = require('./../controllers/ImportCtr'),
+	acl = require('./../../../../config/acl');
 
 module.exports = function (app) {
 
@@ -61,6 +62,14 @@ module.exports = function (app) {
 			}),
 			acl.studentOnly,
 			courseCtr.enroll);
+
+	// Import Routes
+	app.route('/api/admin/course/:id/import')
+		.post(passport.authenticate('jwt', {
+				session: false
+			}),
+			acl.adminOnly,
+			importCtr.import);
 
 	// Dashboards Routes
 
