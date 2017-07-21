@@ -230,7 +230,7 @@ sequelize.init(function (db) {
                     res.CourseId = courseDBObject.id;
                     res.id_IRI = "http://open-university.edu/" + courseName.toLowerCase() + "/resources/" + item[0];
                     res.type = item[3];
-
+                    res.platform = "Moodle";
                     resources.push(res);
                 });
 
@@ -511,7 +511,7 @@ sequelize.init(function (db) {
                     var attemptedActivity = {
                         timestamp: date.addDays(item[2]),
                         stored: date.addDays(item[2]),
-                        platform: "Moodle LMS",
+                        platform: "Moodle",
                         UserId: actorDBObject.id,
                         VerbId: verbsMap['https://w3id.org/xapi/adl/verbs/attempted'].id,
                         has_result: false,
@@ -522,7 +522,7 @@ sequelize.init(function (db) {
                     var completedActivity = {
                         timestamp: date.addDays(item[2]),
                         stored: date.addDays(item[2]),
-                        platform: "Moodle LMS",
+                        platform: "Moodle",
                         UserId: actorDBObject.id,
                         VerbId: verbsMap['https://w3id.org/xapi/adl/verbs/completed'].id,
                         has_result: true,
@@ -599,7 +599,7 @@ sequelize.init(function (db) {
                     var launchedActivity = {
                         timestamp: date.addDays(item[4]),
                         stored: date.addDays(item[4]),
-                        platform: "Moodle LMS",
+                        platform: "Moodle",
                         UserId: actorDBObject.id,
                         VerbId: verbsMap['https://w3id.org/xapi/adl/verbs/launched'].id,
                         has_result: false,
@@ -660,7 +660,7 @@ sequelize.init(function (db) {
                         var clickedActivity = {
                             timestamp: date.addDays(item[4]),
                             stored: date.addDays(item[4]),
-                            platform: "Moodle LMS",
+                            platform: "Moodle",
                             UserId: actorDBObject.id,
                             VerbId: verbsMap['https://w3id.org/xapi/let/verbs/clicked'].id,
                             has_result: false,

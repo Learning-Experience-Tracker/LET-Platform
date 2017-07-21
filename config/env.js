@@ -5,7 +5,7 @@ module.exports = {
     rootPath: rootPath,
     port: process.env.PORT || 3000,
     db: {
-        name: process.env.NODE_ENV == 'test' ? 'testDB' : 'let',
+        name: process.env.NODE_ENV == 'test' ? 'testDB' : 'let2',
         username: 'root',
         password: '',
         host: 'localhost',

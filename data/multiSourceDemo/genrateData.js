@@ -109,7 +109,7 @@ sequelize.init(function (db) {
     function addCourse(callback) {
         db.Course.find({
                 where: {
-                    name: 'How to Make French Toast'
+                    name: 'Cooking Course'
                 }
             })
             .then(function (existCourse) {
@@ -117,10 +117,10 @@ sequelize.init(function (db) {
                     winston.info('No Course found, creating...');
 
                     course = db.Course.build({
-                        name: 'How to Make French Toast',
+                        name: 'Cooking Course',
                         startDate: new Date(),
                         OrganizationId: oranization.id,
-                        id_IRI: "http://adlnet.gov/samples/course/api-jqm/"
+                        id_IRI: "http://localhost/course/view.php?id=2/"
                     });
 
                     course.save().then(function (newItem) {
@@ -253,55 +253,66 @@ sequelize.init(function (db) {
                 id_IRI: courseObject.dataValues.id_IRI + "toc",
                 type: "homepage",
                 name: "How to Make French Toast Homepage",
+                platform : "Website",
                 CourseId: course.id
             }, {
                 id_IRI: courseObject.dataValues.id_IRI + "01-intro",
                 type: "content",
                 name: " Introduction 01",
+                platform : "Website",
                 CourseId: course.id
             }, {
                 id_IRI: courseObject.dataValues.id_IRI + "02-ingredients",
                 type: "content",
                 name: "Ingredients 02",
+                platform : "Website",
                 CourseId: course.id
             }, {
                 id_IRI: courseObject.dataValues.id_IRI + "03-steps",
                 type: "content",
                 name: "Steps 03",
+                platform : "Website",
                 CourseId: course.id
             },
             {
-                id_IRI: +courseObject.dataValues.id_IRI + "04-video",
+                id_IRI: courseObject.dataValues.id_IRI + "04-video",
                 type: "content",
                 name: "Video 04",
+                platform : "Website",
                 CourseId: course.id
             }, {
                 id_IRI: courseObject.dataValues.id_IRI + "glossary",
                 type: "glossary",
                 name: "Course Glossary",
+                platform : "Website",
                 CourseId: course.id
             },
             {
                 id_IRI: courseObject.dataValues.id_IRI + "help",
                 type: "wiki",
                 name: "Wiki Help",
-                CourseId: course.id
-            }, {
-                id_IRI: courseObject.dataValues.id_IRI + "healthy-food",
-                type: "content",
-                name: "Healthy Food",
+                platform : "Website",
                 CourseId: course.id
             },
             {
-                id_IRI: courseObject.dataValues.id_IRI + "drinks",
-                type: "content",
-                name: "Drinks",
+                id_IRI: 'http://localhost/mod/page/view.php?id=38',
+                type: "wiki",
+                name: "Welcome!",
+                platform : "Moodle",
                 CourseId: course.id
             },
             {
-                id_IRI: courseObject.dataValues.id_IRI + "meat-chicken",
+                id_IRI: 'http://localhost/mod/page/view.php?id=40',
                 type: "content",
-                name: "Meats & Chicken",
+                name: "Apple Pie",
+                platform : "Moodle",
+                CourseId: course.id
+            },
+            {
+                id_IRI: 'http://localhost/mod/page/view.php?id=41',
+                type: "content",
+                name: "Baked custard",
+                platform : "Moodle",
                 CourseId: course.id
             }
         ];
@@ -318,7 +329,7 @@ sequelize.init(function (db) {
     function addAsessments(callback) {
         var assessment = {
             name: "Quiz",
-            id_IRI: "http://adlnet.gov/samples/course/api-jqm/05-quiz",
+            id_IRI: +courseObject.dataValues.id_IRI + "05-quiz",
             CourseId: courseObject.dataValues.id
         };
 
@@ -330,18 +341,18 @@ sequelize.init(function (db) {
 
             var questions = [{
                     name: "Question 1",
-                    id_IRI: "http://adlnet.gov/samples/course/api-jqm/#q1",
+                    id_IRI: newItem.id_IRI + "/q1",
                     AssessmentId: newItem.id
                 },
                 {
                     name: "Question 2",
-                    id_IRI: "http://adlnet.gov/samples/course/api-jqm/#q2",
+                    id_IRI: newItem.id_IRI + "/q2",
                     AssessmentId: newItem.id
 
                 },
                 {
                     name: "Question 3",
-                    id_IRI: "http://adlnet.gov/samples/course/api-jqm/#q3",
+                    id_IRI: newItem.id_IRI + "/q3",
                     AssessmentId: newItem.id
                 }
             ];

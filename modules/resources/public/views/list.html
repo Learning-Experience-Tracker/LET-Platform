@@ -16,24 +16,26 @@
   <div class="container">
     <div class="page-section">
       <div class="row">
-        <div class="col-md-9">
+        <div class="col-md-12">
 
           <div class="panel panel-default">
             <!-- Data table -->
             <table data-toggle="data-table" class="table" cellspacing="0" width="100%">
               <thead>
                 <tr>
-                  <th>Id</th>
-                  <th>Name</th>
-                  <th>Type</th>
-                  <th></th>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Id IRI</th>
+                    <th>Platform</th>
+                    <th>Options</th>
                 </tr>
               </thead>
               <tbody>
                 <tr ng-repeat="resource in resourceCtr.resourceList">
-                  <td>{{resource.id}}</td>
-                  <td>{{resource.name}}</td>
-                  <td>{{resource.type}}</td>
+                    <td>{{resource.name}}</td>
+                    <td>{{resource.type}}</td>                    
+                    <td>{{resource.id_IRI}}</td>
+                    <td>{{resource.platform}}</td>  
                   <td>
                     <button class="btn btn-info" ng-click="resourceCtr.viewDashboard(resource.id)" style="height: 24px;padding: 2px;padding-right: 5px;padding-left: 5px;">
                           dashbaord

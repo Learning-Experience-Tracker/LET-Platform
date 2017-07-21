@@ -10,6 +10,7 @@ module.exports.create = function (req, res) {
         id_IRI: req.body.id_IRI,
         name: req.body.name,
         type: req.body.type,
+        platform : req.body.platform,
         CourseId: req.body.courseId,
     });
 

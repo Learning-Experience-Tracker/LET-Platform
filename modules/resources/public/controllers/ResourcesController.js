@@ -63,7 +63,8 @@
                 name : vm.name,
                 id_IRI : vm.id_IRI,
                 courseId : vm.courseId,
-                type : vm.type
+                type : vm.type,
+                platform : vm.platform
             };
            
            ResourcesService.create(resource).then(function(){

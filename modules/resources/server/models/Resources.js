@@ -9,7 +9,8 @@ module.exports = function (sequelize, DataTypes) {
 		{
 			id_IRI : {type : DataTypes.STRING , unique : true},
 			name: DataTypes.STRING,
-			type : DataTypes.ENUM('video', 'content','quiz','homepage','glossary','forum','url','wiki')
+			type : DataTypes.ENUM('video', 'content','quiz','homepage','glossary','forum','url','wiki'),
+			platform : DataTypes.STRING
 		},
 		{
 			associate: function (models) {
