@@ -9,7 +9,8 @@ module.exports.create = function (req, res) {
         UserId: req.user.id
     });
 
-    org.save().then(function () {
+    org.save().then(function (newItem) {
+            res.json(newItem.id);
             res.end();
         })
         .catch(function (err) {

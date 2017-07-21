@@ -19,7 +19,6 @@ module.exports.login = function(req, res){
 }
 
 module.exports.register = function(req, res){
-    console.log(req.body);
     var user = db.User.build({
         name : req.body.name,
         username : req.body.username,
@@ -29,7 +28,6 @@ module.exports.register = function(req, res){
     });
 
     user.save().then(function(user){
-        console.log(user);
         var payload = { id : user.id };
         var token = jwt.sign(payload, config.jwtSecret);
 
