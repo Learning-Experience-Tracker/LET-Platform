@@ -2,9 +2,12 @@ var sequelize = require('../../config/sequelize'),
     winston = require('../../config/winston'),
     adminConfigs = require('../../config/env').adminConfigs,
     fs = require('fs'),
-    async = require('async');
+    async = require('async'),
+    parse = require('csv-parse');
 
 sequelize.init(function (db) {
+
+    var datasetFolderPath = 'data/multiSourceDemo/'
 
     var admin = {};
     var oranization = {};
@@ -36,6 +39,9 @@ sequelize.init(function (db) {
         },
         function (callback) {
             addAsessments(callback);
+        },
+        function (callback) {
+            addQuestions(callback);
         }
     ], function (err) {
         winston.info('All objects are addeded');
@@ -143,48 +149,40 @@ sequelize.init(function (db) {
     }
 
     function addUsers(callback) {
+        fs.readFile(datasetFolderPath + 'students.csv', 'utf8', function (err, data) {
+            parse(data, {}, function (err, output) {
+                
+                output.shift(); // remove first row (headers)
 
-        var users = [{
-            name: "Mohammed Ghanem",
-            username: "MG",
-            password: "MG",
-            email: "mailto:ghanem-mhd@adlnet.gov",
-            role: "student"
-        }, {
-            name: "Aalaa alhamwi",
-            username: "AA",
-            password: "AA",
-            email: "mailto:aalaa.alhamwi@adlnet.gov",
-            role: "student"
-        }, {
-            name: "Bassel shemali",
-            username: "BS",
-            password: "BS",
-            email: "mailto:bass3l@adlnet.gov",
-            role: "student"
-        }, {
-            name: "Hania Almalki",
-            username: "HA",
-            password: "HA",
-            email: "mailto:haniah-mk@adlnet.gov",
-            role: "student"
-        }];
+                var users = [];
 
-        async.each(users, function (user, callback) {
-            var userObject = db.User.build(user);
-            userObject.save().then(function () {
-                winston.info('User Created');
-                userObject.addEnroll(courseObject, {
-                    enroll_date: Date.now(),
-                    enroll_times: 1
-                }).then(function () {
-                    callback();
+                output.forEach(function (item) {
+                    var user = {};
+                    user.name = item[0];
+                    user.username = item[1];
+                    user.password = item[2];
+                    user.email = item[3];
+                    user.role = 'student';
+                    users.push(user);
+                });
 
+                async.each(users, function (user, callback) {
+                    var userObject = db.User.build(user);
+                    userObject.save().then(function () {
+                        winston.info('User Created');
+                        userObject.addEnroll(courseObject, {
+                            enroll_date: Date.now(),
+                            enroll_times: 1
+                        }).then(function () {
+                            callback();
+
+                        });
+                    });
+                }, function () {
+                    winston.info('All users added...');
+                    callback(null);
                 });
             });
-        }, function () {
-            winston.info('All users added...');
-            callback(null);
         });
     }
 
@@ -249,117 +247,93 @@ sequelize.init(function (db) {
     }
 
     function addResources(callback) {
-        var resources = [{
-                id_IRI: courseObject.dataValues.id_IRI + "toc",
-                type: "homepage",
-                name: "How to Make French Toast Homepage",
-                platform : "Website",
-                CourseId: course.id
-            }, {
-                id_IRI: courseObject.dataValues.id_IRI + "01-intro",
-                type: "content",
-                name: " Introduction 01",
-                platform : "Website",
-                CourseId: course.id
-            }, {
-                id_IRI: courseObject.dataValues.id_IRI + "02-ingredients",
-                type: "content",
-                name: "Ingredients 02",
-                platform : "Website",
-                CourseId: course.id
-            }, {
-                id_IRI: courseObject.dataValues.id_IRI + "03-steps",
-                type: "content",
-                name: "Steps 03",
-                platform : "Website",
-                CourseId: course.id
-            },
-            {
-                id_IRI: courseObject.dataValues.id_IRI + "04-video",
-                type: "content",
-                name: "Video 04",
-                platform : "Website",
-                CourseId: course.id
-            }, {
-                id_IRI: courseObject.dataValues.id_IRI + "glossary",
-                type: "glossary",
-                name: "Course Glossary",
-                platform : "Website",
-                CourseId: course.id
-            },
-            {
-                id_IRI: courseObject.dataValues.id_IRI + "help",
-                type: "wiki",
-                name: "Wiki Help",
-                platform : "Website",
-                CourseId: course.id
-            },
-            {
-                id_IRI: 'http://localhost/mod/page/view.php?id=38',
-                type: "wiki",
-                name: "Welcome!",
-                platform : "Moodle",
-                CourseId: course.id
-            },
-            {
-                id_IRI: 'http://localhost/mod/page/view.php?id=40',
-                type: "content",
-                name: "Apple Pie",
-                platform : "Moodle",
-                CourseId: course.id
-            },
-            {
-                id_IRI: 'http://localhost/mod/page/view.php?id=41',
-                type: "content",
-                name: "Baked custard",
-                platform : "Moodle",
-                CourseId: course.id
-            }
-        ];
+        fs.readFile(datasetFolderPath + 'resources.csv', 'utf8', function (err, data) {
+            parse(data, {}, function (err, output) {
+                output.shift(); // remove first row (headers)
 
+                var resources = [];
 
-        db.Resource.bulkCreate(resources).then(function () {
-            winston.info("resources added");
-            callback();
-        }).catch(function (error) {
-            winston.error(error);
+                output.forEach(function (item) {
+                    var resource = {};
+                    resource.id_IRI = item[0];
+                    resource.type = item[1];
+                    resource.name = item[2];
+                    resource.platform = item[3];
+                    resource.CourseId = courseObject.dataValues.id;
+                    resources.push(resource);
+                });
+
+                db.Resource.bulkCreate(resources, {
+                    updateOnDuplicate: ['name']
+                }).then(function () {
+                    winston.info("resources added");
+                    callback();
+                }).catch(function (error) {
+                    winston.error(error);
+                });
+            });
         });
     }
 
     function addAsessments(callback) {
-        var assessment = {
-            name: "Quiz",
-            id_IRI: +courseObject.dataValues.id_IRI + "05-quiz",
-            CourseId: courseObject.dataValues.id
-        };
+        fs.readFile(datasetFolderPath + 'assessments.csv', 'utf8', function (err, data) {
+            parse(data, {}, function (err, output) {
+                output.shift(); // remove first row (headers)
 
+                var assessments = [];
 
-        assessment = db.Assessment.build(assessment);
+                output.forEach(function (item) {
+                    var assessment = {};
+                    assessment.id_IRI = item[0];
+                    assessment.name = item[1];
+                    assessment.CourseId = courseObject.dataValues.id;
+                    assessments.push(assessment);
+                });
 
-        assessment.save().then(function (newItem) {
-            winston.info('Assessment created.');
+                db.Assessment.bulkCreate(assessments, {
+                    updateOnDuplicate: ['name']
+                }).then(function () {
+                    winston.info("assessments added");
+                    callback();
+                }).catch(function (error) {
+                    winston.error(error);
+                });
+            });
+        });
+    }
 
-            var questions = [{
-                    name: "Question 1",
-                    id_IRI: newItem.id_IRI + "/q1",
-                    AssessmentId: newItem.id
-                },
-                {
-                    name: "Question 2",
-                    id_IRI: newItem.id_IRI + "/q2",
-                    AssessmentId: newItem.id
+    function addQuestions(callback) {
+        fs.readFile(datasetFolderPath + 'questions.csv', 'utf8', function (err, data) {
+            parse(data, {}, function (err, output) {
+                output.shift(); // remove first row (headers)
 
-                },
-                {
-                    name: "Question 3",
-                    id_IRI: newItem.id_IRI + "/q3",
-                    AssessmentId: newItem.id
-                }
-            ];
+                var questions = [];
 
-            db.Question.bulkCreate(questions).then(function () {
-                winston.info("questions added");
-                callback();
+                async.eachSeries(output, (item, callback) => {
+
+                    var question = {};
+                    question.id_IRI = item[0];
+                    question.name = item[1];
+                    db.Assessment.findOne({
+                        where: {
+                            id_IRI: item[2]
+                        }
+                    }).then(assessment => {
+                        question.AssessmentId = assessment.id;
+                        questions.push(question);
+                        callback(null);
+                    });
+
+                }, (err => {
+                    db.Question.bulkCreate(questions, {
+                        updateOnDuplicate: ['name']
+                    }).then(function () {
+                        winston.info("questions added");
+                        callback();
+                    }).catch(function (error) {
+                        winston.error(error);
+                    });
+                }));
             });
         });
     }

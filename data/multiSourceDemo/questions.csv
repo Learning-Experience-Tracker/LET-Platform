@@ -1,0 +1,4 @@
+id_IRI,name,assesment_id_IRI
+http://localhost/course/view.php?id=2/05-quiz/q1,Question 1,http://localhost/course/view.php?id=2/05-quiz
+http://localhost/course/view.php?id=2/05-quiz/q2,Question 2,http://localhost/course/view.php?id=2/05-quiz
+http://localhost/course/view.php?id=2/05-quiz/q3,Question 3,http://localhost/course/view.php?id=2/05-quiz
