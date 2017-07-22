@@ -1,10 +1,13 @@
 module.exports = function (sequelize, DataTypes) {
 
     var MiningStatement = sequelize.define('MiningStatement', {
+        final_result : DataTypes.STRING,
         homepage: DataTypes.INTEGER,
         content: DataTypes.INTEGER,
         url: DataTypes.INTEGER,
-        forum: DataTypes.INTEGER
+        forum: DataTypes.INTEGER,
+        willSubmit : DataTypes.BOOLEAN,
+        score : DataTypes.INTEGER
     }, {
         timestamps: false,
         associate: function (models) {

@@ -10,8 +10,9 @@
     "importMS": "node data/multiSourceDEmo/genrateData.js",
     "importOU": "node data/OUData/ImportOU.js",
     "export": "node data/OUData/ExportOUForMining.js",
-    "importMining": "node data/OUData/ImportOUForMining.js",    
+    "importMining": "node data/OUData/ImportOUForMining.js",
     "aggregate": "node data/aggregate.js",
+    "predict": "node data/predictor.js",
     "test": "mocha"
   },
   "author": "",
