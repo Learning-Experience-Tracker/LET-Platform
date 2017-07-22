@@ -4,8 +4,10 @@ var sequelize = require('../../config/sequelize'),
     fs = require('fs'),
     async = require('async'),
     parse = require('csv-parse'),
-    moment = require('moment')
-json2csv = require('json2csv');
+    moment = require('moment'),
+    json2csv = require('json2csv'),
+    _ = require('lodash');
+
 
 
 Date.prototype.addDays = function (days) {
@@ -16,14 +18,18 @@ Date.prototype.addDays = function (days) {
 
 sequelize.init(function (db) {
 
-    var datasetFolderPath = 'data/OUData/AAA2014J/';
+    var datasetFolderPath = 'data/OUData/AAA2013J/';
 
+    var weeks = new Set();
     var coursesMap = new Map();
     var resourcesMap = new Map();
-    var assessmentMap = new Map();
     var usersMap = new Map();
+    var dateMap = new Map();
 
     async.series([
+        function (callback) {
+            seedDateTable(callback);
+        },
         function (callback) {
             addCourse(callback);
         },
@@ -31,83 +37,61 @@ sequelize.init(function (db) {
             addResources(callback);
         },
         function (callback) {
-            addAssessments(callback);
-        },
-        function (callback) {
             addUsers(callback);
         },
         function (callback) {
             addRegistered(callback);
-            //callback();
         },
         function (callback) {
             addResourcesClickedActivites(callback);
-        },
-        function (callback) {
-            // addAssActivites(callback);
-            callback();
         }
     ], function (err) {
         if (err)
             throw err;
 
-        var users = [];
-        
-        Object.keys(usersMap).forEach(function (key) {
+        var rows = [];
+
+
+        Object.keys(usersMap).forEach(key => {
+
             var user = usersMap[key];
-            Object.keys(user.weeklyActivites).forEach(function (key) { // each week i need to create new user with week activities
-                var weekActivities = user.weeklyActivites[key];
 
-                var newUser = {
-                    id: user.username,
-                    gender: user.gender,
-                    region: user.region,
-                    age_band : user.age_band,
-                    disability: user.disability,
-                    course: user.course,
-                    final_result: user.final_result
-                };
+            var row = {
+                UserId: usersMap[user.username].id,
+                CourseId: coursesMap[user.course].id,
+                homepage: 0,
+                content: 0,
+                url: 0,
+                forum: 0
+            };
 
-                newUser.weekNo = key;
+            _.sortBy(Array.from(weeks)).forEach(week => {
 
-                newUser.homepage = weekActivities.homepage;
-                newUser.content = weekActivities.content;
-                newUser.url = weekActivities.url;
-                newUser.glossary = weekActivities.glossary;
-                newUser.wiki = weekActivities.wiki;
-                newUser.quiz = weekActivities.quiz;
-                newUser.forum = weekActivities.forum;
+                var weekActivities = user.weeklyActivites[week];
 
-                users.push(newUser);
+                row.DateId = dateMap[moment(coursesMap[user.course].startDate).add(week, 'weeks').format('MM/DD/YYYY')].id
+
+                if (weekActivities) {
+                    row.homepage += parseInt(weekActivities.homepage);
+                    row.content += parseInt(weekActivities.content);
+                    row.url += parseInt(weekActivities.url);
+                    row.forum += parseInt(weekActivities.forum);
+                }
+                rows.push(JSON.parse(JSON.stringify(row)));
             });
         });
 
-        var fields = [
-            'id',
-            'gender',
-            'region',
-            'highest_education',
-            'age_band',
-            'disability',
-            'course',
-            'final_result',
-            'weekNo',
-            'homepage',
-            'content',
-            'url',
-            'quiz',
-            'glossary',
-            'forum',
-            'wiki'
-        ];
 
-        var csv = json2csv({
-            data: users,
-            fields: fields
-        });
-        fs.writeFile(datasetFolderPath+'MiningFile.csv', csv, function (err) {
-            if (err) throw err;
-            console.log('Mining File saved');
+        var inserter = async.cargo(function (rows, inserterCallback) {
+                db.MiningStatement.bulkCreate(rows).then(function () {
+                    winston.info('Batch of mining clicks activities created... ' + new Date().getUTCMilliseconds());
+                    inserterCallback();
+                });
+            },
+            5000);
+
+        rows.forEach(item => {
+            inserter.push(item);
         });
     });
 
@@ -138,24 +122,30 @@ sequelize.init(function (db) {
 
                     switch (date) {
                         case "2013J":
-                            courseObject.startDate = new Date(2013, 9, 2);
+                            courseObject.startDate = new Date(2013, 9, 1, 3);
                             break;
                         case "2013B":
-                            courseObject.startDate = new Date(2013, 1, 2);
+                            courseObject.startDate = new Date(2013, 1, 1, 3);
                             break;
                         case "2014J":
-                            courseObject.startDate = new Date(2014, 9, 2);
+                            courseObject.startDate = new Date(2014, 9, 2, 3);
                             break;
                         case "2014B":
-                            courseObject.startDate = new Date(2014, 1, 2);
+                            courseObject.startDate = new Date(2014, 1, 1, 3);
                             break;
                     }
                     var date = new Date(courseObject.startDate);
                     courseObject.endDate = date.addDays(length);
                     coursesMap[courseObject.name] = courseObject;
                 });
-                winston.info('Done courses');
-                callback();
+
+                db.Course.findAll().then(courses => {
+                    courses.forEach(course => {
+                        coursesMap[course.name].id = course.id;
+                    });
+                    winston.info('Done courses');
+                    callback();
+                });
             });
         });
     }
@@ -187,45 +177,6 @@ sequelize.init(function (db) {
                 });
 
                 winston.info('Done Resource');
-                callback();
-            });
-        });
-    }
-
-    function addAssessments(callback) {
-        winston.info('Begin reading assessments file');
-        fs.readFile(datasetFolderPath + 'assessments.csv', 'utf8', function (err, data) {
-            if (err) {
-                winston.error(err);
-                return;
-            }
-            winston.info('Begin parsing assessments csv file');
-            parse(data, {}, function (err, output) {
-                if (err) {
-                    winston.error(err);
-                    return;
-                }
-
-                output.shift(); // remove first row (headers)
-
-                output.forEach(function (item) {
-                    var assessment = {};
-
-                    assessment.name = item[2];
-                    assessment.courseName = item[0] + item[1];
-                    assessment.id_IRI = "http://www.open-university.edu/" + assessment.courseName + "/assessment/" + item[2];
-                    assessment.type = item[3];
-                    assessment.weight = item[5];
-
-                    var days = parseInt(item[4]);
-                    if (!isNaN(days)) {
-                        var date = new Date(coursesMap[assessment.courseName].startDate);
-                        assessment.deadline = date.addDays(days);
-                    }
-                    assessmentMap[assessment.id_IRI] = assessment;
-                });
-
-                winston.info('Done Assessments');
                 callback();
             });
         });
@@ -265,8 +216,16 @@ sequelize.init(function (db) {
                     usersMap[user.username] = user;
                 });
 
-                winston.info('Done User');
-                callback();
+
+                db.User.findAll().then(users => {
+                    users.forEach(user => {
+                        if (usersMap[user.username]) {
+                            usersMap[user.username].id = user.id;
+                        }
+                    });
+                    winston.info('Done User');
+                    callback();
+                });
             });
         });
     }
@@ -325,38 +284,6 @@ sequelize.init(function (db) {
         });
     }
 
-    function addAssActivites(callback) {
-        winston.info('Begin reading ass activity file');
-        fs.readFile(datasetFolderPath + 'assActivity.csv', 'utf8', function (err, data) {
-            if (err) {
-                winston.error(err);
-                return;
-            }
-            winston.info('Begin parsing ass activity csv file');
-            parse(data, {}, function (err, output) {
-                if (err) {
-                    winston.error(err);
-                    return;
-                }
-
-                output.shift(); // remove first row (headers)
-
-                output.forEach(function (item) {
-                    var actorDBObject = usersMap[item[1]];
-                    var assessmentDBObject = assessmentMap[item[0]];
-
-                    var courseDBObject = coursesMap[item[4] + item[5]];
-
-                    var date = new Date(courseDBObject.startDate);
-                    var score = parseInt(item[3]);
-
-                });
-
-                winston.info('Done assessments');
-            });
-        });
-    }
-
     function addResourcesClickedActivites(callback) {
         winston.info('Begin reading res click activity file');
         fs.readFile(datasetFolderPath + 'studentVleClicked.csv', 'utf8', function (err, data) {
@@ -392,6 +319,9 @@ sequelize.init(function (db) {
 
                     var weekNumber = clickedMomentDate.diff(momentDate, 'weeks');
 
+
+                    weeks.add(parseInt(weekNumber));
+
                     if (!user.weeklyActivites[weekNumber]) {
                         user.weeklyActivites[weekNumber] = {
                             'homepage': 0,
@@ -409,6 +339,51 @@ sequelize.init(function (db) {
                 winston.info('Done Clicks');
                 callback();
             });
+        });
+    }
+
+
+
+    function seedDateTable(callback) {
+        db.Date.count({}).then(count => {
+            if (count == 0) {
+                var startDate = moment('2010-01-01');
+                var endDate = moment('2020-01-01');
+
+                var dates = [];
+                for (var m = startDate; m.isBefore(endDate); m.add(1, 'days')) {
+                    dates.push({
+                        date: m.toDate(),
+                        year: m.format('YYYY'),
+                        month: m.format('MM'),
+                        day_of_month: m.format('DD'),
+                        week_of_year: m.week(),
+                        day_of_week: m.format('dddd'),
+                        timestamp: m.unix()
+                    });
+                }
+
+                db.Date.bulkCreate(dates).then(function () {
+                    winston.info("Date Table filled");
+                    db.Date.findAll({
+                        raw: true
+                    }).then(dates => {
+                        dates.forEach(date => {
+                            dateMap[moment(date.date).format('MM/DD/YYYY')] = date;
+                        });
+                        callback();
+                    });
+                });
+            } else {
+                db.Date.findAll({
+                    raw: true
+                }).then(dates => {
+                    dates.forEach(date => {
+                        dateMap[moment(date.date).format('MM/DD/YYYY')] = date;
+                    });
+                    callback();
+                });
+            }
         });
     }
 });

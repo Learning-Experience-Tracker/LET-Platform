@@ -10,6 +10,7 @@
     "importMS": "node data/multiSourceDEmo/genrateData.js",
     "importOU": "node data/OUData/ImportOU.js",
     "export": "node data/OUData/ExportOUForMining.js",
+    "importMining": "node data/OUData/ImportOUForMining.js",    
     "aggregate": "node data/aggregate.js",
     "test": "mocha"
   },
@@ -27,6 +28,7 @@
     "json2csv": "^3.9.0",
     "jsonwebtoken": "^7.4.1",
     "lodash": "^4.17.4",
+    "machine_learning": "^0.1.1",
     "math": "0.0.3",
     "mathjs": "^3.14.1",
     "method-override": "^2.3.9",
