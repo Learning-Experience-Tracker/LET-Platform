@@ -1,6 +1,6 @@
 id_IRI,type,name,platform
 http://localhost/course/view.php?id=2/toc,homepage,How to Make French Toast Homepage,Website
-http://localhost/course/view.php?id=2/01-intro,content, Introduction 01,Website
+http://localhost/course/view.php?id=2/01-intro,content,Introduction 01,Website
 http://localhost/course/view.php?id=2/02-ingredients,content,Ingredients 02,Website
 http://localhost/course/view.php?id=2/03-steps,content,Steps 03,Website
 http://localhost/course/view.php?id=2/04-video,content,Video 04,Website

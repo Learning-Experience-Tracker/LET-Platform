@@ -19,7 +19,7 @@
       <div class="row">
         <div class="col-md-10">
 
-          <div class="panel panel-default">
+          <div ng-if="courseCtr.courseList.length && courseCtr.courseList.length != 0" class="panel panel-default">
             <!-- Data table -->
             <table data-toggle="data-table" class="table" cellspacing="0" width="100%">
               <thead>
@@ -35,7 +35,7 @@
                 <tr ng-repeat="course in courseCtr.courseList">
                   <td>{{course.name}}</td>
                   <td>{{course.Organization.name}}</td>
-                  <td>{{course.id_IRI}}</td>                                
+                  <td>{{course.id_IRI}}</td>
                   <td>{{course.startDate | amDateFormat:'MMMM DD, YYYY'}}</td>
                   <td>
                     <button class="btn btn-warning" ng-click="courseCtr.viewCourseDashboard(course.id)" style="height: 24px;padding: 2px;padding-right: 5px;padding-left: 5px;">
@@ -54,22 +54,10 @@
             <!-- // Data table -->
           </div>
 
-        </div>
 
-         <!--  <div class="col-md-2">
-          <div class="panel panel-default" data-toggle="panel-collapse" data-open="true">
-            <div class="panel-heading panel-collapse-trigger">
-              <h4 class="panel-title">My Account</h4>
-            </div>
-            <div class="panel-body list-group">
-              <ul class="list-group list-group-menu">
-                <li class="list-group-item"><a class="link-text-color" href="admin/dashboard">Dashboard</a></li>
-                <li class="list-group-item"><a class="link-text-color" href="admin/org/all">My Organizations</a></li>
-                <li class="list-group-item active"><a class="link-text-color" href="admin/courses/all">My Courses</a></li>
-              </ul>
-            </div>
-          </div>
-        </div> -->
+          <h1 ng-if="courseCtr.courseList.length == 0" class="text-headline margin-none">No courses.</h1>
+
+        </div>
       </div>
     </div>
   </div>
