@@ -2,7 +2,8 @@
 
 var db = require('./../../../../config/sequelize'),
     winston = require('./../../../../config/winston'),
-    async = require('async');
+    async = require('async'),
+    ml = require('machine_learning');
 
 
 module.exports.getStudentDashbaordDate = function (req, res) {
@@ -37,7 +38,7 @@ module.exports.getStudentDashbaordDate = function (req, res) {
             resourceStatements: function (callback) {
                 db.ResStatement
                     .findAll({
-                        attributes: ['id','Date.date', 'ResourceId'],
+                        attributes: ['id', 'Date.date', 'ResourceId'],
                         where: {
                             UserId: req.user.id
                         },
@@ -53,8 +54,8 @@ module.exports.getStudentDashbaordDate = function (req, res) {
                             model: db.Date,
                             attributes: ['date'],
                         }],
-                        nest : true,
-                        raw : true
+                        nest: true,
+                        raw: true
                     }).then(function (statements) {
                         callback(null, statements);
                     }).catch(function (err) {
@@ -216,6 +217,43 @@ module.exports.getAdminDashbaordDate = function (req, res) {
                 callback(null, statements);
             }).catch(function (err) {
                 callback(err, null);
+            });
+        },
+        clusterData: function (callback) {
+            db.MiningStatement.findAll({
+                include: [{
+                    model: db.Date,
+                    attributes: [],
+                    where: {
+                        date: {
+                            $gte: req.body.startDate,
+                            $lte: req.body.endDate
+                        }
+                    }
+                }],
+                raw: true
+            }).then(data => {
+
+                var input = [];
+                data.forEach(item => {
+                    input.push([parseInt(item.homepage), parseInt(item.content), parseInt(item.url), parseInt(item.forum)]);
+                });
+
+                var output = ml.kmeans.cluster({
+                    data: input,
+                    k: 5,
+                    epochs: 100
+                });
+
+                console.log(output);
+
+                for (var i = 0; i < output.clusters.length; i++) {
+                    var cluster = output.clusters[i];
+                    cluster.forEach( item => {
+                        data[item].cluster = i;
+                    });
+                }
+                callback(null, data);
             });
         }
     }, function (err, results) {

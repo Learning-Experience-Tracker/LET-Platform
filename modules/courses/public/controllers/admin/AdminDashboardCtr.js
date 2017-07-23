@@ -75,6 +75,9 @@
 
                 drawResourcesWeeklyChart(response.data.clickedstatements);
 
+
+                drawClusterChart(response.data.clusterData);
+
                 dc.renderAll();
             }).catch(function (err) {
                 console.log(err);
@@ -220,8 +223,6 @@
             studentsViewsHistoram.margins().right = 20;
         }
 
-
-
         function drawOverallChart(statements) {
             var parseDate = d3.time.format("%Y-%m-%dT%H:%M:%S.%LZ").parse;
 
@@ -287,6 +288,11 @@
 
 
             vm.courseOverAllChart = courseOverAllChart;
+        }
+
+        function drawClusterChart(data) {
+
+            console.log(JSON.stringify(data));
         }
     }
 })()
