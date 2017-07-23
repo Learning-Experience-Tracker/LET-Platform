@@ -4,14 +4,17 @@
         .module('letApp')
         .controller('QuestionController', QuestionController);
 
-    QuestionController.$inject = ['QuestionsService', 'VerbsService', 'ResourcesService', 'AssessmentsService', '$rootScope', 'ngToast', '$state', '$stateParams'];
+    QuestionController.$inject = ['QuestionsService', 'VerbsService', 'ResourcesService', 'AssessmentsService', '$rootScope', 'ngToast', '$state', '$stateParams',
+                                  'UserService'];
     
-    function QuestionController(QuestionsService, VerbsService, ResourcesService, AssessmentsService, $rootScope, ngToast, $state, $stateParams){
+    function QuestionController(QuestionsService, VerbsService, ResourcesService, AssessmentsService, $rootScope, ngToast, $state, $stateParams,
+                                UserService){
        var vm = this;
        
        vm.init = init;
        vm.initList = initList;
        vm.initDetails = initDetails;
+       vm.save = save;
 
        vm.execute = execute;
        vm.goDetails = goDetails;
@@ -45,6 +48,13 @@
            }).catch(function(error){
               console.log(error);
            });
+
+           UserService.getStudents().then(function(response){
+               console.log(response);
+               vm.students = response.data;
+           }).catch(function(error){
+               console.log(error);
+           });
        }
 
        function execute(btn){
@@ -54,10 +64,15 @@
                didWhat : vm.didWhat,
                toWhat : vm.toWhat,
                toWhatValue : vm.toWhatValue,
+               who : vm.who,
+               when : vm.when,
                apply : vm.apply
            }).then(function(response){
-              //console.log(response);
-              drawChart(response.data);
+              console.log("response:");
+              console.log(response);
+
+              //drawChart(response.data);
+              drawTable(response.data);
            }).catch(function(error){
               //console.log(error);
            });
@@ -116,8 +131,86 @@
        function initDetails(){
            QuestionsService.get($stateParams.id).then(function(response){
               vm.question = response.data;
+              
+              angular.merge(
+                    vm,
+                    JSON.parse(vm.question.Indicators[0].hql)
+                  );
+              
+              vm.execute();
            }).catch(function(error){
               console.log(error);              
+           });
+       }
+
+       function drawTable(data){ //prepares table to be drawn
+
+           if(!angular.isArray(data)){
+               data = [data];
+           }
+
+           vm.headers = [ 'QueriedId', 'Name'];
+
+           //prepare table
+           if(vm.toWhat == 'resource'){
+                vm.headers.push('Type');
+
+                vm.tableData = data.map(function(row){
+                   return {
+                       id : row.QueriedId,
+                       name : row['Resource.name'],
+                       type : row['Resource.type'],                       
+                       count : row.count
+                   }
+                });
+           }else if(vm.toWhat == 'question'){
+                vm.tableData = data.map(function(row){
+                    return {
+                        id : row.QueriedId,
+                        name : row['Question.name'],
+                        count : row.count
+                    }
+                });
+           }else if (vm.toWhat == 'assessment'){
+                vm.tableData = data.map(function(row){
+                    return {
+                        id : row.QueriedId,
+                        name : row['Assessment.name'],
+                        count : row.count
+                    }
+                });
+           }
+           
+           //check first element for 'count', 'min', 'max', 'average'
+           if(vm.apply == 'none'){
+              vm.headers.push('Count');
+           }else if(vm.apply == 'min'){
+               vm.headers.push('Min');
+           }else if(vm.apply == 'max'){
+               vm.headers.push('Max');
+           }else if(vm.apply == 'average'){
+               vm.headers.push('Average');
+           }
+       }
+
+       function save(){
+           QuestionsService.save({
+               name : vm.questionName,
+               hql : {
+                    didWhat : vm.didWhat,
+                    toWhat : vm.toWhat,
+                    toWhatValue : vm.toWhatValue,
+                    who : vm.who,
+                    when : vm.when,
+                    apply : vm.apply
+               }
+           }).then(function(response){
+                ngToast.create({
+                    className : 'success',
+                    content : 'Created Successfully.'
+                });
+           }).catch(function(error){
+              console.log(error);
            });
        }
     }

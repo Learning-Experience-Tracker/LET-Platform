@@ -6,7 +6,7 @@
                     <input type="text" ng-model="qCtr.questionName" class="form-control" placeholder="Question Name">
                 </div>
                 <div class="col-md-4">
-                    <button class="btn btn-primary" style="float:right" ng-click="qCtr.saveQuesiton()">Save Question</button>
+                    <button class="btn btn-primary" style="float:right" ng-click="qCtr.save()">Save Question</button>
                 </div>
             </div>
         </div>
@@ -14,7 +14,7 @@
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-3">
-                        <div class="card">
+                        <div class="card" style="height:156px;">
                             <label>Did what?</label>
                             <select class="form-control" ng-model="qCtr.didWhat">
                                 <option ng-repeat="verb in qCtr.verbs" value="{{verb.id}}">{{verb.name}}</option>
@@ -23,7 +23,7 @@
                     </div>
                     
                     <div class="col-md-3">
-                        <div class="card">
+                        <div class="card" style="height:156px;">
                             <label>To what?</label>
                             <select class="form-control" ng-model="qCtr.toWhat" style="margin-bottom:10px;">
                                 <option value="resource" selected>Resource</option>
@@ -46,25 +46,29 @@
                     </div>                    
 
                     <div class="col-md-2">
-                        <div class="card">
+                        <div class="card" style="height:156px;">
                             <label>Who ?</label>
-                            <select class="form-control" ng-model="qCtr.apply">
-                                <option value="none">Sherley Pressley</option>
+                            <select class="form-control" ng-model="qCtr.who">
+                                <option ng-repeat="student in qCtr.students" value="{{student.id}}">{{student.name}}</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="col-md-2">
-                        <div class="card">
+                        <div class="card" style="height:156px;">
                             <label>When ?</label>
-                            <select class="form-control" ng-model="qCtr.apply">
-                                <option value="none">17 - 7 - 2017</option>
-                            </select>
+                            <div class="dropdown">
+                                <input class="dropdown-toggle form-control" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="#" ng-model="qCtr.when">
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                    <datetimepicker data-ng-model="qCtr.when"
+                                                    data-datetimepicker-config="{ dropdownSelector: '.dropdown-toggle', minView : 'day', modelType : 'DD-MM-YYYY' }"></datetimepicker>
+                                </ul>
+                            </div>
                         </div>
                     </div>
 
                     <div class="col-md-2">
-                        <div class="card">
+                        <div class="card" style="height:156px;">
                             <label>Apply ?</label>
                             <select class="form-control" ng-model="qCtr.apply">
                                 <option value="none">Count</option>
@@ -79,7 +83,7 @@
                     <button class="btn btn-primary" style="margin:0 auto;display:block;" ng-click="qCtr.execute()">Execute</button>                
                 </div>
 
-                <div class="row" style="margin-top:30px;">
+                <!--<div class="row" style="margin-top:30px;">
                     <div class="col-md-4">
                         <div class="card">
                             Max Resource Clicked:  546943
@@ -95,7 +99,29 @@
                 <div class="row">
                     <div id="chart" style="width:100%; height:400px;"></div>
                 </div>
+                -->
 
+                <!-- TABLE -->
+                <div class="row" ng-if="qCtr.tableData">
+                    <div class="col-md-8 col-md-offset-2">
+                        <table class="table" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th ng-repeat="header in qCtr.headers">
+                                        {{header}}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="row in qCtr.tableData">
+                                    <td ng-repeat="rowElement in row">
+                                        {{rowElement}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
                 
             </div>        
         </div>

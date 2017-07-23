@@ -6,7 +6,7 @@ var passport = require('./../../../../config/passport'),
 module.exports = function(app){
 
     app.route('/api/question/execute')
-       .post(passport.authenticate('jwt', {session : false}),
+       .post(passport.authenticate('jwt', {session : false}), //todo: should be get?
             acl.adminOnly,
             questionCtr.execute);
 
@@ -15,6 +15,11 @@ module.exports = function(app){
             acl.adminOnly,
             questionCtr.getAllQuestions);
     
+    app.route('/api/question/save')
+       .post(passport.authenticate('jwt', {session : false}),
+            acl.adminOnly,
+            questionCtr.save);
+
     app.route('/api/question/:id')
        .get(passport.authenticate('jwt', {session : false}),
             acl.adminOnly,

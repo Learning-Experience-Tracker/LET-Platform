@@ -28,6 +28,7 @@ angular
             UserServiceKlass.prototype.onIdFail = onIdFail;
             UserServiceKlass.prototype.logout = logout;
             UserServiceKlass.prototype.signup = signup;
+            UserServiceKlass.prototype.getStudents = getStudents;
             
             return UserServiceK;
 
@@ -95,6 +96,10 @@ angular
                         console.log(err);
                         $rootScope.$emit('signupFailed');
                     });
+            }
+
+            function getStudents(){
+                return $http.get('/api/students');
             }
     }
 

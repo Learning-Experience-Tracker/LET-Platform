@@ -45,3 +45,16 @@ module.exports.register = function(req, res){
         res.status(500).end();
     });
 }
+
+module.exports.getStudents = function(req, res){
+    db.User.findAll({
+        where : {
+            role : 'student'
+        }
+    }).then(function(students){
+        res.json(students);
+    }).catch(function(error){
+        winston.error(error);
+        res.status(500).end();
+    })
+}
