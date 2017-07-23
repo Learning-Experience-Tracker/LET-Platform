@@ -78,6 +78,9 @@ module.exports.getAdminDashbaordDate = function (req, res) {
     async.parallel({
         clickedstatements: function (callback) {
             db.ResStatement.findAll({
+                where: {
+                    CourseId: req.params.id
+                },
                 attributes: [
                     'Date.date', 'Resource.type', [db.sequelize.fn('SUM', db.sequelize.col('ResStatement.sum_clicks')), 'sum_clicks'],
                     [db.sequelize.fn('SUM', db.sequelize.col('ResStatement.sum_lunches')), 'sum_lunches']
@@ -148,6 +151,9 @@ module.exports.getAdminDashbaordDate = function (req, res) {
         topTenActiveStudents: function (callback) {
             db.UserStatement
                 .findAll({
+                    where: {
+                        CourseId: req.params.id
+                    },
                     attributes: [
                         ['sum_activities', 'numOfAction']
                     ],
@@ -179,6 +185,9 @@ module.exports.getAdminDashbaordDate = function (req, res) {
         studensViewsHistogram: function (callback) {
             db.ResStatement
                 .findAll({
+                    where: {
+                        CourseId: req.params.id
+                    },
                     attributes: [
                         [db.sequelize.fn('SUM', db.sequelize.col('ResStatement.sum_lunches')), 'numOfViews']
                     ],
@@ -221,22 +230,20 @@ module.exports.getAdminDashbaordDate = function (req, res) {
         },
         clusterData: function (callback) {
             db.MiningStatement.findAll({
-                include: [{
-                    model: db.Date,
-                    attributes: [],
-                    where: {
-                        date: {
-                            $gte: req.body.startDate,
-                            $lte: req.body.endDate
-                        }
-                    }
-                }],
+                where: {
+                    CourseId: req.params.id,
+                    weekNo: req.body.weekNo
+                },
                 raw: true
             }).then(data => {
+                if (data.length < 0) {
+                    callback(null, data);
+                    return;
+                }
 
                 var input = [];
                 data.forEach(item => {
-                    input.push([parseInt(item.homepage), parseInt(item.content), parseInt(item.url), parseInt(item.forum)]);
+                    input.push([parseInt(item.content), parseInt(item.url), parseInt(item.forum)]);
                 });
 
                 var output = ml.kmeans.cluster({
@@ -245,14 +252,26 @@ module.exports.getAdminDashbaordDate = function (req, res) {
                     epochs: 100
                 });
 
-                console.log(output);
-
                 for (var i = 0; i < output.clusters.length; i++) {
                     var cluster = output.clusters[i];
-                    cluster.forEach( item => {
+                    cluster.forEach(item => {
                         data[item].cluster = i;
                     });
                 }
+                console.log(output);
+                callback(null, data);
+            });
+        },
+        predctionData: function (callback) {
+            db.MiningStatement.findAll({
+                where: {
+                    CourseId: {
+                        $ne: req.params.id
+                    },
+                    weekNo: req.body.weekNo
+                },
+                raw: true
+            }).then(data => {
                 callback(null, data);
             });
         }

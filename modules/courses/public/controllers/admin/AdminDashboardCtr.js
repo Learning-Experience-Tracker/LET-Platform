@@ -60,10 +60,9 @@
 
             CourseDashboardService.getAdminDashbaordDate($stateParams.id, {
                 startDate: startDate,
-                endDate: endDate
+                endDate: endDate,
+                weekNo: weekNo
             }).then(function (response) {
-
-
 
                 drawStudentsViewsHistoram(response.data.studensViewsHistogram);
 
@@ -292,7 +291,77 @@
 
         function drawClusterChart(data) {
 
-            console.log(JSON.stringify(data));
+            console.log(data);
+
+            var ndx = crossfilter(data);
+
+            var dateDim = ndx.dimension(function (d) {
+                return d.content;
+            });
+            var xDim = ndx.dimension(function (d) {
+                return d.forum;
+            });
+            //var hits = dateDim.group().reduceSum(function(d) {return d.total;});
+            //var xGroup = dateDim.group().reduceSum(dc.pluck('x')); 
+            var dateGroup = dateDim.group().reduce(
+                function (p, v) {
+                    p.content = v.content;
+                    p.url = v.url;
+                    p.forum = v.forum;
+                    return p;
+                },
+                function (p, v) {
+                    p.content = 0;
+                    p.url = 0;
+                    p.forum = 0;
+                    return p;
+                },
+                function () {
+                    return {
+                        content: 0,
+                        url: 0,
+                        forum: 0
+                    };
+                });
+
+
+
+
+            var bubbleChart = dc.bubbleChart("#clusters-chart");
+            //debugger;
+            bubbleChart
+                .dimension(dateDim)
+                .group(dateGroup)
+                .x(d3.scale.linear())
+                .y(d3.scale.linear())
+
+                .width(400)
+                .height(400)
+                .yAxisPadding(50)
+                .xAxisPadding(50)
+                .xAxisLabel('X') // (optional) render an axis label below the x axis
+                .yAxisLabel('Y') // (optional) render a vertical axis lable left of the y axis
+                .label(function (p) {
+                    return p.value.label;
+                })
+                .renderLabel(true)
+                .renderTitle(true)
+                .renderHorizontalGridLines(true) // (optional) render horizontal grid lines, :default=false
+                .renderVerticalGridLines(true)
+                .maxBubbleRelativeSize(0.3)
+                .keyAccessor(function (p) {
+
+                    return p.value.content;
+                })
+                .valueAccessor(function (p) {
+                    return p.value.forum;
+                })
+                .radiusValueAccessor(function (p) {
+                    return p.value.url;
+                })
+
+
+            ;
         }
     }
 })()

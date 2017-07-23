@@ -15,7 +15,8 @@
             getAdminDashbaordDate: function (courseId,dateRange) {
                 return $http.post('/api/admin/course/' + courseId + "/dashboard",{
                     startDate : dateRange.startDate,
-                    endDate : dateRange.endDate
+                    endDate : dateRange.endDate,
+                    weekNo : dateRange.weekNo
                 });
             },
             getStudentDashbaordDate: function (courseId) {

@@ -14,7 +14,7 @@ Date.prototype.addDays = function (days) {
 
 sequelize.init(function (db) {
 
-    var datasetFolderPath = 'data/OUData/AAA2014J/'
+    var datasetFolderPath = 'data/OUData/AAA2013J/'
     var maxLimit = 100; // max insert operation in parallel
     var admin = {};
     var oranization = {};
@@ -60,15 +60,14 @@ sequelize.init(function (db) {
             //callback();
         },
         function (callback) {
-            addResourcesLunchedActivites(callback);
-            //callback();
+            addAssActivites(callback);
         },
         function (callback) {
             addResourcesClickedActivites(callback);
             //callback();
         },
         function (callback) {
-            addAssActivites(callback);
+            addResourcesLunchedActivites(callback);
             //callback();
         }
     ], function (err) {
@@ -172,10 +171,10 @@ sequelize.init(function (db) {
                             courseObject.startDate = new Date(2013, 9, 1, 3);
                             break;
                         case "2013B":
-                            courseObject.startDate = new Date(2013, 1, 1 ,3);
+                            courseObject.startDate = new Date(2013, 1, 1, 3);
                             break;
                         case "2014J":
-                            courseObject.startDate = new Date(2014, 9, 2 ,3);
+                            courseObject.startDate = new Date(2014, 9, 2, 3);
                             break;
                         case "2014B":
                             courseObject.startDate = new Date(2014, 1, 1, 3);
@@ -189,7 +188,7 @@ sequelize.init(function (db) {
                 });
                 winston.info('Start courses import series..');
                 db.Course.bulkCreate(courses, {
-                    updateOnDuplicate: ['startDate','endDate']
+                    updateOnDuplicate: ['startDate', 'endDate']
                 }).then(results => {
 
                     db.Course.findAll({}).then(coursesObjects => {

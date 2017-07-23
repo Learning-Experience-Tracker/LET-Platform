@@ -2,6 +2,7 @@ module.exports = function (sequelize, DataTypes) {
 
     var MiningStatement = sequelize.define('MiningStatement', {
         final_result : DataTypes.STRING,
+        weekNo : DataTypes.INTEGER,
         homepage: DataTypes.INTEGER,
         content: DataTypes.INTEGER,
         url: DataTypes.INTEGER,

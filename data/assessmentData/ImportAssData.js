@@ -84,7 +84,7 @@ sequelize.init(function (db) {
     function addOrganization(callback) {
         db.Organization.find({
                 where: {
-                    name: 'Oranization 1'
+                    name: 'OU Oranization'
                 }
             })
             .then(function (existOranization) {
