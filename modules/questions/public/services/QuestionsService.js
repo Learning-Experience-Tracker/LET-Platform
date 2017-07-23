@@ -17,6 +17,9 @@ angular
                 },
                 get : function(id){
                     return $http.get('/api/question/' + id);
+                },
+                save : function(question){
+                    return $http.post('/api/question/save', question);
                 }
             }
     }

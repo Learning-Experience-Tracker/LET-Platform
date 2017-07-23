@@ -12,7 +12,7 @@ module.exports = function (sequelize, DataTypes) {
 		},
 		{
 			associate: function (models) {
-				Indicator.belongsTo(models.Question);				
+				Indicator.belongsTo(models.AnalyticsQuestion);				
 			}
 		}
 	);

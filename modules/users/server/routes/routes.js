@@ -13,4 +13,7 @@ module.exports = function(app){
 
     app.route('/api/register')
        .post(usersCtr.register);
+
+    app.route('/api/students')
+       .get(usersCtr.getStudents);
 }

@@ -7,7 +7,8 @@ angular.module('letApp', [
     'bw.paging',
     'angularMoment',
     'rzModule',
-    'ngFileUpload'
+    'ngFileUpload',
+    'ui.bootstrap.datetimepicker'
 ]);
 
 (function () {
