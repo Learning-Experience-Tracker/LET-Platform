@@ -129,6 +129,7 @@
                 .yAxisLabel('Number of Activities')
                 .renderHorizontalGridLines(true)
                 .renderVerticalGridLines(true)
+                .brushOn(false)
                 .seriesAccessor(function (d) {
                     return "Course: " + d.key[0];
                 })

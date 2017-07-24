@@ -13,6 +13,11 @@
         vm.findOne = findOne;
         vm.initWeekSlider = initWeekSlider;
 
+        vm.x = 'Content';
+        vm.y = 'Forum';
+
+        vm.drawClusterChart = drawClusterChart;
+
         function findOne() {
             CourseDashboardService.get($stateParams.id).then(function (response) {
                 vm.course = response.data;
@@ -74,8 +79,9 @@
 
                 drawResourcesWeeklyChart(response.data.clickedstatements);
 
+                vm.clusterData = response.data.clusterData;
 
-                drawClusterChart(response.data.clusterData);
+                drawClusterChart();
 
                 dc.renderAll();
             }).catch(function (err) {
@@ -289,79 +295,101 @@
             vm.courseOverAllChart = courseOverAllChart;
         }
 
-        function drawClusterChart(data) {
+        function drawClusterChart() {
 
-            console.log(data);
+            var ndx = crossfilter(vm.clusterData);
 
-            var ndx = crossfilter(data);
-
-            var dateDim = ndx.dimension(function (d) {
-                return d.content;
+            var dimension = ndx.dimension(function (d) {
+                return [+d.cluster, helpX(d), d.UserId];
             });
-            var xDim = ndx.dimension(function (d) {
-                return d.forum;
+
+            var runGroup = dimension.group().reduceSum(function (d) {
+                return helpY(d);
             });
-            //var hits = dateDim.group().reduceSum(function(d) {return d.total;});
-            //var xGroup = dateDim.group().reduceSum(dc.pluck('x')); 
-            var dateGroup = dateDim.group().reduce(
-                function (p, v) {
-                    p.content = v.content;
-                    p.url = v.url;
-                    p.forum = v.forum;
-                    return p;
-                },
-                function (p, v) {
-                    p.content = 0;
-                    p.url = 0;
-                    p.forum = 0;
-                    return p;
-                },
-                function () {
-                    return {
-                        content: 0,
-                        url: 0,
-                        forum: 0
-                    };
-                });
 
+            var symbolScale = d3.scale.ordinal().range(d3.svg.symbolTypes);
+            var symbolAccessor = function (d) {
+                return symbolScale(d.key[0]);
+            };
+            var subChart = function (c) {
+                return dc.scatterPlot(c)
+                    .symbol(symbolAccessor)
+                    .symbolSize(8)
+                    .highlightedSize(10)
+            };
 
+            var minX = d3.min(vm.clusterData, function (d) {
+                return helpX(d);
+            });
 
+            var maxX = d3.max(vm.clusterData, function (d) {
+                return helpX(d);
+            });
 
-            var bubbleChart = dc.bubbleChart("#clusters-chart");
-            //debugger;
-            bubbleChart
-                .dimension(dateDim)
-                .group(dateGroup)
-                .x(d3.scale.linear())
-                .y(d3.scale.linear())
+            var minY = d3.min(vm.clusterData, function (d) {
+                return helpY(d);
+            });
 
-                .width(400)
-                .height(400)
-                .yAxisPadding(50)
-                .xAxisPadding(50)
-                .xAxisLabel('X') // (optional) render an axis label below the x axis
-                .yAxisLabel('Y') // (optional) render a vertical axis lable left of the y axis
-                .label(function (p) {
-                    return p.value.label;
+            var maxY = d3.max(vm.clusterData, function (d) {
+                return helpY(d);
+            });
+
+            var chart = dc.seriesChart("#clusters-chart");
+            chart
+                .width(function (element) {
+                    var width = element && element.getBoundingClientRect && element.getBoundingClientRect().width;
+                    return (width && width > chart.minWidth()) ? width : chart.minWidth();
                 })
-                .renderLabel(true)
-                .renderTitle(true)
-                .renderHorizontalGridLines(true) // (optional) render horizontal grid lines, :default=false
-                .renderVerticalGridLines(true)
-                .maxBubbleRelativeSize(0.3)
-                .keyAccessor(function (p) {
-
-                    return p.value.content;
+                .chart(subChart)
+                .x(d3.scale.linear().domain([minX, maxX]))
+                .y(d3.scale.linear().domain([minY, maxY + 50]))
+                .brushOn(false)
+                .mouseZoomable(true)
+                .yAxisLabel(vm.y)
+                .xAxisLabel(vm.x)
+                .dimension(dimension)
+                .group(runGroup)
+                .title(function (d) {
+                    return 'Student: ' + d.key[2];
                 })
-                .valueAccessor(function (p) {
-                    return p.value.forum;
+                .seriesAccessor(function (d) {
+                    return "Group: " + d.key[0];
                 })
-                .radiusValueAccessor(function (p) {
-                    return p.value.url;
-                })
+                .keyAccessor(function (d) {
+                    return +d.key[1];
+                }).valueAccessor(function (d) {
+                    return +d.value;
+                }).legend(dc.legend().x(100).y(50).itemHeight(13).gap(5).horizontal(1).legendWidth(140).itemWidth(70));
 
-
-            ;
+            dc.renderAll();
         }
+
+        function helpY(item) {
+            if (vm.y == 'Content') {
+                return item.content;
+            }
+
+            if (vm.y == 'Url') {
+                return item.url;
+            }
+
+            if (vm.y == 'Forum') {
+                return item.forum;
+            }
+        };
+
+        function helpX(item) {
+            if (vm.x == 'Content') {
+                return item.content;
+            }
+
+            if (vm.x == 'Url') {
+                return item.url;
+            }
+
+            if (vm.x == 'Forum') {
+                return item.forum;
+            }
+        };
     }
 })()
