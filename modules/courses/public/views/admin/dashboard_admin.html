@@ -127,67 +127,28 @@
             <div class="chart-title">
               At risk students in week {{dashboardCtr.weekSlider.value}}
             </div>
-            <table class="table table-striped table-bordered" style="margin-bottom:0">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Assessment Results</th>
-                  <th>Next Assessmet Result</th>
-                  <th>At Risk</th>
+            <div class="table-responsive">
+              <table class="table table-striped table-bordered" style="margin-bottom:0">
+                <thead>
+                  <tr>
+                    <th>Student Name</th>
+                    <th>Will submit next assessment</th>
+                    <th>At Risk</th>
+                    <th>Final Result</th>
+                  </tr>
+                </thead>
+                <tr ng-repeat="result in dashboardCtr.partOfPredctionData">
+                  <td>{{result.User.name}}</td>
+                  <td>{{result.will_submit}}</td>
+                  <td>{{result.atRisk}}</td>
+                  <td>{{result.final_result}}</td>
                 </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>134143</td>
-                  <td>
-                    <div class="icon-block s30 bg-green-400 text-white">76</div>
-                    <div class="icon-block s30 bg-red-400 text-white">27</div>
-                    <div class="icon-block s30 bg-green-400 text-white">73</div>
-                    <div class="icon-block s30 bg-red-400 text-white">25</div>
-                  </td>
-                  <td>Submit</td>
-                  <td>No</td>
-                </tr>
-
-                <tr>
-                  <td>546732</td>
-                  <td>
-                    <div class="icon-block s30 bg-green-400 text-white">83</div>
-                    <div class="icon-block s30 bg-green-400 text-white">60</div>
-                    <div class="icon-block s30 bg-red-400 text-white">0</div>
-                    <div class="icon-block s30 bg-red-400 text-white">0</div>
-                  </td>
-                  <td>Submit</td>
-                  <td>No</td>
-                </tr>
-
-                <tr>
-                  <td>546667</td>
-                  <td>
-                    <div class="icon-block s30 bg-green-400 text-white">80</div>
-                    <div class="icon-block s30 bg-red-400 text-white">0</div>
-                    <div class="icon-block s30 bg-green-400 text-white">60</div>
-                    <div class="icon-block s30 bg-red-400 text-white">25</div>
-                  </td>
-                  <td>Submit</td>
-                  <td>No</td>
-                </tr>
-
-
-                <tr>
-                  <td>546681</td>
-                  <td>
-                    <div class="icon-block s30 bg-red-400 text-white">0</div>
-                    <div class="icon-block s30 bg-red-400 text-white">0</div>
-                    <div class="icon-block s30 bg-red-400 text-white">0</div>
-                    <div class="icon-block s30 bg-red-400 text-white">0</div>
-                  </td>
-                  <td>Not Submit</td>
-                  <td>Yes</td>
-                </tr>
-              </tbody>
-            </table>
-            <div paging page="1" page-size="10" total="500" width="100%" style="margin: 10px;">
+              </table>
+            </div>
+            <div style="padding:0px 15px;">
+              <div paging page="dashboardCtr.currentPage" paging-action="dashboardCtr.getPage('clicked',page, pageSize, total)" page-size="dashboardCtr.pageSize"
+                total="dashboardCtr.predctionData.length" width="100%">
+              </div>
             </div>
           </div>
         </div>

@@ -258,21 +258,97 @@ module.exports.getAdminDashbaordDate = function (req, res) {
                         data[item].cluster = i;
                     });
                 }
-                console.log(output);
                 callback(null, data);
             });
         },
         predctionData: function (callback) {
-            db.MiningStatement.findAll({
-                where: {
-                    CourseId: {
-                        $ne: req.params.id
-                    },
-                    weekNo: req.body.weekNo
+            async.parallel({
+                currentData: function (callback) {
+                    db.MiningStatement.findAll({
+                        where: {
+                            CourseId: req.params.id,
+                            weekNo: req.body.weekNo
+                        },include:[{model:db.User,attributes:['name']}],
+                        raw: true,
+                        nest : true
+                    }).then(data => {
+                        callback(null, data);
+                    })
                 },
-                raw: true
-            }).then(data => {
-                callback(null, data);
+                pastData: function (callback) {
+                    db.MiningStatement.findAll({
+                        where: {
+                            CourseId: {
+                                $ne: req.params.id
+                            },
+                            weekNo: req.body.weekNo
+                        },
+                        raw: true
+                    }).then(data => {
+                        callback(null, data);
+                    })
+                }
+            }, function (err, results) {
+                var data = [];
+                var final_result = [];
+                var will_submit = [];
+                var score = [];
+
+                results.pastData.forEach(item => {
+
+                    if (item.final_result == 'Fail' || item.final_result == 'Withdrawn')
+                        final_result.push(0);
+                    else
+                        final_result.push(1);
+
+                    if (item.willSubmit) {
+                        will_submit.push(1);
+                    } else {
+                        will_submit.push(0);
+                    }
+
+                    score.push(item.score);
+
+                    data.push([parseInt(item.content), parseInt(item.url), parseInt(item.forum)]);
+                });
+
+                var knnFinal = new ml.KNN({
+                    data: data,
+                    result: final_result
+                });
+
+
+                var knnwillSubmit = new ml.KNN({
+                    data: data,
+                    result: will_submit
+                });
+
+
+                var knnScore = new ml.KNN({
+                    data: data,
+                    result: score
+                });
+
+                results.currentData.forEach(item => {
+
+                    var final_result = knnFinal.predict({
+                        x: [item.content, item.url, item.forum],
+                        k: 5
+                    });
+                    var will_submit = knnwillSubmit.predict({
+                        x: [item.content, item.url, item.forum],
+                        k: 5
+                    });
+                    var score = knnScore.predict({
+                        x: [item.content, item.url, item.forum],
+                        k: 5
+                    });
+
+                    item.atRisk = Math.round(final_result) == 1;
+                    item.will_submit = Math.round(will_submit) == 1;
+                    item.score = Math.round(score);
+                });
+                callback(null, results.currentData);
             });
         }
     }, function (err, results) {

@@ -18,7 +18,7 @@ Date.prototype.addDays = function (days) {
 
 sequelize.init(function (db) {
 
-    var datasetFolderPath = 'data/OUData/AAA2013J/';
+    var datasetFolderPath = 'data/OUData/AAA2014J/';
 
     var weeks = new Set();
     var coursesMap = new Map();

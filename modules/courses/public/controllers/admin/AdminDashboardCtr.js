@@ -18,6 +18,11 @@
 
         vm.drawClusterChart = drawClusterChart;
 
+
+        vm.pageSize = "10";
+        vm.currentPage = 0;
+        vm.getPage = getPage;
+
         function findOne() {
             CourseDashboardService.get($stateParams.id).then(function (response) {
                 vm.course = response.data;
@@ -83,7 +88,12 @@
 
                 drawClusterChart();
 
+                vm.predctionData = response.data.predctionData;
+
+                vm.partOfPredctionData = vm.predctionData.splice(0,10);
+
                 dc.renderAll();
+
             }).catch(function (err) {
                 console.log(err);
                 ngToast.create({
@@ -366,30 +376,45 @@
 
         function helpY(item) {
             if (vm.y == 'Content') {
-                return item.content;
+                return +item.content;
             }
 
             if (vm.y == 'Url') {
-                return item.url;
+                return +item.url;
             }
 
             if (vm.y == 'Forum') {
-                return item.forum;
+                return +item.forum;
             }
         };
 
         function helpX(item) {
             if (vm.x == 'Content') {
-                return item.content;
+                return +item.content;
             }
 
             if (vm.x == 'Url') {
-                return item.url;
+                return +item.url;
             }
 
             if (vm.x == 'Forum') {
-                return item.forum;
+                return +item.forum;
             }
         };
+
+        function getPage(text, page, pageSize, total){
+            (!page) ? page = 0: page--;
+
+            console.log(page);
+            var start = (page-1)*vm.pageSize;
+            var end = (+start) + (+vm.pageSize);
+
+            console.log(+start);
+            console.log(+end);
+
+            vm.partOfPredctionData = vm.predctionData.slice(start,end);
+
+            console.log(vm.partOfPredctionData);
+        }
     }
 })()
